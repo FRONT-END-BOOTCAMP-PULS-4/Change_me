@@ -2,6 +2,7 @@ import { Message } from "../entities/Message";
 import { MessageFilter } from "./filters/MessageFilter";
 
 export interface MessageRepository {
+    count(filter?: MessageFilter): Promise<number>;
     findAll(filter?: MessageFilter): Promise<Message[]>;
     findById(id: number): Promise<Message | null>;
     save(message: Message): Promise<Message>;
