@@ -3,5 +3,5 @@ export class Category {
         public id: number,
         public memberId: string,
         public name: string
-    );
+    ) {}
 }

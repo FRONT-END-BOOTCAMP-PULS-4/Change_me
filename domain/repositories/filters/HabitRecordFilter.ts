@@ -1,8 +1,6 @@
-export class HabitFilter {
+export class HabitRecordFilter {
     constructor(
-        public memberId?: string,
-        public categoryName?: string,
-        public status?: number,
+        public habitId?: number,
         public includeAll?: boolean,
         public sortField?: string,
         public ascending?: boolean,

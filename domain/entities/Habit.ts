@@ -9,5 +9,5 @@ export class Habit {
         public finishedAt: Date,
         public stoppedAt: Date,
         public status: number
-    );
+    ) {}
 }

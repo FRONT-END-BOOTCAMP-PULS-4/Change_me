@@ -10,5 +10,5 @@ export class Member {
         public createdAt: Date,
         public modifiedAt: Date,
         public deletedAt: Date
-    );
+    ) {}
 }
