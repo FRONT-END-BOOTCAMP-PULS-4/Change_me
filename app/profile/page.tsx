@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import ProfileForm from "./components/ProfileForm";
+import LogoutButton from "./components/LogoutButton";
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState<any>(null);
@@ -24,5 +25,10 @@ export default function ProfilePage() {
 
     if (!profile) return <p>로딩 중...</p>;
 
-    return <ProfileForm profile={profile} />;
+    return (
+        <>
+            <ProfileForm profile={profile} />
+            <LogoutButton />
+        </>
+    );
 }
