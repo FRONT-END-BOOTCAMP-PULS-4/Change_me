@@ -1,20 +1,6 @@
-// export class JoinMember {
-//     constructor(
-//         public name: string,
-//         public email: string,
-//         public password: string
-//     ) {}
-
-//     public async execute(): Promise<void> {
-//         // Logic for joining a new member goes here
-//         // This could involve validating the input,
-//         // checking if the email is already in use,
-//         // and saving the member to the database.
-//     }
-// }
-
 import { Member } from "@/domain/entities/Member";
 import { memberRepository } from "@/infra/repositories/supabase/SbMemberRepository";
+import bcrypt from "bcrypt";
 
 export const joinMemberUseCase = {
     async execute(data: {
@@ -23,7 +9,13 @@ export const joinMemberUseCase = {
         password: string;
         nickname: string;
     }) {
-        const newMember = Member.create(data); // 도메인에서 validation 처리할 수도 있음
+        // 비밀번호 해시
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+        // 해시된 비밀번호로 새로운 Member 생성
+        const newMember = Member.create({
+            ...data,
+            password: hashedPassword,
+        });
         const savedMember = await memberRepository.create(newMember);
         return savedMember;
     },
