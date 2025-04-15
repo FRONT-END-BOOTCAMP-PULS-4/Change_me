@@ -28,4 +28,14 @@ export class Member {
     static create(props: MemberProps) {
         return new Member({ ...props, createdAt: new Date() });
     }
+    static fromDB(record: any): Member {
+        return new Member({
+            id: record.id,
+            name: record.name,
+            email: record.email,
+            password: record.password,
+            nickname: record.nickname,
+            createdAt: record.created_at,
+        });
+    }
 }

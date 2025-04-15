@@ -21,4 +21,16 @@ export const memberRepository: MemberRepository = {
 
         return Member.create({ ...data });
     },
+
+    async findByEmailAndPassword(email, password) {
+        const { data, error } = await supabase
+            .from("member")
+            .select("*")
+            .eq("email", email)
+            .eq("password", password) // 실제로는 bcrypt 등 해시 비교해야 안전함!
+            .single();
+
+        if (error || !data) return null;
+        return Member.fromDB(data);
+    },
 };
