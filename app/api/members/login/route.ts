@@ -6,7 +6,18 @@ export async function POST(req: NextRequest) {
 
     try {
         const result = await loginMemberUseCase.execute(body);
-        return NextResponse.json(result, { status: 200 });
+
+        const response = NextResponse.json(result.user, { status: 200 });
+        response.cookies.set("access_token", result.token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            maxAge: 60 * 60 * 24,
+            path: "/",
+        });
+
+        return response;
+
+        // return NextResponse.json(result, { status: 200 });
     } catch (error: any) {
         return NextResponse.json({ errorMessage: error.message }, { status: 401 });
     }
