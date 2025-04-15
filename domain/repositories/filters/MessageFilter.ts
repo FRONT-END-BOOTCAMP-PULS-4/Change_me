@@ -1,7 +1,7 @@
 export class MessageFilter {
     constructor(
         public memberId?: string,
-        public sortField?: string,
+        public sortField?: string, // to support multiple sorting options later
         public ascending?: boolean,
         public offset: number = 0,
         public limit: number = 5

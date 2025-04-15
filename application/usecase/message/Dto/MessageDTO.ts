@@ -1,10 +1,11 @@
 export class MessageDTO {
     constructor(
-        public memberName: string,
-        public memberImage: string,
+        public id: number,
+        public writer: string,
+        public profileUrl: string,
         public content: string,
         public createdAt: Date,
-        public countLike: number,
+        public likeCount: number,
         public isLiked: boolean,
         public modifiedAt?: Date // can be null if message is not modified
     ) {}

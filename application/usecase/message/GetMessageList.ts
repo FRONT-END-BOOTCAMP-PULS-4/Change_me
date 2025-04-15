@@ -27,14 +27,17 @@ export class GetMessageList {
         try {
             // page setups
             const pageSize: number = 5; // number of messages per page
-            const currentPage: number = queryDto.page || 1;
+            const currentPage: number = queryDto.currentPage || 1;
+            const mine: boolean = queryDto.mine || false; // default to false
 
             const offset: number = (currentPage - 1) * pageSize;
             const limit: number = pageSize;
 
+            const memberId: string = "temp"; // using JWT token to get memberId
+
             // data query
             const filter = new MessageFilter(
-                queryDto.memberId,
+                memberId,
                 "createdAt",
                 false, // default sorting order: latest first
                 offset,
@@ -51,7 +54,7 @@ export class GetMessageList {
                 messages.map(async (message) => {
                     let member: Member | null =
                         await this.memberRepository.findById(message.memberId);
-                    let countLike: number =
+                    let likeCount: number =
                         await this.messageLikeRepository.count({
                             messageId: message.id,
                         });
@@ -62,11 +65,14 @@ export class GetMessageList {
                         })) !== null;
 
                     return {
-                        memberName: member?.name || "Unknown",
-                        memberImage: member?.imageUrl || "default.png", // TODO: change to the actual default image path
+                        id: message.id,
+                        writer: member?.name || "Unknown",
+                        profileUrl:
+                            member?.imageUrl ||
+                            "@/public/images/ProfileCircle.png",
                         content: message.content,
                         createdAt: message.createdAt,
-                        countLike,
+                        likeCount,
                         isLiked,
                         modifiedAt: message.modifiedAt,
                     };

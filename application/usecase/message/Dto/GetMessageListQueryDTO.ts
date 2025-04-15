@@ -1,6 +1,6 @@
 export class GetMessageListQueryDTO {
     constructor(
-        public page?: number,
-        public memberId?: string
+        public currentPage?: number, // current page number
+        public mine?: boolean
     ) {}
 }
