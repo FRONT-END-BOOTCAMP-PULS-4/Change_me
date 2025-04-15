@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect, ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+    const router = useRouter();
     const [form, setForm] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const [errorMessage, setErrorMessage] = useState("");
@@ -47,6 +49,7 @@ export default function LoginForm() {
             }
 
             console.log("로그인 성공", data);
+            router.push("/profile");
             // 성공 시 페이지 이동 또는 상태 업데이트 등
         } catch (err) {
             setErrorMessage("서버 오류가 발생했습니다.");
