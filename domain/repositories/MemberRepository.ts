@@ -13,4 +13,5 @@ import { Member } from "../entities/Member";
 export interface MemberRepository {
     create(member: Member): Promise<Member>;
     findByEmailAndPassword(email: string, password: string): Promise<Member | null>;
+    findById(id: string): Promise<Member | null>;
 }

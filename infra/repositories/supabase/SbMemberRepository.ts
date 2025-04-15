@@ -33,4 +33,15 @@ export const memberRepository: MemberRepository = {
         if (error || !data) return null;
         return Member.fromDB(data);
     },
+
+    findById: async (id: string) => {
+        const { data, error } = await supabase
+            .from("member")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+        if (error || !data) return null;
+        return Member.fromDB(data);
+    },
 };
