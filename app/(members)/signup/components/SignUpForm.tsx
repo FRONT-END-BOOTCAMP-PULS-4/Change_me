@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function SignUpForm() {
+    const router = useRouter();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,8 +20,13 @@ export function SignUpForm() {
             headers: { "Content-Type": "application/json" },
         });
 
-        const result = await res.json();
-        console.log(result);
+        if (res.ok) {
+            console.log("회원가입 성공");
+            router.push("/login");
+        } else {
+            const result = await res.json();
+            console.error("회원가입 실패:", result);
+        }
     };
 
     return (
