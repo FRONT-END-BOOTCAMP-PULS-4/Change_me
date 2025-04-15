@@ -8,11 +8,50 @@ export function SignUpForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [nickname, setNickname] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+
+    // 이메일 형식 검사
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setEmail(value);
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+            setEmailError("올바른 이메일 형식이 아닙니다.");
+        } else {
+            setEmailError("");
+        }
+    };
+
+    // 비밀번호 형식 검사
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setPassword(value);
+
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_]).{8,16}$/;
+
+        if (!passwordRegex.test(value)) {
+            setPasswordError(
+                "비밀번호는 8~16자이며, 대문자/소문자/숫자/특수문자를 모두 포함해야 합니다."
+            );
+        } else {
+            setPasswordError("");
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        console.log("회원가입 시도:", { name, email, password, nickname });
+        if (!name || !email || !password || !nickname) {
+            alert("모든 필드를 입력해주세요.");
+            return;
+        }
+
+        if (emailError || passwordError) {
+            alert("입력한 정보가 올바르지 않습니다.");
+            return;
+        }
 
         const res = await fetch("/api/members/join", {
             method: "POST",
@@ -52,8 +91,11 @@ export function SignUpForm() {
                         name="email"
                         placeholder="example@example.com"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={handleEmailChange}
                     />
+                    {emailError && (
+                        <div style={{ color: "red", fontSize: "12px" }}>{emailError}</div>
+                    )}
                 </div>
                 <div>
                     <label htmlFor="password">비밀번호</label><br />
@@ -63,8 +105,11 @@ export function SignUpForm() {
                         name="password"
                         placeholder="********"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={handlePasswordChange}
                     />
+                    {passwordError && (
+                        <div style={{ color: "red", fontSize: "12px" }}>{passwordError}</div>
+                    )}
                 </div>
                 <div>
                     <label htmlFor="nickname">닉네임</label><br />
