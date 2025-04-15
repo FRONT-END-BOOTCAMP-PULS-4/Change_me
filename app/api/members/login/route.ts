@@ -7,17 +7,14 @@ export async function POST(req: NextRequest) {
     try {
         const result = await loginMemberUseCase.execute(body);
 
-        const response = NextResponse.json(result.user, { status: 200 });
-        response.cookies.set("access_token", result.token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 60 * 60 * 24,
-            path: "/",
-        });
-
-        return response;
-
-        // return NextResponse.json(result, { status: 200 });
+        // token을 응답 바디에 포함
+        return NextResponse.json(
+            {
+                token: result.token, // 클라이언트가 localStorage에 저장할 수 있게 전달
+                user: result.user,
+            },
+            { status: 200 }
+        );
     } catch (error: any) {
         return NextResponse.json({ errorMessage: error.message }, { status: 401 });
     }
