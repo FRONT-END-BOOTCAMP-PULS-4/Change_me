@@ -8,14 +8,25 @@ export default function ProfilePage() {
 
     useEffect(() => {
         const fetchProfile = async () => {
+            const token = localStorage.getItem("access_token");
+
+            if (!token) {
+                window.location.href = "/login";
+                return;
+            }
+
             const res = await fetch("/api/members/profile", {
-                credentials: "include",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             });
+
             if (res.ok) {
                 const data = await res.json();
                 setProfile(data);
             } else {
-                // 인증 안 됐을 때 로그인으로 이동
+                // 토큰이 잘못됐거나 만료된 경우
+                localStorage.removeItem("access_token");
                 window.location.href = "/login";
             }
         };

@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getProfileUseCase } from "@/application/usecase/member/GetProfile";
 
 export async function GET(req: NextRequest) {
-    const token = req.cookies.get("access_token")?.value;
+    const authHeader = req.headers.get("authorization");
+    const token = authHeader?.replace("Bearer ", "");
+
     if (!token) {
         return NextResponse.json({ error: "토큰 없음" }, { status: 401 });
     }

@@ -24,21 +24,16 @@ export default function LoginForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // 간단한 유효성 검사
         if (!form.email || !form.password) {
             setErrorMessage("모든 필드를 입력해주세요.");
             return;
         }
-
-        // setErrorMessage("");
-        // console.log("로그인 시도:", form);
 
         try {
             const res = await fetch("/api/members/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),
-                credentials: "include",
             });
 
             const data = await res.json();
@@ -48,9 +43,11 @@ export default function LoginForm() {
                 return;
             }
 
+            // 토큰을 localStorage에 저장
+            localStorage.setItem("access_token", data.token);
+
             console.log("로그인 성공", data);
             router.push("/profile");
-            // 성공 시 페이지 이동 또는 상태 업데이트 등
         } catch (err) {
             setErrorMessage("서버 오류가 발생했습니다.");
         }
