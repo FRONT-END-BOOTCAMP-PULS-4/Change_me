@@ -31,7 +31,7 @@ export async function GET(request: Request) {
             messageLikeRepository,
         );
 
-        // set up query DTO
+        // set up query Dto
         const queryDto = new GetMessageListQueryDto(
             Number(currentPageParam),
             mineParam === "true",

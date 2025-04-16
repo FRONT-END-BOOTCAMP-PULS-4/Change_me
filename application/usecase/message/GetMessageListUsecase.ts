@@ -49,7 +49,7 @@ export class GetMessageListUsecase {
             const totalCount: number =
                 await this.messageRepository.count(filter);
 
-            // convert Message to MessageDTO
+            // convert Message to MessageDto
             const messageDtos: MessageDto[] = await Promise.all(
                 messages.map(async (message) => {
                     let member: Member | null =
@@ -87,14 +87,14 @@ export class GetMessageListUsecase {
                 (_, i) => i + startPage,
             ).filter((pageNumber) => pageNumber <= endPage);
 
-            const messageListDTO: MessageListDto = {
+            const messageListDto: MessageListDto = {
                 messages: messageDtos,
                 totalCount,
                 endPage,
                 pages,
             };
 
-            return messageListDTO;
+            return messageListDto;
         } catch (error) {
             console.error("Error retrieving messages:", error);
             throw new Error("Error retrieving messages.");
