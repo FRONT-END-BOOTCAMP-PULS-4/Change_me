@@ -4,7 +4,7 @@ import { CategoryListDto } from "./dto/CategoryListDto";
 import { CategoryFilter } from "@/domain/repositories/filters/CategoryFilter";
 import { CategoryDto } from "./dto/CategoryDto";
 
-export class GetCategories {
+export class GetCategoryListUseCase {
     constructor(private categoryRepository: CategoryRepository) {}
 
     async execute(queryDto: GetCategoryListQueryDto): Promise<CategoryListDto> {

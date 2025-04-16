@@ -1,5 +1,5 @@
 import { GetCategoryListQueryDto } from "@/application/usecase/category/dto/GetCategoryListQueryDto";
-import { GetCategories } from "@/application/usecase/category/GetCategoryListUsecase";
+import { GetCategoryListUseCase } from "@/application/usecase/category/GetCategoryListUsecase";
 import { CategoryRepository } from "@/domain/repositories/CategoryRepository";
 import { SbCategoryRepository } from "@/infra/repositories/supabase/SbCategoryRepository";
 import { NextResponse } from "next/server";
@@ -11,7 +11,9 @@ export async function GET(request: Request) {
 
         const categoryRepository: CategoryRepository =
             new SbCategoryRepository();
-        const getCategoryListUsecase = new GetCategories(categoryRepository);
+        const getCategoryListUsecase = new GetCategoryListUseCase(
+            categoryRepository,
+        );
 
         const queryDto = new GetCategoryListQueryDto(popularParam === "true");
         const categories = await getCategoryListUsecase.execute(queryDto);
