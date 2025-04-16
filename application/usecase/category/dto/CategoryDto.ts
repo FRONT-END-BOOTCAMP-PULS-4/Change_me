@@ -1,7 +1,7 @@
-export class Category {
+export class CategoryDto {
     constructor(
         public id?: number,
-        public memberId?: string,
         public name?: string,
+        public habitCount?: number,
     ) {}
 }
