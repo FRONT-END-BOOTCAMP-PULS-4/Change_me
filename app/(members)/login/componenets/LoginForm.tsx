@@ -2,7 +2,7 @@
 
 import { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
-import { useMemberStore } from "@/stores/memberStore";
+import { useMemberStore } from "@/stores/MemberStore";
 
 export default function LoginForm() {
     const router = useRouter();

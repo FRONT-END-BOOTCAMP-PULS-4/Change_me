@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { loginMemberUseCase } from "@/application/usecase/member/LoginMember";
+import { loginMemberUseCase } from "@/application/usecase/member/LoginMemberUsecase";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
