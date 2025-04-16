@@ -20,9 +20,15 @@ export async function GET(request: Request) {
 
         return NextResponse.json(categories);
     } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json(
+                { message: error.message || "카테고리 조회 실패" },
+                { status: 400 },
+            );
+        }
         return NextResponse.json(
-            { message: "카테고리 조회 실패" },
-            { status: 400 },
+            { message: "알 수 없는 오류 발생" },
+            { status: 500 },
         );
     }
 }
