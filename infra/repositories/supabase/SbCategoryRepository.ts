@@ -8,12 +8,10 @@ export class SbCategoryRepository implements CategoryRepository {
     async count(): Promise<number> {
         const supabase = await createClient();
 
-        const { count, error, data } = await supabase
-            .from("category")
-            .select("*", {
-                count: "exact",
-                head: true,
-            });
+        const { count, error } = await supabase.from("category").select("*", {
+            count: "exact",
+            head: true,
+        });
 
         if (error) {
             throw new Error(`카테고리 개수를 가져올 수 없음: ${error.message}`);
@@ -58,29 +56,6 @@ export class SbCategoryRepository implements CategoryRepository {
         });
     }
 
-    async findByName(name: string): Promise<Category | null> {
-        const supabase = await createClient();
-
-        const { data, error } = await supabase
-            .from("category")
-            .select("*")
-            .eq("name", name)
-            .single();
-
-        if (error) {
-            throw new Error(
-                `이름(${name})으로 카테고리 조회 실패: ${error.message}`,
-            );
-        }
-
-        if (!data) return null;
-
-        return {
-            ...data,
-            memberId: data.member_id,
-        };
-    }
-
     async save(category: Category): Promise<Category> {
         const supabase = await createClient();
 
@@ -94,11 +69,15 @@ export class SbCategoryRepository implements CategoryRepository {
             .single();
 
         if (error) {
+            if (error.code === "23505") {
+                throw new Error(`이미 존재하는 카테고리입니다.`);
+            }
             throw new Error(`카테고리 등록 실패: ${error.message}`);
         }
 
         return {
-            ...data,
+            id: data.id,
+            name: data.name,
             memberId: data.member_id,
         };
     }
@@ -120,7 +99,8 @@ export class SbCategoryRepository implements CategoryRepository {
         }
 
         return {
-            ...data,
+            id: data.id,
+            name: data.name,
             memberId: data.member_id,
         };
     }
