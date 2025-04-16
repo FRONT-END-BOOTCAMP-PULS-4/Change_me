@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export function SignUpForm() {
@@ -10,11 +10,55 @@ export function SignUpForm() {
     const [nickname, setNickname] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
+    const [isEmailChecked, setIsEmailChecked] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
+
+    useEffect(() => {
+        if (confirmPassword) {
+            if (confirmPassword !== password) {
+                setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
+            } else {
+                setConfirmPasswordError("");
+            }
+        }
+    }, [password, confirmPassword]);
+
+    // 이메일 중복 검사
+    const handleEmailCheck = async () => {
+        if (!email) {
+            alert("이메일을 입력해주세요.");
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setEmailError("올바른 이메일 형식이 아닙니다.");
+            return;
+        }
+
+        const res = await fetch("/api/members/email-check", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+        });
+
+        const data = await res.json();
+        if (data.isDuplicated) {
+            setEmailError("이미 사용 중인 이메일입니다.");
+            setIsEmailChecked(false);
+        } else {
+            alert("사용 가능한 이메일입니다.");
+            setEmailError("");
+            setIsEmailChecked(true);
+        }
+    };
 
     // 이메일 형식 검사
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setEmail(value);
+        setIsEmailChecked(false); // 이메일 변경 시 중복확인 무효화
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(value)) {
@@ -40,6 +84,18 @@ export function SignUpForm() {
         }
     };
 
+    // 비밀번호와 비밀번호 확인 비교
+    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setConfirmPassword(value);
+
+        if (value !== password) {
+            setConfirmPasswordError("비밀번호가 일치하지 않습니다.");
+        } else {
+            setConfirmPasswordError("");
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -50,6 +106,16 @@ export function SignUpForm() {
 
         if (emailError || passwordError) {
             alert("입력한 정보가 올바르지 않습니다.");
+            return;
+        }
+
+        if (!isEmailChecked) {
+            alert("이메일 중복 확인을 완료해주세요.");
+            return;
+        }
+
+        if (confirmPassword !== password) {
+            alert("비밀번호가 일치하지 않습니다.");
             return;
         }
 
@@ -93,6 +159,9 @@ export function SignUpForm() {
                         value={email}
                         onChange={handleEmailChange}
                     />
+                    <button type="button" onClick={handleEmailCheck}>
+                        중복확인
+                    </button>
                     {emailError && (
                         <div style={{ color: "red", fontSize: "12px" }}>{emailError}</div>
                     )}
@@ -109,6 +178,20 @@ export function SignUpForm() {
                     />
                     {passwordError && (
                         <div style={{ color: "red", fontSize: "12px" }}>{passwordError}</div>
+                    )}
+                </div>
+                <div>
+                    <label htmlFor="confirmPassword">비밀번호 확인</label><br />
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="********"
+                        value={confirmPassword}
+                        onChange={handleConfirmPasswordChange}
+                    />
+                    {confirmPasswordError && (
+                        <div style={{ color: "red", fontSize: "12px" }}>{confirmPasswordError}</div>
                     )}
                 </div>
                 <div>
