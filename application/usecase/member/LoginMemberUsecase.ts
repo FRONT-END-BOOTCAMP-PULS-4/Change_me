@@ -10,6 +10,10 @@ export const loginMemberUseCase = {
             throw new Error("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
 
+        if (member.deletedAt !== null) {
+            throw new Error("탈퇴한 계정입니다.");
+        }
+
         const isValid = await bcrypt.compare(password, member.password);
         if (!isValid) {
             throw new Error("이메일 또는 비밀번호가 일치하지 않습니다.");

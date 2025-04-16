@@ -98,4 +98,14 @@ export const memberRepository: MemberRepository = {
 
         return !!data; // data가 있으면 true (중복)
     },
+
+    withdraw: async (id: string) => {
+        const now = new Date().toISOString();
+        const { error } = await supabase
+            .from("member")
+            .update({ deleted_at: now })
+            .eq("id", id);
+
+        if (error) throw new Error(error.message);
+    },
 };
