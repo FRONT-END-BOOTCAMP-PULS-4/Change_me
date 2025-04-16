@@ -9,13 +9,22 @@ export const joinMemberUseCase = {
         password: string;
         nickname: string;
     }) {
-        // 비밀번호 해시
         const hashedPassword = await bcrypt.hash(data.password, 10);
-        // 해시된 비밀번호로 새로운 Member 생성
-        const newMember = Member.create({
-            ...data,
-            password: hashedPassword,
-        });
+        const now = new Date();
+
+        const newMember = new Member(
+            "", // id는 Supabase에서 자동 생성
+            data.name,
+            data.email,
+            hashedPassword,
+            data.nickname,
+            "",       // imageUrl
+            0,        // role
+            now,      // createdAt
+            null,     // modifiedAt
+            null      // deletedAt
+        );
+
         const savedMember = await memberRepository.create(newMember);
         return savedMember;
     },

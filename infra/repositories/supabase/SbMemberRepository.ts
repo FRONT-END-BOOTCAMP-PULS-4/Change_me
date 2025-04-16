@@ -9,20 +9,41 @@ const supabase = createClient(
 
 export const memberRepository: MemberRepository = {
     async create(member: Member): Promise<Member> {
-        const { data, error } = await supabase.from("member").insert({
-            name: member.props.name,
-            email: member.props.email,
-            password: member.props.password,
-            nickname: member.props.nickname,
-            created_at: member.props.createdAt?.toISOString(),
-        }).select().single();
+        const { data, error } = await supabase
+            .from("member")
+            .insert({
+                name: member.name,
+                email: member.email,
+                password: member.password,
+                nickname: member.nickname,
+                image_url: member.imageUrl,
+                role: member.role,
+                created_at: member.createdAt.toISOString(),
+                modified_at: null,
+                deleted_at: null,
+            })
+            .select()
+            .single();
 
-        if (error) throw new Error(error.message);
+        if (error || !data) {
+            throw new Error(error?.message || "회원 생성 실패");
+        }
 
-        return Member.create({ ...data });
+        return new Member(
+            data.id,
+            data.name,
+            data.email,
+            data.password,
+            data.nickname,
+            data.image_url ?? "",
+            data.role,
+            new Date(data.created_at),
+            data.modified_at ? new Date(data.modified_at) : null,
+            data.deleted_at ? new Date(data.deleted_at) : null
+        );
     },
 
-    findByEmail: async (email: string) => {
+    async findByEmail(email: string) {
         const { data, error } = await supabase
             .from("member")
             .select("*")
@@ -30,10 +51,22 @@ export const memberRepository: MemberRepository = {
             .single();
 
         if (error || !data) return null;
-        return Member.fromDB(data);
+
+        return new Member(
+            data.id,
+            data.name,
+            data.email,
+            data.password,
+            data.nickname,
+            data.image_url ?? "",
+            data.role,
+            new Date(data.created_at),
+            data.modified_at ? new Date(data.modified_at) : null,
+            data.deleted_at ? new Date(data.deleted_at) : null
+        );
     },
 
-    findById: async (id: string) => {
+    async findById(id: string) {
         const { data, error } = await supabase
             .from("member")
             .select("*")
@@ -41,6 +74,18 @@ export const memberRepository: MemberRepository = {
             .single();
 
         if (error || !data) return null;
-        return Member.fromDB(data);
+
+        return new Member(
+            data.id,
+            data.name,
+            data.email,
+            data.password,
+            data.nickname,
+            data.image_url ?? "",
+            data.role,
+            new Date(data.created_at),
+            data.modified_at ? new Date(data.modified_at) : null,
+            data.deleted_at ? new Date(data.deleted_at) : null
+        );
     },
 };

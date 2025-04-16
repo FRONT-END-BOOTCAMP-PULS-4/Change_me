@@ -10,22 +10,22 @@ export const loginMemberUseCase = {
             throw new Error("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
 
-        const isValid = await bcrypt.compare(password, member.props.password);
+        const isValid = await bcrypt.compare(password, member.password);
         if (!isValid) {
             throw new Error("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
 
         const token = signJWT({
-            id: member.props.id,
-            nickname: member.props.nickname,
+            id: member.id,
+            nickname: member.nickname,
         });
 
         return {
             token,
             user: {
-                id: member.props.id,
-                name: member.props.name,
-                nickname: member.props.nickname,
+                id: member.id,
+                name: member.name,
+                nickname: member.nickname,
             },
         };
     },
