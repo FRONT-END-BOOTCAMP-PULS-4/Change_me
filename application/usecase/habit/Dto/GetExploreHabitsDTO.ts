@@ -1,4 +1,4 @@
-export class GetExploreHabitsDTO {
+export class GetExploreHabitsDto {
     constructor(
         public categoryId?: number,
         public memberId?: string,
