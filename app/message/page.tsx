@@ -59,5 +59,19 @@ export default function MessageListPage() {
         fetchMessages();
     }, [currentPage, mine, token]);
 
-    return {};
+    return (
+        <main>
+            <header>
+                <h1>Daily Message</h1>
+                <ol>
+                    <li>
+                        <button>전체</button>
+                    </li>
+                    <li>
+                        <button>내 메시지</button>
+                    </li>
+                </ol>
+            </header>
+        </main>
+    );
 }
