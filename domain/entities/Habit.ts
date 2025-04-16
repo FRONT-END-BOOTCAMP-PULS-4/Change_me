@@ -1,4 +1,5 @@
-export class Habit {
+
+export class Habit{
     constructor(
         public id: number,
         public categoryId: number,

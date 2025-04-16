@@ -4,7 +4,7 @@ import { HabitFilter } from "./filters/HabitFilter";
 export interface HabitRepository {
     findAll(filter?: HabitFilter): Promise<Habit[]>;
     findById(id: number): Promise<Habit | null>;
-    save(category: Habit): Promise<Habit>;
-    update(category: Habit): Promise<Habit>;
+    save(Habit: Habit): Promise<Habit>;
+    update(Habit: Habit): Promise<Habit>;
     deleteById(id: number): Promise<void>;
 }

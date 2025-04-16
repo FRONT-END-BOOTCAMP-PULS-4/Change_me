@@ -1,9 +1,8 @@
 export class HabitFilter {
     constructor(
         public memberId?: string,
-        public categoryName?: string,
+        public categoryId?: number,
         public status?: number,
-        public includeAll?: boolean,
         public sortField?: string,
         public ascending?: boolean,
         public offset: number = 0,
