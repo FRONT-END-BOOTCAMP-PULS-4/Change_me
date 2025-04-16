@@ -2,9 +2,11 @@
 
 import { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
+import { useMemberStore } from "@/stores/memberStore";
 
 export default function LoginForm() {
     const router = useRouter();
+    const setUser = useMemberStore((state) => state.setUser);
     const [form, setForm] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const [errorMessage, setErrorMessage] = useState("");
@@ -13,7 +15,6 @@ export default function LoginForm() {
         const { name, value } = e.target;
         setForm(prev => ({ ...prev, [name]: value }));
 
-        // 간단한 유효성 검사 예시
         if (name === "email" && !value.includes("@")) {
             setErrors(prev => ({ ...prev, email: "유효한 이메일을 입력해주세요." }));
         } else {
@@ -43,8 +44,8 @@ export default function LoginForm() {
                 return;
             }
 
-            // 토큰을 localStorage에 저장
-            localStorage.setItem("access_token", data.token);
+            // localStorage.setItem("access_token", data.token);
+            setUser(data.user, data.token);
 
             console.log("로그인 성공", data);
             router.push("/profile");
