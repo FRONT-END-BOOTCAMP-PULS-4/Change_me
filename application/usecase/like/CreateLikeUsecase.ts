@@ -1,5 +1,8 @@
-export class CreateLike {
-    constructor(public memberId: string, public messageId: number) {}
+export class CreateLikeUsecase {
+    constructor(
+        public memberId: string,
+        public messageId: number,
+    ) {}
 
     async execute() {
         // Logic to create a like for a message by a member

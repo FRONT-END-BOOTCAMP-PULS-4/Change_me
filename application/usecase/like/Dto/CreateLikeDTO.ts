@@ -1,6 +1,6 @@
-export class CreateLikeDTO {
+export class CreateLikeDto {
     constructor(
         public messageId: number,
-        public memberId: string
+        public memberId: string,
     ) {}
 }

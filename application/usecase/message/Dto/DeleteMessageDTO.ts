@@ -1,5 +1,3 @@
-export class DeleteMessageDTO {
-    constructor(
-        public messageId: number
-    ) {}
+export class DeleteMessageDto {
+    constructor(public messageId: number) {}
 }

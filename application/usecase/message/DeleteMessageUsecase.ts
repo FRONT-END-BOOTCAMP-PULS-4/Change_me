@@ -1,4 +1,4 @@
-export class DeleteMessage {
+export class DeleteMessageUsecase {
     constructor(private messageId: number) {}
 
     async execute() {
