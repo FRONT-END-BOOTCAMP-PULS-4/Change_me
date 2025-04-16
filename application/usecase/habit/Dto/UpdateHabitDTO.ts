@@ -1,4 +1,4 @@
-export class UpdateHabitDTO {
+export class UpdateHabitDto {
     constructor(
         public id: number,
         public name?: string,

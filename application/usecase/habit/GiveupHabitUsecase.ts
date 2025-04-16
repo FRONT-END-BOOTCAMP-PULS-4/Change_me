@@ -1,3 +1,7 @@
+import {HabitRepository} from '@/domain/repositories/HabitRepository';
+import {Habit} from '@/domain/entities/Habit';
+import {HabitFilter} from '@/domain/repositories/filters/HabitFilter';
+
 export class GiveupHabit {
     constructor(private habitId: number) {}
 
