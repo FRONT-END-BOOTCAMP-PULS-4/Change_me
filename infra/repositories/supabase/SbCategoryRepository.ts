@@ -8,9 +8,12 @@ export class SbCategoryRepository implements CategoryRepository {
     async count(): Promise<number> {
         const supabase = await createClient();
 
-        const { count, error } = await supabase
+        const { count, error, data } = await supabase
             .from("category")
-            .select("*", { count: "exact", head: true });
+            .select("*", {
+                count: "exact",
+                head: true,
+            });
 
         if (error) {
             throw new Error(`카테고리 개수를 가져올 수 없음: ${error.message}`);
@@ -28,7 +31,7 @@ export class SbCategoryRepository implements CategoryRepository {
             .order("habit_count", { ascending: false });
 
         if (filter) {
-            if (filter.offset) {
+            if (filter.offset !== undefined) {
                 query.range(
                     filter.offset,
                     filter.offset + (filter.limit || 0) - 1,
@@ -48,7 +51,8 @@ export class SbCategoryRepository implements CategoryRepository {
 
         return data.map((category) => {
             return {
-                ...category,
+                id: category.id,
+                name: category.name,
                 habitCount: category.habit_count,
             };
         });
