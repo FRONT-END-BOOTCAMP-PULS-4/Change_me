@@ -18,7 +18,7 @@ export const joinMemberUseCase = {
             data.email,
             hashedPassword,
             data.nickname,
-            "",       // imageUrl
+            null,       // imageUrl
             0,        // role
             now,      // createdAt
             null,     // modifiedAt

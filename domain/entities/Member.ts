@@ -5,7 +5,7 @@ export class Member {
         public email: string,
         public password: string,
         public nickname: string,
-        public imageUrl: string,
+        public imageUrl: string | null,
         public role: number,
         public createdAt: Date,
         public modifiedAt: Date | null,
