@@ -1,10 +1,10 @@
-import { MessageDTO } from "./MessageDTO";
+import { MessageDto } from "./MessageDto";
 
-export class MessageListDTO {
+export class MessageListDto {
     constructor(
-        public messages: MessageDTO[],
+        public messages: MessageDto[],
         public totalCount: number, // total number of messages
         public endPage: number, // last page number
-        public pages: number[] // array of page numbers to show in pagination
+        public pages: number[], // array of page numbers to show in pagination
     ) {}
 }

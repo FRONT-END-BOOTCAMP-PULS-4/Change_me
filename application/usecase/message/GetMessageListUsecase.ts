@@ -1,14 +1,14 @@
 import { MessageRepository } from "@/domain/repositories/MessageRepository";
-import { MessageListDTO } from "./Dto/MessageListDTO";
-import { GetMessageListQueryDTO } from "./Dto/GetMessageListQueryDTO";
+import { MessageListDto } from "./dto/MessageListDto";
+import { GetMessageListQueryDto } from "./dto/GetMessageListQueryDto";
 import { MessageFilter } from "@/domain/repositories/filters/MessageFilter";
 import { Message } from "@/domain/entities/Message";
 import { MemberRepository } from "@/domain/repositories/MemberRepository";
 import { Member } from "@/domain/entities/Member";
 import { MessageLikeRepository } from "@/domain/repositories/MessageLikeRepository";
-import { MessageDTO } from "./Dto/MessageDTO";
+import { MessageDto } from "./dto/MessageDto";
 
-export class GetMessageList {
+export class GetMessageListUsecase {
     private messageRepository: MessageRepository;
     private memberRepository: MemberRepository;
     private messageLikeRepository: MessageLikeRepository;
@@ -16,14 +16,14 @@ export class GetMessageList {
     constructor(
         messageRepository: MessageRepository,
         memberRepository: MemberRepository,
-        messageLikeRepository: MessageLikeRepository
+        messageLikeRepository: MessageLikeRepository,
     ) {
         this.messageRepository = messageRepository;
         this.memberRepository = memberRepository;
         this.messageLikeRepository = messageLikeRepository;
     }
 
-    async execute(queryDto: GetMessageListQueryDTO): Promise<MessageListDTO> {
+    async execute(queryDto: GetMessageListQueryDto): Promise<MessageListDto> {
         try {
             // page setups
             const pageSize: number = 5; // number of messages per page
@@ -41,7 +41,7 @@ export class GetMessageList {
                 "createdAt",
                 false, // default sorting order: latest first
                 offset,
-                limit
+                limit,
             );
 
             const messages: Message[] =
@@ -50,7 +50,7 @@ export class GetMessageList {
                 await this.messageRepository.count(filter);
 
             // convert Message to MessageDTO
-            const messageDtos: MessageDTO[] = await Promise.all(
+            const messageDtos: MessageDto[] = await Promise.all(
                 messages.map(async (message) => {
                     let member: Member | null =
                         await this.memberRepository.findById(message.memberId);
@@ -76,7 +76,7 @@ export class GetMessageList {
                         isLiked,
                         modifiedAt: message.modifiedAt,
                     };
-                })
+                }),
             );
 
             const startPage =
@@ -84,10 +84,10 @@ export class GetMessageList {
             const endPage = Math.ceil(totalCount / pageSize);
             const pages = Array.from(
                 { length: 5 }, // 5 pages to show
-                (_, i) => i + startPage
+                (_, i) => i + startPage,
             ).filter((pageNumber) => pageNumber <= endPage);
 
-            const messageListDTO: MessageListDTO = {
+            const messageListDTO: MessageListDto = {
                 messages: messageDtos,
                 totalCount,
                 endPage,

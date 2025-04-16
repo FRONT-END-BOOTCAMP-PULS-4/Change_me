@@ -1,8 +1,8 @@
-export class UpdateMessage {
+export class UpdateMessageUsecase {
     constructor(
         public id: number,
         public content: string,
-        public modifiedAt: Date
+        public modifiedAt: Date,
     ) {}
 
     async execute() {

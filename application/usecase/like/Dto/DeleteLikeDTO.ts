@@ -1,6 +1,6 @@
-export class DeleteLikeDTO {
+export class DeleteLikeDto {
     constructor(
         public likeId: number,
-        public memberId: string
+        public memberId: string,
     ) {}
 }

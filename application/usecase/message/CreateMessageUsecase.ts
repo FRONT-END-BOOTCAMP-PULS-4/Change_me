@@ -1,8 +1,8 @@
-export class CreateMessage {
+export class CreateMessageUsecase {
     constructor(
         public memberId: string,
         public content: string,
-        public createdAt: Date = new Date()
+        public createdAt: Date = new Date(),
     ) {}
 
     execute() {

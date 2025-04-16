@@ -1,4 +1,4 @@
-export class DeleteLike {
+export class DeleteLikeUsecase {
     constructor(private likeId: string) {}
 
     async execute() {

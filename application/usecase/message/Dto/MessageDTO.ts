@@ -1,4 +1,4 @@
-export class MessageDTO {
+export class MessageDto {
     constructor(
         public id: number,
         public writer: string,
@@ -7,6 +7,6 @@ export class MessageDTO {
         public createdAt: Date,
         public likeCount: number,
         public isLiked: boolean,
-        public modifiedAt?: Date // can be null if message is not modified
+        public modifiedAt?: Date, // can be null if message is not modified
     ) {}
 }
