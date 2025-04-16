@@ -8,7 +8,7 @@ import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 export class SbMessageRepository implements MessageRepository {
     private queryFilter(
         filter: MessageFilter | undefined,
-        query: PostgrestFilterBuilder<any, any, any[], "messages", unknown>
+        query: PostgrestFilterBuilder<any, any, any[], "messages", unknown>,
     ) {
         if (filter) {
             if (filter.memberId) {
@@ -42,7 +42,7 @@ export class SbMessageRepository implements MessageRepository {
             .order("created_at", { ascending: false })
             .range(
                 filter?.offset || 0,
-                (filter?.offset || 0) + (filter?.limit || 5) - 1
+                (filter?.offset || 0) + (filter?.limit || 5) - 1,
             );
 
         query = this.queryFilter(filter, query);
@@ -57,7 +57,7 @@ export class SbMessageRepository implements MessageRepository {
                 memberId: m.member_id,
                 content: m.content,
                 createdAt: new Date(m.created_at),
-                modifiedAt: new Date(m.modified_at),
+                modifiedAt: m.modified_at && new Date(m.modified_at), // return null if modifiedAt is null
             })) || [];
 
         return messages;
@@ -80,12 +80,14 @@ export class SbMessageRepository implements MessageRepository {
             return null;
         }
 
+        const modifiedAt = data.modified_at && new Date(data.modified_at);
+
         return new Message(
             data.id,
-            data.memberId,
+            data.member_id,
             data.content,
-            new Date(data.createdAt),
-            new Date(data.modifiedAt)
+            new Date(data.created_at),
+            modifiedAt,
         );
     }
 
@@ -95,8 +97,7 @@ export class SbMessageRepository implements MessageRepository {
         const { data, error } = await supabase
             .from("messages")
             .insert({
-                id: message.id,
-                memberId: message.memberId,
+                member_id: message.memberId,
                 content: message.content,
             })
             .select("*")
@@ -106,12 +107,14 @@ export class SbMessageRepository implements MessageRepository {
             throw new Error(`Failed to save message: ${error.message}`);
         }
 
+        const modifiedAt = data.modified_at && new Date(data.modified_at);
+
         return new Message(
             data.id,
             data.member_id,
             data.content,
-            new Date(data.createdAt),
-            new Date(data.modifiedAt)
+            new Date(data.created_at),
+            modifiedAt,
         );
     }
 
@@ -121,8 +124,9 @@ export class SbMessageRepository implements MessageRepository {
         const { data, error } = await supabase
             .from("messages")
             .update({
-                memberId: message.memberId,
+                member_id: message.memberId,
                 content: message.content,
+                modified_at: new Date().toISOString(),
             })
             .eq("id", message.id)
             .select("*")
@@ -132,12 +136,14 @@ export class SbMessageRepository implements MessageRepository {
             throw new Error(`Failed to update message: ${error.message}`);
         }
 
+        const modifiedAt = data.modified_at && new Date(data.modified_at);
+
         return new Message(
             data.id,
             data.member_id,
             data.content,
-            new Date(data.createdAt),
-            new Date(data.modifiedAt)
+            new Date(data.created_at),
+            modifiedAt,
         );
     }
 
@@ -148,7 +154,7 @@ export class SbMessageRepository implements MessageRepository {
 
         if (error) {
             throw new Error(
-                `Failed to delete message with id ${id}: ${error.message}`
+                `Failed to delete message with id ${id}: ${error.message}`,
             );
         }
     }

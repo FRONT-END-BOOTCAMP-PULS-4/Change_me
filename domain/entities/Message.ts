@@ -4,6 +4,6 @@ export class Message {
         public memberId: string,
         public content: string,
         public createdAt: Date,
-        public modifiedAt: Date
+        public modifiedAt: Date | null,
     ) {}
 }
