@@ -59,14 +59,14 @@ export default function LoginForm() {
             <h2>로그인</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="email">이메일</label><br />
+                    <label htmlFor="email">이메일(아이디)</label><br />
                     <input
                         type="email"
                         id="email"
                         name="email"
                         value={form.email}
                         onChange={handleChange}
-                        placeholder="example@example.com"
+                        placeholder="이메일"
                     />
                     {errors.email && (
                         <div>{errors.email}</div>
@@ -81,7 +81,7 @@ export default function LoginForm() {
                         name="password"
                         value={form.password}
                         onChange={handleChange}
-                        placeholder="********"
+                        placeholder="비밀번호"
                     />
                     {errors.password && (
                         <div>{errors.password}</div>
@@ -95,7 +95,7 @@ export default function LoginForm() {
                     로그인
                 </button>
                 <p>
-                    아직 계정이 없으신가요? <a href="/signup">회원가입</a>
+                    계정이 없으신가요? <a href="/signup">회원가입하기</a>
                 </p>
             </form>
         </div>
