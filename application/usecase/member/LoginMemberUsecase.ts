@@ -18,6 +18,7 @@ export const loginMemberUseCase = {
         const token = signJWT({
             id: member.id,
             nickname: member.nickname,
+            role: member.role,
         });
 
         return {
