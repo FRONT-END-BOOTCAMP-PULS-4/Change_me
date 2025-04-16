@@ -1,4 +1,4 @@
-import { joinMemberUseCase } from "@/application/usecase/member/JoinMember";
+import { joinMemberUseCase } from "@/application/usecase/member/JoinMemberUsecase";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

@@ -4,7 +4,7 @@
 //     ) {}
 // }
 
-export interface ProfileDTO {
+export interface ProfileDto {
     id: string;
     name: string;
     email: string;

@@ -1,4 +1,4 @@
-export class JoinMemberDTO {
+export class JoinMemberDto {
     constructor(
         public name: string,
         public email: string,

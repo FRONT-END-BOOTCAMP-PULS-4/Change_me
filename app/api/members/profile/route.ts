@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getProfileUseCase } from "@/application/usecase/member/GetProfile";
+import { getProfileUseCase } from "@/application/usecase/member/GetProfileUsecase";
 
 export async function GET(req: NextRequest) {
     const authHeader = req.headers.get("authorization");
