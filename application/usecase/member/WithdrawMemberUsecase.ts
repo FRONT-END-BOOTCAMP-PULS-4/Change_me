@@ -1,9 +1,11 @@
-export class WithdrawMember {
-    constructor(private memberId: string) {}
+import { memberRepository } from "@/infra/repositories/supabase/SbMemberRepository";
+import { verifyJWT } from "@/utils/jwt";
 
-    public async execute(): Promise<void> {
-        // Logic for withdrawing a member from the application
-        // This could involve removing the member's data from the database
-        // and performing any necessary cleanup operations.
-    }
-}
+export const withdrawMemberUseCase = {
+    async execute(token: string) {
+        const payload = verifyJWT(token);
+        if (!payload) throw new Error("인증 실패");
+
+        await memberRepository.withdraw(payload.id);
+    },
+};
