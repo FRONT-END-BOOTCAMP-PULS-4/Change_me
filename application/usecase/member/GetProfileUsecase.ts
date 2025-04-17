@@ -16,6 +16,7 @@ export const getProfileUseCase = {
             name: member.name,
             email: member.email,
             nickname: member.nickname,
+            imageUrl: member.imageUrl,
             createdAt: member.createdAt.toISOString(),
         };
     },

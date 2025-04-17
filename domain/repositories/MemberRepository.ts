@@ -6,4 +6,6 @@ export interface MemberRepository {
     findById(id: string): Promise<Member | null>;
     isEmailDuplicated(email: string): Promise<boolean>;
     withdraw(id: string): Promise<void>;
+    updateProfile(id: string, nickname: string, imageUrl?: string | null): Promise<void>;
+    uploadProfileImage(id: string, file: File, oldPath?: string): Promise<{ path: string }>;
 }

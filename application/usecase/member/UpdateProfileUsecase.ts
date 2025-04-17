@@ -1,16 +1,27 @@
-export class UpdateProfile {
-    constructor(private profileData: UpdateProfileDTO) {}
+import { memberRepository } from "@/infra/repositories/supabase/SbMemberRepository";
 
-    async execute() {
-        // Logic to update the member's profile using this.profileData
-        // This could involve calling a repository method to persist the changes
-    }
-}
+export const updateProfileUsecase = {
+    async execute(id: string, nickname: string, file?: File) {
+        try {
+            let imageUrl: string | null = null;
 
-export interface UpdateProfileDTO {
-    name?: string;
-    email?: string;
-    password?: string;
-    nickname?: string;
-    imageUrl?: string;
-}
+            if (file) {
+                const existingMember = await memberRepository.findById(id);
+                const oldPath = existingMember?.imageUrl?.split("/").pop();
+                const uploadResult = await memberRepository.uploadProfileImage(id, file, oldPath);
+
+                if (!uploadResult || !uploadResult.path) {
+                    throw new Error("이미지 업로드에 실패했습니다.");
+                }
+
+                imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/profile-images/${uploadResult.path}`;
+            }
+
+            await memberRepository.updateProfile(id, nickname, imageUrl);
+            return imageUrl;
+        } catch (err) {
+            console.error("프로필 업데이트 실패:", err);
+            throw err;
+        }
+    },
+};

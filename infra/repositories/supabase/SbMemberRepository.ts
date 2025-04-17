@@ -108,4 +108,44 @@ export const memberRepository: MemberRepository = {
 
         if (error) throw new Error(error.message);
     },
+
+    async updateProfile(id: string, nickname: string, imageUrl?: string | null): Promise<void> {
+        const updates: Record<string, any> = { nickname };
+        if (imageUrl) {
+            updates.image_url = imageUrl;
+        }
+
+        const { error } = await supabase
+            .from("member")
+            .update(updates)
+            .eq("id", id);
+
+        if (error) throw new Error("프로필 업데이트 실패");
+    },
+
+    async uploadProfileImage(id: string, file: File, oldPath?: string): Promise<{ path: string }> {
+        const filename = `${id}_${Date.now()}`;
+
+        // 기존 이미지가 있으면 삭제
+        if (oldPath) {
+            const { error: deleteError } = await supabase.storage
+                .from("profile-images")
+                .remove([oldPath]);
+
+            if (deleteError) {
+                console.warn("기존 이미지 삭제 실패:", deleteError);
+            }
+        }
+
+        const { data, error } = await supabase.storage
+            .from("profile-images")
+            .upload(filename, file);
+
+        if (error || !data?.path) {
+            console.error("업로드 실패:", error);
+            throw new Error("이미지 업로드 실패");
+        }
+
+        return { path: data.path };
+    }
 };
