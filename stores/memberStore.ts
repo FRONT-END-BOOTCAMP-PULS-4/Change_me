@@ -13,8 +13,11 @@ type MemberState = {
     setUser: (user: User, token: string) => void;
     logout: () => void;
     tryAutoLogin: () => Promise<void>;
-    getToken: () => string | null;
 };
+
+export function getToken() {
+    return localStorage.getItem("access_token");
+}
 
 export const useMemberStore = create<MemberState>((set) => ({
     user: null,
@@ -48,7 +51,7 @@ export const useMemberStore = create<MemberState>((set) => ({
         }
     },
 
-    getToken: () => {
-        return localStorage.getItem("access_token");
-    },
+    // getToken: () => {
+    //     return localStorage.getItem("access_token");
+    // },
 }));
