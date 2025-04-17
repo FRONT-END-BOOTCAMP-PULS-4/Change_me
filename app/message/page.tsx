@@ -76,7 +76,26 @@ export default function MessageListPage() {
             <ol>
                 {messages.map((message) => (
                     <li key={message.id}>
-                        <div></div>
+                        <div>
+                            <img
+                                src={message.profileUrl}
+                                width={40}
+                                height={40}
+                            />
+                            <div>
+                                <strong>{message.writer}</strong>
+                                <span>{message.createdAt.toISOString()}</span>
+                            </div>
+                        </div>
+
+                        <p>{message.content}</p>
+
+                        <div>
+                            <button>
+                                {message.isLiked ? "❤️" : "🤍"}{" "}
+                                {message.likeCount}
+                            </button>
+                        </div>
                     </li>
                 ))}
             </ol>
