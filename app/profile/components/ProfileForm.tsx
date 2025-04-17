@@ -53,10 +53,14 @@ export default function ProfileForm({ profile }: Props) {
             return;
         }
 
+        const token = localStorage.getItem("access_token");
         // 비밀번호 검증
         const passwordRes = await fetch("/api/members/verify-password", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
             body: JSON.stringify({ id: profile.id, password }),
         });
 
@@ -76,6 +80,9 @@ export default function ProfileForm({ profile }: Props) {
 
         const res = await fetch("/api/members/profile-image", {
             method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
             body: formData,
         });
 

@@ -20,6 +20,10 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
+    if (!pathname.startsWith("/api")) {
+        return NextResponse.next(); // 페이지 라우트는 인증 검사 안 함
+    }
+
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.replace("Bearer ", "");
 
