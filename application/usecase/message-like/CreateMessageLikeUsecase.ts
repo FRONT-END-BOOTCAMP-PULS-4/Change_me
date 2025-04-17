@@ -1,7 +1,7 @@
-export class CreateLikeUsecase {
+export class CreateMemberLikeUsecase {
     constructor(
-        public memberId: string,
         public messageId: number,
+        public memberId: string,
     ) {}
 
     async execute() {
