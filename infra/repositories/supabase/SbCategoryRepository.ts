@@ -56,6 +56,26 @@ export class SbCategoryRepository implements CategoryRepository {
         });
     }
 
+    async findById(id: number): Promise<CategoryView> {
+        const supabase = await createClient();
+
+        const { data, error } = await supabase
+            .from("category_view")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+        if (error) {
+            throw new Error(`${error.message}`);
+        }
+
+        return {
+            name: data.name,
+            memberId: data.member_id,
+            habitCount: data.habit_count,
+        };
+    }
+
     async save(category: Category): Promise<Category> {
         const supabase = await createClient();
 
@@ -82,12 +102,12 @@ export class SbCategoryRepository implements CategoryRepository {
         };
     }
 
-    async update(category: Category): Promise<Category> {
+    async update(category: Category): Promise<void> {
         const supabase = await createClient();
 
         const updates: Pick<Category, "name"> = { name: category.name };
 
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from("category")
             .update(updates)
             .eq("id", category.id)
@@ -97,12 +117,6 @@ export class SbCategoryRepository implements CategoryRepository {
         if (error) {
             throw new Error(`카테고리 수정 실패: ${error.message}`);
         }
-
-        return {
-            id: data.id,
-            name: data.name,
-            memberId: data.member_id,
-        };
     }
 
     async deleteById(id: number): Promise<void> {

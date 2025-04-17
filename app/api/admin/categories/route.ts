@@ -51,7 +51,7 @@ export async function POST(request: Request) {
             );
         }
 
-        const memberId = getMemberIdFromToken(
+        const memberId = await getMemberIdFromToken(
             request.headers.get("Authorization")!,
         );
 
