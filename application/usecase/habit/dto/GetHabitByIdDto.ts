@@ -1,4 +1,4 @@
-export class GetHabitByIdDTO {
+export class GetHabitByIdDto {
     constructor(
         public id: number
     ) {}
