@@ -11,12 +11,6 @@ export default function ProfilePage() {
     useEffect(() => {
         const fetchProfile = async () => {
             const token = localStorage.getItem("access_token");
-
-            if (!token) {
-                window.location.href = "/login";
-                return;
-            }
-
             const res = await fetch("/api/members/profile", {
                 headers: {
                     Authorization: `Bearer ${token}`,
