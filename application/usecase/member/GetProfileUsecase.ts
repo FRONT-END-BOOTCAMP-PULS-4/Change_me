@@ -3,7 +3,7 @@ import { memberRepository } from "@/infra/repositories/supabase/SbMemberReposito
 
 export const getProfileUseCase = {
     async execute(token: string) {
-        const payload = verifyJWT(token);
+        const payload = await verifyJWT(token);
         if (!payload || typeof payload !== "object" || !("id" in payload)) {
             throw new Error("인증 실패");
         }
