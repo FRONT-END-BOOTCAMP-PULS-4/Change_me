@@ -1,0 +1,79 @@
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 1rem;
+
+    img {
+        width: 180px;
+        height: 180px;
+    }
+
+    h1 {
+        margin-top: 0.5rem;
+        font-size: var(--fontSize-2xl);
+        color: var(--color-main1);
+    }
+}
+
+.inputGroup {
+    margin-bottom: 1rem;
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid var(--color-gray);
+        border-radius: 5px;
+    }
+}
+
+.duplicateButton {
+    margin-top: 0.3rem;
+    padding: 0.3rem 1rem;
+    background-color: var(--color-main3);
+    color: var(--color-black);
+    border-radius: 4px;
+}
+
+.error {
+    color: var(--color-red);
+    font-size: var(--fontSize-sm);
+    margin-top: 0.2rem;
+}
+
+.success {
+    color: var(--color-main1);
+    font-size: var(--fontSize-sm);
+    margin-top: 0.2rem;
+}
+
+.submitButton {
+    width: 100%;
+    padding: 0.7rem;
+    background-color: var(--color-main1);
+    color: white;
+    border-radius: 5px;
+    font-size: var(--fontSize-md);
+    font-weight: var(--fontWeight-bold);
+}
+
+.bottomText {
+    text-align: center;
+    font-size: var(--fontSize-sm);
+    margin-top: 1rem;
+
+    a {
+        color: var(--color-main1);
+        font-weight: bold;
+        margin-left: 4px;
+    }
+}

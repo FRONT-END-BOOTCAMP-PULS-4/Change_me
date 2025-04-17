@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import styles from "./SignUpForm.module.scss";
 
 export function SignUpForm() {
     const router = useRouter();
@@ -134,82 +135,164 @@ export function SignUpForm() {
         }
     };
 
+    // return (
+    //     <div>
+    //         <h2>회원가입</h2>
+    //         <form onSubmit={handleSubmit}>
+    //             <div>
+    //                 <label htmlFor="name">이름</label><br />
+    //                 <input
+    //                     type="text"
+    //                     id="name"
+    //                     name="name"
+    //                     placeholder="이름을 입력해주세요"
+    //                     value={name}
+    //                     onChange={(e) => setName(e.target.value)}
+    //                 />
+    //             </div>
+    //             <div>
+    //                 <label htmlFor="email">이메일</label><br />
+    //                 <input
+    //                     type="email"
+    //                     id="email"
+    //                     name="email"
+    //                     placeholder="example@example.com"
+    //                     value={email}
+    //                     onChange={handleEmailChange}
+    //                 />
+    //                 <button type="button" onClick={handleEmailCheck}>
+    //                     중복확인
+    //                 </button>
+    //                 {emailError && (
+    //                     <div style={{ color: "red", fontSize: "12px" }}>{emailError}</div>
+    //                 )}
+    //             </div>
+    //             <div>
+    //                 <label htmlFor="password">비밀번호</label><br />
+    //                 <input
+    //                     type="password"
+    //                     id="password"
+    //                     name="password"
+    //                     placeholder="********"
+    //                     value={password}
+    //                     onChange={handlePasswordChange}
+    //                 />
+    //                 {passwordError && (
+    //                     <div style={{ color: "red", fontSize: "12px" }}>{passwordError}</div>
+    //                 )}
+    //             </div>
+    //             <div>
+    //                 <label htmlFor="confirmPassword">비밀번호 확인</label><br />
+    //                 <input
+    //                     type="password"
+    //                     id="confirmPassword"
+    //                     name="confirmPassword"
+    //                     placeholder="********"
+    //                     value={confirmPassword}
+    //                     onChange={handleConfirmPasswordChange}
+    //                 />
+    //                 {confirmPasswordError && (
+    //                     <div style={{ color: "red", fontSize: "12px" }}>{confirmPasswordError}</div>
+    //                 )}
+    //             </div>
+    //             <div>
+    //                 <label htmlFor="nickname">닉네임</label><br />
+    //                 <input
+    //                     type="text"
+    //                     id="nickname"
+    //                     name="nickname"
+    //                     placeholder="********"
+    //                     value={nickname}
+    //                     onChange={(e) => setNickname(e.target.value)}
+    //                 />
+    //             </div>
+    //             <button type="submit">가입하기</button>
+    //         </form>
+
+    //         <p>
+    //             이미 계정이 있으신가요? <a href="/login">로그인</a>
+    //         </p>
+    //     </div>
+    // );
     return (
-        <div>
+        <div className={styles.container}>
+            <div className={styles.logo}>
+                <img src="/images/LogoChangeMe.png" alt="LogoChangeMe" />
+                <h1>Change Me</h1>
+            </div>
+
             <h2>회원가입</h2>
+
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="name">이름</label><br />
+                <div className={styles.inputGroup}>
+                    <label htmlFor="name">이름</label>
                     <input
-                        type="text"
                         id="name"
-                        name="name"
-                        placeholder="이름을 입력해주세요"
+                        type="text"
+                        placeholder="성을 입력해주세요."
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
                 </div>
-                <div>
-                    <label htmlFor="email">이메일</label><br />
+
+                <div className={styles.inputGroup}>
+                    <label htmlFor="email">이메일(아이디)</label>
                     <input
-                        type="email"
                         id="email"
-                        name="email"
-                        placeholder="example@example.com"
+                        type="email"
+                        placeholder="email_address@example.com"
                         value={email}
                         onChange={handleEmailChange}
                     />
-                    <button type="button" onClick={handleEmailCheck}>
-                        중복확인
+                    <button type="button" className={styles.duplicateButton} onClick={handleEmailCheck}>
+                        중복 확인
                     </button>
-                    {emailError && (
-                        <div style={{ color: "red", fontSize: "12px" }}>{emailError}</div>
-                    )}
+                    {emailError && <div className={styles.error}>{emailError}</div>}
+                    {isEmailChecked && <div className={styles.success}>사용 가능한 이메일입니다.</div>}
                 </div>
-                <div>
-                    <label htmlFor="password">비밀번호</label><br />
+
+                <div className={styles.inputGroup}>
+                    <label htmlFor="password">비밀번호</label>
                     <input
-                        type="password"
                         id="password"
-                        name="password"
-                        placeholder="********"
+                        type="password"
+                        placeholder="비밀번호를 입력해주세요."
                         value={password}
                         onChange={handlePasswordChange}
                     />
-                    {passwordError && (
-                        <div style={{ color: "red", fontSize: "12px" }}>{passwordError}</div>
-                    )}
+                    {passwordError && <div className={styles.error}>{passwordError}</div>}
                 </div>
-                <div>
-                    <label htmlFor="confirmPassword">비밀번호 확인</label><br />
+
+                <div className={styles.inputGroup}>
+                    <label htmlFor="confirmPassword">비밀번호 확인</label>
                     <input
-                        type="password"
                         id="confirmPassword"
-                        name="confirmPassword"
-                        placeholder="********"
+                        type="password"
+                        placeholder="비밀번호를 다시 입력해주세요."
                         value={confirmPassword}
                         onChange={handleConfirmPasswordChange}
                     />
-                    {confirmPasswordError && (
-                        <div style={{ color: "red", fontSize: "12px" }}>{confirmPasswordError}</div>
-                    )}
+                    {confirmPasswordError && <div className={styles.error}>{confirmPasswordError}</div>}
                 </div>
-                <div>
-                    <label htmlFor="nickname">닉네임</label><br />
+
+                <div className={styles.inputGroup}>
+                    <label htmlFor="nickname">닉네임</label>
                     <input
-                        type="text"
                         id="nickname"
-                        name="nickname"
-                        placeholder="********"
+                        type="text"
+                        placeholder="닉네임을 입력해주세요."
                         value={nickname}
                         onChange={(e) => setNickname(e.target.value)}
                     />
                 </div>
-                <button type="submit">가입하기</button>
+
+                <button type="submit" className={styles.submitButton}>
+                    가입 완료
+                </button>
             </form>
 
-            <p>
-                이미 계정이 있으신가요? <a href="/login">로그인</a>
+            <p className={styles.bottomText}>
+                계정이 있으신가요? <a href="/login">로그인하기</a>
             </p>
         </div>
     );
