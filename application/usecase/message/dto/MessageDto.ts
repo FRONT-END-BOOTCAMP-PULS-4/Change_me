@@ -7,6 +7,6 @@ export class MessageDto {
         public createdAt: Date,
         public likeCount: number,
         public isLiked: boolean,
-        public modifiedAt?: Date, // can be null if message is not modified
+        public modifiedAt: Date | null, // can be null if message is not modified
     ) {}
 }
