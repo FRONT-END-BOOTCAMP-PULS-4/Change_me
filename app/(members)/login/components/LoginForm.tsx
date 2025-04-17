@@ -46,8 +46,6 @@ export default function LoginForm() {
 
             // localStorage.setItem("access_token", data.token);
             setUser(data.user, data.token);
-
-            console.log("로그인 성공", data);
             router.push("/profile");
         } catch (err) {
             setErrorMessage("서버 오류가 발생했습니다.");
