@@ -110,7 +110,10 @@ export const memberRepository: MemberRepository = {
     },
 
     async updateProfile(id: string, nickname: string, imageUrl?: string | null): Promise<void> {
-        const updates: Record<string, any> = { nickname };
+        const updates: Record<string, any> = {
+            nickname,
+            modified_at: new Date().toISOString(),
+        };
         if (imageUrl) {
             updates.image_url = imageUrl;
         }
