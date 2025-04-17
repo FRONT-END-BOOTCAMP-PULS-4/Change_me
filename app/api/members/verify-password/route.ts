@@ -1,15 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { memberRepository } from "@/infra/repositories/supabase/SbMemberRepository";
+import { verifyJWT } from "@/utils/jwt";
 import bcrypt from "bcrypt";
+import { getMemberIdFromToken } from "@/utils/auth";
 
 export async function POST(req: NextRequest) {
-    const { id, password } = await req.json();
+    const authHeader = req.headers.get("authorization");
+    const memberId = await getMemberIdFromToken(authHeader!);
 
-    if (!id || !password) {
-        return NextResponse.json({ error: "잘못된 요청" }, { status: 400 });
+    const { password } = await req.json();
+    if (!password) {
+        return NextResponse.json({ error: "비밀번호가 필요합니다" }, { status: 400 });
     }
 
-    const member = await memberRepository.findById(id);
+    const member = await memberRepository.findById(memberId!);
     if (!member) {
         return NextResponse.json({ valid: false }, { status: 404 });
     }
