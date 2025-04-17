@@ -3,33 +3,29 @@
 import { useMemberStore } from "@/stores/memberStore";
 import HeaderIcon from "./HeaderIcon";
 import Link from "next/link";
-import styles from "./RootHeader.module.scss";
+import styles from "./UserHeader.module.scss";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const iconLinkList = [
     {
-        id: 0,
         to: "/",
         imgPath: "/images/LogoOurHabits.png",
         title: "모두의 습관",
     },
     {
-        id: 1,
         to: "/daily-routine",
         imgPath: "/images/LogoDailyRoutine.png",
         title: "오늘의 루틴",
     },
     {
-        id: 2,
         to: "/record",
         imgPath: "/images/LogoRecord.png",
         title: "기록 보기",
     },
 ];
 
-export default function RootHeader() {
-    const [selected, setSelected] = useState<number>(0);
+export default function UserHeader() {
     const isLoggedIn = useMemberStore((state) => state.isLoggedIn);
     const logout = useMemberStore((state) => state.logout);
     const router = useRouter();
@@ -45,14 +41,12 @@ export default function RootHeader() {
                 <h1>Change Me</h1>
             </div>
             <nav className={styles.nav}>
-                {iconLinkList.map((link) => (
+                {iconLinkList.map((link, idx) => (
                     <HeaderIcon
-                        key={link.id}
+                        key={idx}
                         to={link.to}
                         imgPath={link.imgPath}
                         title={link.title}
-                        handleClick={() => setSelected(link.id)}
-                        isSelected={selected === link.id}
                     />
                 ))}
             </nav>

@@ -78,7 +78,7 @@ export function SignUpForm() {
 
         if (!passwordRegex.test(value)) {
             setPasswordError(
-                "비밀번호는 8~16자이며, 대문자/소문자/숫자/특수문자를 모두 포함해야 합니다."
+                "비밀번호는 8~16자이며, 대문자/소문자/숫자/특수문자를 모두 포함해야 합니다.",
             );
         } else {
             setPasswordError("");
@@ -86,7 +86,9 @@ export function SignUpForm() {
     };
 
     // 비밀번호와 비밀번호 확인 비교
-    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleConfirmPasswordChange = (
+        e: React.ChangeEvent<HTMLInputElement>,
+    ) => {
         const value = e.target.value;
         setConfirmPassword(value);
 
@@ -244,11 +246,21 @@ export function SignUpForm() {
                         value={email}
                         onChange={handleEmailChange}
                     />
-                    <button type="button" className={styles.duplicateButton} onClick={handleEmailCheck}>
+                    <button
+                        type="button"
+                        className={styles.duplicateButton}
+                        onClick={handleEmailCheck}
+                    >
                         중복 확인
                     </button>
-                    {emailError && <div className={styles.error}>{emailError}</div>}
-                    {isEmailChecked && <div className={styles.success}>사용 가능한 이메일입니다.</div>}
+                    {emailError && (
+                        <div className={styles.error}>{emailError}</div>
+                    )}
+                    {isEmailChecked && (
+                        <div className={styles.success}>
+                            사용 가능한 이메일입니다.
+                        </div>
+                    )}
                 </div>
 
                 <div className={styles.inputGroup}>
@@ -260,7 +272,9 @@ export function SignUpForm() {
                         value={password}
                         onChange={handlePasswordChange}
                     />
-                    {passwordError && <div className={styles.error}>{passwordError}</div>}
+                    {passwordError && (
+                        <div className={styles.error}>{passwordError}</div>
+                    )}
                 </div>
 
                 <div className={styles.inputGroup}>
@@ -272,7 +286,11 @@ export function SignUpForm() {
                         value={confirmPassword}
                         onChange={handleConfirmPasswordChange}
                     />
-                    {confirmPasswordError && <div className={styles.error}>{confirmPasswordError}</div>}
+                    {confirmPasswordError && (
+                        <div className={styles.error}>
+                            {confirmPasswordError}
+                        </div>
+                    )}
                 </div>
 
                 <div className={styles.inputGroup}>
