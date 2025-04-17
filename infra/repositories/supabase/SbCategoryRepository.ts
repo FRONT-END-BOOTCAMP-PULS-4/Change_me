@@ -56,23 +56,23 @@ export class SbCategoryRepository implements CategoryRepository {
         });
     }
 
-    async findById(id: number): Promise<CategoryView> {
+    async findById(id: number): Promise<CategoryView | null> {
         const supabase = await createClient();
 
         const { data, error } = await supabase
             .from("category_view")
             .select("*")
-            .eq("id", id)
-            .single();
+            .eq("id", id);
 
         if (error) {
             throw new Error(`${error.message}`);
         }
 
+        if (data.length === 0) return null;
         return {
-            name: data.name,
-            memberId: data.member_id,
-            habitCount: data.habit_count,
+            name: data[0].name,
+            memberId: data[0].member_id,
+            habitCount: data[0].habit_count,
         };
     }
 
