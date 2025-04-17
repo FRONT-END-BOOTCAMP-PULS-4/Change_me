@@ -1,4 +1,4 @@
-import { GetFilteredHabits} from  '@/application/usecase/habit/GetFilteredHabitsUsecase';
-import { GetFilteredHabitsDto } from '@/application/usecase/habit/Dto/GetFilteredHabitsDto';
+import { GetFilteredHabit} from  '@/application/usecase/habit/GetHabitUsecase';
+import { GetFilteredHabitDto } from '@/application/usecase/habit/dto/GetHabitDto';
 import { HabitRepository } from '@/domain/repositories/HabitRepository';
 
