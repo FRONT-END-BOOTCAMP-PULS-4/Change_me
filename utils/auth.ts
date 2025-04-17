@@ -1,12 +1,11 @@
-import { verify } from "jsonwebtoken";
-import { NextApiRequest } from "next";
+import { verifyJWT } from "./jwt";
 
-export function getMemberIdFromToken(authHeader: string): string | null {
+export async function getMemberIdFromToken(authHeader: string) {
     const token = authHeader?.replace("Bearer ", "")!;
 
     try {
-        const decoded = verify(token, process.env.JWT_SECRET!);
-        const { id } = decoded as { id: string };
+        const payload = await verifyJWT(token);
+        const { id } = payload as { id: string };
         return id;
     } catch (err) {
         return null;

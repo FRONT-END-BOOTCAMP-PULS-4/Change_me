@@ -19,7 +19,7 @@ export const loginMemberUseCase = {
             throw new Error("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
 
-        const token = signJWT({
+        const token = await signJWT({
             id: member.id,
             nickname: member.nickname,
             role: member.role,

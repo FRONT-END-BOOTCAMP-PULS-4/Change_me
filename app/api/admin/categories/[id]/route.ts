@@ -37,7 +37,7 @@ export async function PATCH(request: Request, { params }: RequestParams) {
     } catch (error) {
         if (error instanceof Error) {
             return NextResponse.json(
-                { message: error.message || "카테고리 생성 실패" },
+                { message: error.message || "카테고리 수정 실패" },
                 { status: 400 },
             );
         }

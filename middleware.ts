@@ -1,20 +1,48 @@
-import { type NextRequest } from "next/server";
-import { updateSession } from "@/utils/supabase/middleware";
+import { NextResponse, type NextRequest } from "next/server";
+import { verifyJWT } from "./utils/jwt";
 
-export async function middleware(request: NextRequest) {
-  return await updateSession(request);
+const PUBLIC_PATHS = [
+    "/api/categories",
+    "/anon",
+    "/api/members/email-check",
+    "/api/members/join",
+    "/api/members/login",
+];
+
+function isPublicRoute(pathname: string) {
+    return PUBLIC_PATHS.some((publicPath) => pathname.startsWith(publicPath));
 }
 
-export const config = {
-  matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
-     * Feel free to modify this pattern to include more paths.
-     */
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-  ],
-};
+export async function middleware(request: NextRequest) {
+    const { pathname } = request.nextUrl;
+
+    if (isPublicRoute(pathname)) {
+        return NextResponse.next();
+    }
+
+    const authHeader = request.headers.get("authorization");
+    const token = authHeader?.replace("Bearer ", "");
+
+    if (!token) {
+        return NextResponse.json(
+            {
+                message: "로그인 필요",
+            },
+            { status: 401 },
+        );
+    }
+
+    try {
+        const payload = await verifyJWT(token);
+        const pathname = request.nextUrl.pathname;
+
+        if (pathname.startsWith("/api/admin") && payload.role !== 1) {
+            return NextResponse.json({ message: "권한 없음" }, { status: 403 });
+        }
+    } catch (error) {
+        return NextResponse.json(
+            { message: "token이 유효하지 않음" },
+            { status: 401 },
+        );
+    }
+}
