@@ -150,5 +150,14 @@ export const memberRepository: MemberRepository = {
         }
 
         return { path: data.path };
-    }
+    },
+
+    changePassword: async (id, hashedPassword) => {
+        const { error } = await supabase
+            .from("member")
+            .update({ password: hashedPassword })
+            .eq("id", id);
+
+        if (error) throw new Error("비밀번호 변경 실패");
+    },
 };

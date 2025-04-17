@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import ProfileForm from "./components/ProfileForm";
 import LogoutButton from "./components/LogoutButton";
 import WithdrawButton from "./components/WithdrawButton";
+import ChangePasswordButton from "./components/ChangePasswordButton";
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState<any>(null);
@@ -41,6 +42,7 @@ export default function ProfilePage() {
         <>
             <ProfileForm profile={profile} />
             <LogoutButton />
+            <ChangePasswordButton />
             <WithdrawButton />
         </>
     );
