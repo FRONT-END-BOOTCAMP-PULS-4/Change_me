@@ -2,17 +2,15 @@
 
 import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
 import { MessageListDto } from "@/application/usecase/message/dto/MessageListDto";
-import { useMemberStore } from "@/stores/memberStore";
+import { getToken, useMemberStore } from "@/stores/memberStore";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function MessageListPage() {
+    // search params initialization
     const searchParams = useSearchParams();
-
     const currentPageParam = searchParams.get("currentPage");
     const mineParam = searchParams.get("mine");
-
-    const { token } = useMemberStore();
 
     // page state initialization
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -25,6 +23,9 @@ export default function MessageListPage() {
     if (mineParam) setMine(mineParam === "true");
 
     useEffect(() => {
+        const token = getToken();
+        console.log("token", token);
+
         async function fetchMessages() {
             try {
                 const params = new URLSearchParams();
@@ -57,7 +58,7 @@ export default function MessageListPage() {
         }
 
         fetchMessages();
-    }, [currentPage, mine, token]);
+    }, [currentPage, mine]);
 
     return (
         <main>
@@ -74,30 +75,34 @@ export default function MessageListPage() {
             </header>
 
             <ol>
-                {messages.map((message) => (
-                    <li key={message.id}>
-                        <div>
-                            <img
-                                src={message.profileUrl}
-                                width={40}
-                                height={40}
-                            />
+                {messages.map((message) => {
+                    return (
+                        <li key={message.id}>
                             <div>
-                                <strong>{message.writer}</strong>
-                                <span>{message.createdAt.toISOString()}</span>
+                                <img
+                                    src={message.profileUrl}
+                                    width={40}
+                                    height={40}
+                                />
+                                <div>
+                                    <strong>{message.writer}</strong>
+                                    <span>
+                                        {message.createdAt.toISOString()}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
 
-                        <p>{message.content}</p>
+                            <p>{message.content}</p>
 
-                        <div>
-                            <button>
-                                {message.isLiked ? "❤️" : "🤍"}{" "}
-                                {message.likeCount}
-                            </button>
-                        </div>
-                    </li>
-                ))}
+                            <div>
+                                <button>
+                                    {message.isLiked ? "❤️" : "🤍"}{" "}
+                                    {message.likeCount}
+                                </button>
+                            </div>
+                        </li>
+                    );
+                })}
             </ol>
         </main>
     );
