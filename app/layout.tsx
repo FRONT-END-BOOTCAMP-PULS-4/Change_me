@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import ClientLayoutWrapper from "./common-components/ClientLayoutWrapper";
+import RootHeader from "./components/RootHeader";
 
 const NotoSans = localFont({
     src: [
@@ -24,6 +25,7 @@ const NotoSans = localFont({
 });
 
 export const metadata: Metadata = {
+    icons: "/images/LogoChangeMe.png",
     title: "Change Me",
 };
 
@@ -35,7 +37,10 @@ export default function RootLayout({
     return (
         <html lang="ko" className={NotoSans.className}>
             <body>
-                <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+                <ClientLayoutWrapper>
+                    <RootHeader />
+                    <main>{children}</main>
+                </ClientLayoutWrapper>
             </body>
         </html>
     );

@@ -49,9 +49,5 @@ export const useMemberStore = create<MemberState>((set) => ({
         } else {
             localStorage.removeItem("access_token");
         }
-    },
-
-    // getToken: () => {
-    //     return localStorage.getItem("access_token");
-    // },
+    },    
 }));

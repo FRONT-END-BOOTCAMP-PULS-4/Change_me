@@ -1,0 +1,26 @@
+.link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+    transition: font-weight 300ms ease-in-out;
+    > img {
+        width: 50px;
+        height: 50px;
+    }
+
+    > h3 {
+        font-size: var(--fontSize-xl);
+        font-weight: var(--fontWeight-regular);
+    }
+
+    .active {
+        font-weight: var(--fontWeight-semiBold);
+    }
+
+    &:hover {
+        > h3 {
+            font-weight: var(--fontWeight-semiBold);
+        }
+    }
+}
