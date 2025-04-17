@@ -3,6 +3,12 @@
 import React, { FC } from "react";
 import styles from "./Pager.module.scss";
 
+const {
+    ["pager-box"]: pagerBox,
+    ["pager"]: pager,
+    ["disabled"]: disabled,
+} = styles;
+
 type PagerProps = {
     currentPage: number;
     endPage: number;
@@ -25,40 +31,44 @@ const Pager: FC<PagerProps> = ({
     const hasPreviousPage = currentPage > pageSize;
 
     return (
-        <section className="d:flex jc:center ai:center gap:2 h:100p">
-            <h1 className="d:none">페이저</h1>
-            {hasPreviousPage ? (
-                <button
-                    className="n-btn"
-                    onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
-                >
-                    이전
-                </button>
-            ) : (
-                <div className="n-btn disabled">이전</div>
-            )}
-            <ul className="n-bar">
-                {pages.map((pageNumber) => (
-                    <li key={pageNumber}>
-                        <button
-                            className={`n-btn ${pageNumber === currentPage ? "active" : ""}`}
-                            onClick={() => onPageChange(pageNumber)}
-                        >
-                            {pageNumber}
-                        </button>
-                    </li>
-                ))}
-            </ul>
-            {hasNextPage ? (
-                <button
-                    className="n-btn"
-                    onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
-                >
-                    다음
-                </button>
-            ) : (
-                <div className="n-btn disabled">다음</div>
-            )}
-        </section>
+        <div className={pagerBox}>
+            <section className={pager}>
+                <h1>페이저</h1>
+                {hasPreviousPage ? (
+                    <button
+                        onClick={() =>
+                            onPageChange(Math.max(currentPage - 1, 1))
+                        }
+                    >
+                        이전
+                    </button>
+                ) : (
+                    <div className={disabled}>이전</div>
+                )}
+                <ul>
+                    {pages.map((pageNumber) => (
+                        <li key={pageNumber}>
+                            <button
+                                className={`${pageNumber === currentPage ? "active" : ""}`}
+                                onClick={() => onPageChange(pageNumber)}
+                            >
+                                {pageNumber}
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+                {hasNextPage ? (
+                    <button
+                        onClick={() =>
+                            onPageChange(Math.max(currentPage - 1, 1))
+                        }
+                    >
+                        다음
+                    </button>
+                ) : (
+                    <div className={disabled}>다음</div>
+                )}
+            </section>
+        </div>
     );
 };

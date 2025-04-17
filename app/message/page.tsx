@@ -72,6 +72,14 @@ export default function MessageListPage() {
                     </li>
                 </ol>
             </header>
+
+            <ol>
+                {messages.map((message) => (
+                    <li key={message.id}>
+                        <div></div>
+                    </li>
+                ))}
+            </ol>
         </main>
     );
 }

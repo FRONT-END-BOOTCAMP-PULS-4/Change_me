@@ -1,0 +1,37 @@
+.pager-box {
+    width: 100%;
+    max-width: 600px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    > .pager {
+        > h1 {
+            display: none;
+        }
+
+        > button {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ccc;
+            background-color: white;
+            color: #333;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+
+            &:hover:not(.disabled) {
+                background-color: #f0f0f0;
+            }
+        }
+
+        > .disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+    }
+}
