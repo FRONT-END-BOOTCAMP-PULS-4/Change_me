@@ -1,18 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
-import { loginMemberUseCase } from "@/application/usecase/member/LoginMemberUsecase";
+import { LoginMemberUseCase } from "@/application/usecase/member/LoginMemberUsecase";
 import { LoginMemberDto } from "@/application/usecase/member/dto/LoginMemberDto";
+import { SbMemberRepository } from "@/infra/repositories/supabase/SbMemberRepository";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
 
     try {
         const dto = new LoginMemberDto(body.email, body.password);
+        const memberRepository = new SbMemberRepository();
+        const loginMemberUseCase = new LoginMemberUseCase(memberRepository);
+
         const result = await loginMemberUseCase.execute(dto);
 
-        // token을 응답 바디에 포함
         return NextResponse.json(
             {
-                token: result.token, // 클라이언트가 localStorage에 저장할 수 있게 전달
+                token: result.token,
                 user: result.user,
             },
             { status: 200 }

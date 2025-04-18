@@ -7,7 +7,8 @@ const supabase = createClient(
     process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export const memberRepository: MemberRepository = {
+export class SbMemberRepository implements MemberRepository {
+    // 회원가입
     async create(member: Member): Promise<Member> {
         const { data, error } = await supabase
             .from("member")
@@ -41,9 +42,21 @@ export const memberRepository: MemberRepository = {
             data.modified_at ?? null,
             data.deleted_at ?? null
         );
-    },
+    }
 
-    async findByEmail(email: string) {
+    // 이메일 중복확인
+    async isEmailDuplicated(email: string): Promise<boolean> {
+        const { data } = await supabase
+            .from("member")
+            .select("id")
+            .eq("email", email)
+            .single();
+
+        return !!data;
+    }
+
+    // 로그인
+    async findByEmail(email: string): Promise<Member | null> {
         const { data, error } = await supabase
             .from("member")
             .select("*")
@@ -64,9 +77,10 @@ export const memberRepository: MemberRepository = {
             data.modified_at ?? null,
             data.deleted_at ?? null
         );
-    },
+    }
 
-    async findById(id: string) {
+    // 프로필 조회
+    async findById(id: string): Promise<Member | null> {
         const { data, error } = await supabase
             .from("member")
             .select("*")
@@ -87,45 +101,22 @@ export const memberRepository: MemberRepository = {
             data.modified_at ?? null,
             data.deleted_at ?? null
         );
-    },
+    }
 
-    isEmailDuplicated: async (email: string) => {
-        const { data } = await supabase
-            .from("member")
-            .select("id")
-            .eq("email", email)
-            .single();
-
-        return !!data; // data가 있으면 true (중복)
-    },
-
-    withdraw: async (id: string) => {
+    // 회원 탈퇴
+    async withdraw(id: string): Promise<void> {
         const now = new Date().toISOString();
         const { error } = await supabase
             .from("member")
             .update({ deleted_at: now })
             .eq("id", id);
 
-        if (error) throw new Error(error.message);
-    },
-
-    async updateProfile(id: string, nickname: string, imageUrl?: string | null): Promise<void> {
-        const updates: Record<string, any> = {
-            nickname,
-            modified_at: new Date().toISOString(),
-        };
-        if (imageUrl) {
-            updates.image_url = imageUrl;
+        if (error) {
+            throw new Error("회원 탈퇴 실패: " + error.message);
         }
+    }
 
-        const { error } = await supabase
-            .from("member")
-            .update(updates)
-            .eq("id", id);
-
-        if (error) throw new Error("프로필 업데이트 실패");
-    },
-
+    // 프로필 이미지 변경경
     async uploadProfileImage(id: string, file: File, oldPath?: string): Promise<{ path: string }> {
         const filename = `${id}_${Date.now()}`;
 
@@ -150,14 +141,33 @@ export const memberRepository: MemberRepository = {
         }
 
         return { path: data.path };
-    },
+    }
 
-    changePassword: async (id, hashedPassword) => {
+    // 프로필 변경
+    async updateProfile(id: string, nickname: string, imageUrl?: string | null): Promise<void> {
+        const updates: Record<string, any> = {
+            nickname,
+            modified_at: new Date().toISOString(),
+        };
+        if (imageUrl) {
+            updates.image_url = imageUrl;
+        }
+
+        const { error } = await supabase
+            .from("member")
+            .update(updates)
+            .eq("id", id);
+
+        if (error) throw new Error("프로필 업데이트 실패");
+    }
+
+    // 비밀번호 변경
+    async changePassword(id: string, hashedPassword: string): Promise<void> {
         const { error } = await supabase
             .from("member")
             .update({ password: hashedPassword })
             .eq("id", id);
 
-        if (error) throw new Error("비밀번호 변경 실패");
-    },
-};
+        if (error) throw new Error("비밀번호 변경 실패: " + error.message);
+    }
+}

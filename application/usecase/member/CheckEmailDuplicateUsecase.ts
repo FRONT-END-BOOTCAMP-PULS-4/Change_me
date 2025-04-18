@@ -1,8 +1,10 @@
-import { memberRepository } from "@/infra/repositories/supabase/SbMemberRepository";
+import { MemberRepository } from "@/domain/repositories/MemberRepository";
 
-export const checkEmailDuplicateUsecase = {
-    async execute(email: string) {
-        const isDuplicated = await memberRepository.isEmailDuplicated(email);
+export class CheckEmailDuplicateUsecase {
+    constructor(private readonly memberRepository: MemberRepository) { }
+
+    async execute(email: string): Promise<{ isDuplicated: boolean }> {
+        const isDuplicated = await this.memberRepository.isEmailDuplicated(email);
         return { isDuplicated };
-    },
-};
+    }
+}
