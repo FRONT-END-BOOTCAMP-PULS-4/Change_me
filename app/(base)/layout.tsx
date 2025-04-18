@@ -1,16 +1,16 @@
 "use client";
 
 import React from "react";
-import UserHeader from "./components/UserHeader";
+import BaseHeader from "./components/BaseHeader";
 
-export default function UserLayout({
+export default function BaseLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
     return (
         <>
-            <UserHeader />
+            <BaseHeader />
             <main>{children}</main>
         </>
     );

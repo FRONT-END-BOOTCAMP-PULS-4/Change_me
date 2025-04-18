@@ -3,8 +3,7 @@
 import { useMemberStore } from "@/stores/memberStore";
 import HeaderIcon from "./HeaderIcon";
 import Link from "next/link";
-import styles from "./UserHeader.module.scss";
-import { useState } from "react";
+import styles from "./BaseHeader.module.scss";
 import { useRouter } from "next/navigation";
 
 const iconLinkList = [
@@ -14,18 +13,18 @@ const iconLinkList = [
         title: "모두의 습관",
     },
     {
-        to: "/daily-routine",
+        to: "/member/daily-routine",
         imgPath: "/images/LogoDailyRoutine.png",
         title: "오늘의 루틴",
     },
     {
-        to: "/record",
+        to: "/member/record",
         imgPath: "/images/LogoRecord.png",
         title: "기록 보기",
     },
 ];
 
-export default function UserHeader() {
+export default function BaseHeader() {
     const isLoggedIn = useMemberStore((state) => state.isLoggedIn);
     const logout = useMemberStore((state) => state.logout);
     const router = useRouter();

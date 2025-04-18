@@ -1,28 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { verifyJWT } from "./utils/jwt";
 
-const PUBLIC_PATHS = [
-    "/api/categories",
-    "/anon",
-    "/api/members/email-check",
-    "/api/members/join",
-    "/api/members/login",
-];
-
-function isPublicRoute(pathname: string) {
-    return PUBLIC_PATHS.some((publicPath) => pathname.startsWith(publicPath));
-}
+export const config = {
+    // /api/admin/** 및 /api/member/** 경로에 미들웨어 적용
+    matcher: ["/api/admin/:path*", "/api/member/:path*"],
+};
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
-
-    if (isPublicRoute(pathname)) {
-        return NextResponse.next();
-    }
-
-    if (!pathname.startsWith("/api")) {
-        return NextResponse.next(); // 페이지 라우트는 인증 검사 안 함
-    }
 
     const authHeader = request.headers.get("authorization");
     const token = authHeader?.replace("Bearer ", "");
