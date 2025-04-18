@@ -3,6 +3,7 @@
 import { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useMemberStore } from "@/stores/memberStore";
+import styles from "./LoginForm.module.scss";
 
 export default function LoginForm() {
     const router = useRouter();
@@ -12,6 +13,16 @@ export default function LoginForm() {
         {},
     );
     const [errorMessage, setErrorMessage] = useState("");
+
+    useEffect(() => {
+        if (!errorMessage) return;
+
+        const timer = setTimeout(() => {
+            setErrorMessage("");
+        }, 3000); // 3초 후 사라짐
+
+        return () => clearTimeout(timer); // cleanup
+    }, [errorMessage]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -57,12 +68,17 @@ export default function LoginForm() {
     };
 
     return (
-        <div>
+        <div className={styles.container}>
+            {errorMessage && (
+                <div className={styles.warningMessage}>
+                    ⚠️ {errorMessage}
+                </div>
+            )}
+
             <h2>로그인</h2>
             <form onSubmit={handleSubmit}>
-                <div>
+                <div className={styles.inputGroup}>
                     <label htmlFor="email">이메일(아이디)</label>
-                    <br />
                     <input
                         type="email"
                         id="email"
@@ -71,12 +87,13 @@ export default function LoginForm() {
                         onChange={handleChange}
                         placeholder="이메일"
                     />
-                    {errors.email && <div>{errors.email}</div>}
+                    {errors.email && (
+                        <div className={styles.error}>{errors.email}</div>
+                    )}
                 </div>
 
-                <div style={{ marginBottom: "1rem" }}>
+                <div className={styles.inputGroup}>
                     <label htmlFor="password">비밀번호</label>
-                    <br />
                     <input
                         type="password"
                         id="password"
@@ -85,12 +102,16 @@ export default function LoginForm() {
                         onChange={handleChange}
                         placeholder="비밀번호"
                     />
-                    {errors.password && <div>{errors.password}</div>}
+                    {errors.password && (
+                        <div className={styles.error}>{errors.password}</div>
+                    )}
                 </div>
-                {errorMessage && <div>{errorMessage}</div>}
 
-                <button type="submit">로그인</button>
-                <p>
+                <button type="submit" className={styles.submitButton}>
+                    로그인
+                </button>
+
+                <p className={styles.bottomText}>
                     계정이 없으신가요? <a href="/signup">회원가입하기</a>
                 </p>
             </form>
