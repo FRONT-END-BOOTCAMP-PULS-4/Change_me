@@ -72,7 +72,7 @@ export default function PasswordChangeForm() {
 
         if (changeRes.ok) {
             alert("비밀번호가 성공적으로 변경되었습니다.");
-            router.push("/profile");
+            router.push("/member/profile");
         } else {
             const data = await changeRes.json();
             alert(data.error || "비밀번호 변경에 실패했습니다.");

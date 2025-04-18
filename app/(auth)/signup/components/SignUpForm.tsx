@@ -38,7 +38,7 @@ export function SignUpForm() {
             return;
         }
 
-        const res = await fetch("/api/members/email-check", {
+        const res = await fetch("/api/email-check", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email }),
@@ -122,7 +122,7 @@ export function SignUpForm() {
             return;
         }
 
-        const res = await fetch("/api/members/join", {
+        const res = await fetch("/api/join", {
             method: "POST",
             body: JSON.stringify({ name, email, password, nickname }),
             headers: { "Content-Type": "application/json" },
