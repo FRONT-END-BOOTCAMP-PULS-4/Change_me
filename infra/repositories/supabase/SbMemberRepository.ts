@@ -1,15 +1,12 @@
 import { MemberRepository } from "@/domain/repositories/MemberRepository";
 import { Member } from "@/domain/entities/Member";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { createClient } from "@/utils/supabase/Server";
 
 export class SbMemberRepository implements MemberRepository {
     // 회원가입
     async create(member: Member): Promise<Member> {
+        const supabase = await createClient();
+
         const { data, error } = await supabase
             .from("member")
             .insert({
@@ -46,6 +43,8 @@ export class SbMemberRepository implements MemberRepository {
 
     // 이메일 중복확인
     async isEmailDuplicated(email: string): Promise<boolean> {
+        const supabase = await createClient();
+
         const { data } = await supabase
             .from("member")
             .select("id")
@@ -57,6 +56,8 @@ export class SbMemberRepository implements MemberRepository {
 
     // 로그인
     async findByEmail(email: string): Promise<Member | null> {
+        const supabase = await createClient();
+
         const { data, error } = await supabase
             .from("member")
             .select("*")
@@ -81,6 +82,8 @@ export class SbMemberRepository implements MemberRepository {
 
     // 프로필 조회
     async findById(id: string): Promise<Member | null> {
+        const supabase = await createClient();
+
         const { data, error } = await supabase
             .from("member")
             .select("*")
@@ -105,6 +108,8 @@ export class SbMemberRepository implements MemberRepository {
 
     // 회원 탈퇴
     async withdraw(id: string): Promise<void> {
+        const supabase = await createClient();
+
         const now = new Date().toISOString();
         const { error } = await supabase
             .from("member")
@@ -116,11 +121,11 @@ export class SbMemberRepository implements MemberRepository {
         }
     }
 
-    // 프로필 이미지 변경경
+    // 프로필 이미지 변경
     async uploadProfileImage(id: string, file: File, oldPath?: string): Promise<{ path: string }> {
+        const supabase = await createClient();
         const filename = `${id}_${Date.now()}`;
 
-        // 기존 이미지가 있으면 삭제
         if (oldPath) {
             const { error: deleteError } = await supabase.storage
                 .from("profile-images")
@@ -145,6 +150,8 @@ export class SbMemberRepository implements MemberRepository {
 
     // 프로필 변경
     async updateProfile(id: string, nickname: string, imageUrl?: string | null): Promise<void> {
+        const supabase = await createClient();
+
         const updates: Record<string, any> = {
             nickname,
             modified_at: new Date().toISOString(),
@@ -163,6 +170,8 @@ export class SbMemberRepository implements MemberRepository {
 
     // 비밀번호 변경
     async changePassword(id: string, hashedPassword: string): Promise<void> {
+        const supabase = await createClient();
+
         const { error } = await supabase
             .from("member")
             .update({ password: hashedPassword })
