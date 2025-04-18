@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { loginMemberUseCase } from "@/application/usecase/member/LoginMemberUsecase";
+import { LoginMemberDto } from "@/application/usecase/member/dto/LoginMemberDto";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
 
     try {
-        const result = await loginMemberUseCase.execute(body);
+        const dto = new LoginMemberDto(body.email, body.password);
+        const result = await loginMemberUseCase.execute(dto);
 
         // token을 응답 바디에 포함
         return NextResponse.json(

@@ -4,8 +4,8 @@ import { signJWT } from "@/utils/jwt";
 import bcrypt from "bcrypt";
 
 export const loginMemberUseCase = {
-    async execute({ email, password }: LoginMemberDto) {
-        const member = await memberRepository.findByEmail(email);
+    async execute(dto: LoginMemberDto) {
+        const member = await memberRepository.findByEmail(dto.email);
         if (!member) {
             throw new Error("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
@@ -14,7 +14,7 @@ export const loginMemberUseCase = {
             throw new Error("탈퇴한 계정입니다.");
         }
 
-        const isValid = await bcrypt.compare(password, member.password);
+        const isValid = await bcrypt.compare(dto.password, member.password);
         if (!isValid) {
             throw new Error("이메일 또는 비밀번호가 일치하지 않습니다.");
         }
