@@ -8,7 +8,7 @@ import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 export class SbMessageRepository implements MessageRepository {
     private queryFilter(
         filter: MessageFilter | undefined,
-        query: PostgrestFilterBuilder<any, any, any[], "messages", unknown>,
+        query: PostgrestFilterBuilder<any, any, any[], "message", unknown>,
     ) {
         if (filter) {
             if (filter.memberId) {
@@ -21,7 +21,7 @@ export class SbMessageRepository implements MessageRepository {
     async count(filter?: MessageFilter): Promise<number> {
         const supabase = await createClient();
 
-        let query = supabase.from("messages").select("*", { count: "exact" });
+        let query = supabase.from("message").select("*", { count: "exact" });
 
         query = this.queryFilter(filter, query);
 
@@ -37,7 +37,7 @@ export class SbMessageRepository implements MessageRepository {
         const supabase = await createClient();
 
         let query = supabase
-            .from("messages")
+            .from("message")
             .select("*")
             .order("created_at", { ascending: false })
             .range(
@@ -67,7 +67,7 @@ export class SbMessageRepository implements MessageRepository {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from("messages")
+            .from("message")
             .select("*")
             .eq("id", id)
             .single();
@@ -95,7 +95,7 @@ export class SbMessageRepository implements MessageRepository {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from("messages")
+            .from("message")
             .insert({
                 member_id: message.memberId,
                 content: message.content,
@@ -122,7 +122,7 @@ export class SbMessageRepository implements MessageRepository {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from("messages")
+            .from("message")
             .update({
                 member_id: message.memberId,
                 content: message.content,
@@ -150,7 +150,7 @@ export class SbMessageRepository implements MessageRepository {
     async deleteById(id: number): Promise<void> {
         const supabase = await createClient();
 
-        const { error } = await supabase.from("messages").delete().eq("id", id);
+        const { error } = await supabase.from("message").delete().eq("id", id);
 
         if (error) {
             throw new Error(

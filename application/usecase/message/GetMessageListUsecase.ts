@@ -33,7 +33,7 @@ export class GetMessageListUsecase {
             const offset: number = (currentPage - 1) * pageSize;
             const limit: number = pageSize;
 
-            const memberId: string = "temp"; // using JWT token to get memberId
+            const memberId: string = "temp"; // TODO: using JWT token to get memberId
 
             // data query
             const filter = new MessageFilter(
