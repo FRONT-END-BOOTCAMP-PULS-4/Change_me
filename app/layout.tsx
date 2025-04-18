@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import ClientLayoutWrapper from "./common-components/ClientLayoutWrapper";
+import ClientLayoutWrapper from "./components/ClientLayoutWrapper";
 
 const NotoSans = localFont({
     src: [
