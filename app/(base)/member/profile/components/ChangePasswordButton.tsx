@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import styles from "./ChangePasswordButton.module.scss";
 
 export default function ChangePasswordButton() {
     const router = useRouter();
@@ -10,8 +11,8 @@ export default function ChangePasswordButton() {
     };
 
     return (
-        <button onClick={handleClick}>
-            비밀번호 수정하기
+        <button onClick={handleClick} className={styles.changePasswordButton}>
+            비밀번호 변경하기
         </button>
     );
 }

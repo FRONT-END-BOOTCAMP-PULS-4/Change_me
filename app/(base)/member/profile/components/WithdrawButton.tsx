@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import styles from "./WithdrawButton.module.scss";
 
 export default function WithdrawButton() {
     const router = useRouter();
@@ -30,7 +31,7 @@ export default function WithdrawButton() {
     };
 
     return (
-        <button onClick={handleWithdraw} style={{ marginTop: "1rem", color: "gray" }}>
+        <button onClick={handleWithdraw} className={styles.withdrawButton}>
             탈퇴하기
         </button>
     );

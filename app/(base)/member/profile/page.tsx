@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import ProfileForm from "./components/ProfileForm";
-import LogoutButton from "./components/LogoutButton";
 import WithdrawButton from "./components/WithdrawButton";
 import ChangePasswordButton from "./components/ChangePasswordButton";
+import styles from "./page.module.scss";
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState<any>(null);
@@ -33,11 +33,13 @@ export default function ProfilePage() {
     if (!profile) return <p>로딩 중...</p>;
 
     return (
-        <>
+        <div className={styles.pageWrapper}>
             <ProfileForm profile={profile} />
-            <LogoutButton />
-            <ChangePasswordButton />
-            <WithdrawButton />
-        </>
+
+            <div className={styles.actionButtons}>
+                <ChangePasswordButton />
+                <WithdrawButton />
+            </div>
+        </div>
     );
 }

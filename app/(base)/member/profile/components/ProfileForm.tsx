@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
 import Image from "next/image";
+import styles from "./ProfileForm.module.scss";
 
 type Props = {
     profile: {
@@ -99,31 +100,17 @@ export default function ProfileForm({ profile }: Props) {
     };
 
     return (
-        <div>
-            <h2>프로필</h2>
+        <div className={styles.container}>
+            <h2 className={styles.title}>프로필</h2>
 
-            <div style={{ position: "relative", display: "inline-block", marginBottom: "1rem" }}>
-                <div
-                    onClick={handleImageClick}
-                    style={{
-                        borderRadius: "50%",
-                        overflow: "hidden",
-                        width: 140,
-                        height: 140,
-                        border: "3px solid white",
-                        cursor: "pointer",
-                        boxShadow: "0 0 5px rgba(0,0,0,0.2)",
-                    }}
-                >
-                    <Image
-                        src={preview || "/images/ProfileSquare.png"}
-                        alt="프로필 이미지"
-                        width={140}
-                        height={140}
-                        style={{ objectFit: "cover" }}
-                    />
-                </div>
-
+            <div onClick={handleImageClick} className={styles.avatar}>
+                <Image
+                    src={preview || "/images/ProfileSquare.png"}
+                    alt="프로필 이미지"
+                    width={140}
+                    height={140}
+                    style={{ objectFit: "cover" }}
+                />
                 <input
                     type="file"
                     accept="image/*"
@@ -132,13 +119,21 @@ export default function ProfileForm({ profile }: Props) {
                     style={{ display: "none" }}
                 />
             </div>
+            <p className={styles.joinedDate}>{formattedDate} 가입</p>
 
-            <p>{formattedDate} 가입</p>
-            <div>
-                <strong>이름</strong> <div>{profile.name}</div>
-                <strong>이메일</strong> <div>{profile.email}</div>
-                <strong>비밀번호 확인</strong><br />
-                <div>
+            <div className={styles.infoGroup}>
+                <div className={styles.row}>
+                    <strong>이름</strong>
+                    <div>{profile.name}</div>
+                </div>
+
+                <div className={styles.row}>
+                    <strong>이메일</strong>
+                    <div>{profile.email}</div>
+                </div>
+
+                <div className={styles.row}>
+                    <strong>비밀번호</strong>
                     <input
                         type="password"
                         value={password}
@@ -146,8 +141,10 @@ export default function ProfileForm({ profile }: Props) {
                         placeholder="비밀번호 입력"
                     />
                 </div>
-                <strong>닉네임</strong>
-                <div>
+                {password === "" && <div className={styles.error}>비밀번호를 입력해주세요.</div>}
+
+                <div className={styles.row}>
+                    <strong>닉네임</strong>
                     <input
                         type="text"
                         value={nickname}
@@ -155,8 +152,14 @@ export default function ProfileForm({ profile }: Props) {
                         placeholder="닉네임"
                     />
                 </div>
+                {nickname.length > 20 && (
+                    <div className={styles.error}>20자 이내로 작성해주세요.</div>
+                )}
+
+                <button className={styles.submitButton} onClick={handleSubmit}>
+                    수정
+                </button>
             </div>
-            <button onClick={handleSubmit}>수정</button>
         </div>
     );
 }
