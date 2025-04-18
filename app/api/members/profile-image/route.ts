@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateProfileUsecase } from "@/application/usecase/member/UpdateProfileUsecase";
+import { SbMemberRepository } from "@/infra/repositories/supabase/SbMemberRepository";
+import { UpdateProfileUsecase } from "@/application/usecase/member/UpdateProfileUsecase";
 
 export async function POST(req: NextRequest) {
     const formData = await req.formData();
@@ -12,6 +13,9 @@ export async function POST(req: NextRequest) {
     }
 
     try {
+        const memberRepository = new SbMemberRepository();
+        const updateProfileUsecase = new UpdateProfileUsecase(memberRepository);
+
         const imageUrl = await updateProfileUsecase.execute(memberId, nickname, file ?? undefined);
         return NextResponse.json({ imageUrl });
     } catch (error: any) {

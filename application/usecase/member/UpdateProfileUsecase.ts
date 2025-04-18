@@ -1,29 +1,26 @@
-import { memberRepository } from "@/infra/repositories/supabase/SbMemberRepository";
+import { MemberRepository } from "@/domain/repositories/MemberRepository";
 import { UpdateProfileDto } from "./dto/UpdateProfileDto";
 
-export const updateProfileUsecase = {
-    async execute(id: string, nickname: string, file?: File) {
-        try {
-            let imageUrl: string | null = null;
+export class UpdateProfileUsecase {
+    constructor(private readonly memberRepository: MemberRepository) { }
 
-            if (file) {
-                const existingMember = await memberRepository.findById(id);
-                const oldPath = existingMember?.imageUrl?.split("/").pop();
-                const uploadResult = await memberRepository.uploadProfileImage(id, file, oldPath);
+    async execute(id: string, nickname: string, file?: File): Promise<string | null> {
+        let imageUrl: string | null = null;
 
-                if (!uploadResult || !uploadResult.path) {
-                    throw new Error("이미지 업로드에 실패했습니다.");
-                }
+        if (file) {
+            const existingMember = await this.memberRepository.findById(id);
+            const oldPath = existingMember?.imageUrl?.split("/").pop();
+            const uploadResult = await this.memberRepository.uploadProfileImage(id, file, oldPath);
 
-                imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/profile-images/${uploadResult.path}`;
+            if (!uploadResult || !uploadResult.path) {
+                throw new Error("이미지 업로드에 실패했습니다.");
             }
 
-            const dto = new UpdateProfileDto(id, nickname, imageUrl || undefined);
-            await memberRepository.updateProfile(dto.id, dto.nickname!, dto.imageUrl);
-            return imageUrl;
-        } catch (err) {
-            console.error("프로필 업데이트 실패:", err);
-            throw err;
+            imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/profile-images/${uploadResult.path}`;
         }
-    },
-};
+
+        const dto = new UpdateProfileDto(id, nickname, imageUrl || undefined);
+        await this.memberRepository.updateProfile(dto.id, dto.nickname!, dto.imageUrl);
+        return imageUrl;
+    }
+}
