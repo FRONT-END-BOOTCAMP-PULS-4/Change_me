@@ -1,8 +1,19 @@
-export class DeleteMemberLikeUsecase {
-    constructor(
-        public messageId: number,
-        public memberId: string,
-    ) {}
+import { MessageLikeRepository } from "@/domain/repositories/MessageLikeRepository";
 
-    async execute() {}
+export class DeleteMessageLikeUsecase {
+    private messageLikeRepository: MessageLikeRepository;
+
+    constructor(messageLikeRepository: MessageLikeRepository) {
+        this.messageLikeRepository = messageLikeRepository;
+    }
+
+    async execute(messageId: number, memberId: string): Promise<void> {
+        if (!messageId) {
+            throw new Error("messageId is required");
+        } else if (!memberId) {
+            throw new Error("memberId is required");
+        }
+
+        await this.messageLikeRepository.delete(messageId, memberId);
+    }
 }

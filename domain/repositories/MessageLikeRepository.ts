@@ -5,5 +5,5 @@ export interface MessageLikeRepository {
     count(filter?: MessageLikeFilter): Promise<number>;
     findAll(filter?: MessageLikeFilter): Promise<MessageLike[]>;
     save(messageLike: MessageLike): Promise<MessageLike>;
-    delete(messageLike: MessageLike): Promise<void>;
+    delete(messageId: number, memberId: string): Promise<void>;
 }

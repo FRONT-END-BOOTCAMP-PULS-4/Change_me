@@ -1,11 +1,24 @@
-export class CreateMemberLikeUsecase {
-    constructor(
-        public messageId: number,
-        public memberId: string,
-    ) {}
+import { MessageLikeRepository } from "@/domain/repositories/MessageLikeRepository";
+import { CreateMessageLikeDto } from "./dto/CreateMessageLikeDto";
+import { MessageLike } from "@/domain/entities/MessageLike";
 
-    async execute() {
-        // Logic to create a like for a message by a member
-        // This could involve calling a repository method to save the like in the database
+export class CreateMessageLikeUsecase {
+    private messageLikeRepository: MessageLikeRepository;
+
+    constructor(messageLikeRepository: MessageLikeRepository) {
+        this.messageLikeRepository = messageLikeRepository;
+    }
+
+    async execute(
+        createMessageLikeDto: CreateMessageLikeDto,
+    ): Promise<MessageLike> {
+        const messageLike: MessageLike = new MessageLike(
+            createMessageLikeDto.messageId,
+            createMessageLikeDto.memberId,
+        );
+
+        const newMessageLike =
+            await this.messageLikeRepository.save(messageLike);
+        return newMessageLike;
     }
 }

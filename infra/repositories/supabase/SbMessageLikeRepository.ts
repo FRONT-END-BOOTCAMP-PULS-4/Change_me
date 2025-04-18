@@ -75,18 +75,18 @@ export class SbMessageLikeRepository implements MessageLikeRepository {
 
         return new MessageLike(data.message_id, data.member_id);
     }
-    async delete(messageLike: MessageLike): Promise<void> {
+    async delete(messageId: number, memberId: string): Promise<void> {
         const supabase = await createClient();
 
         const { error } = await supabase
             .from("message_like")
             .delete()
-            .eq("message_id", messageLike.messageId)
-            .eq("member_id", messageLike.memberId);
+            .eq("message_id", messageId)
+            .eq("member_id", memberId);
 
         if (error) {
             throw new Error(
-                `Failed to delete message with message_id ${messageLike.messageId}, member_id ${messageLike.memberId}: ${error.message}`,
+                `Failed to delete message with message_id ${messageId}, member_id ${memberId}: ${error.message}`,
             );
         }
     }
