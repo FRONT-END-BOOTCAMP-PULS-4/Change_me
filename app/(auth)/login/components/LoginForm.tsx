@@ -36,7 +36,7 @@ export default function LoginForm() {
         }
 
         try {
-            const res = await fetch("/api/members/login", {
+            const res = await fetch("/api/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),
@@ -49,9 +49,8 @@ export default function LoginForm() {
                 return;
             }
 
-            // localStorage.setItem("access_token", data.token);
             setUser(data.user, data.token);
-            router.push("/profile");
+            router.push("/member/profile");
         } catch (err) {
             setErrorMessage("서버 오류가 발생했습니다.");
         }
