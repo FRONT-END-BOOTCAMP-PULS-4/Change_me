@@ -218,11 +218,6 @@ export function SignUpForm() {
     // );
     return (
         <div className={styles.container}>
-            <div className={styles.logo}>
-                <img src="/images/LogoChangeMe.png" alt="LogoChangeMe" />
-                <h1>Change Me</h1>
-            </div>
-
             <h2>회원가입</h2>
 
             <form onSubmit={handleSubmit}>
