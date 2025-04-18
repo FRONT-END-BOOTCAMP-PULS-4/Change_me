@@ -1,0 +1,13 @@
+.withdrawButton {
+    margin-top: 1rem;
+    background-color: transparent;
+    color: gray;
+    font-size: var(--fontSize-sm);
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: var(--color-red);
+    }
+}
