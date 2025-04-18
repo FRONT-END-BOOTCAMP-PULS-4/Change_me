@@ -2,23 +2,28 @@
 
 import { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
-import { useMemberStore } from "@/stores/MemberStore";
+import { useMemberStore } from "@/stores/memberStore";
 
 export default function LoginForm() {
     const router = useRouter();
     const setUser = useMemberStore((state) => state.setUser);
     const [form, setForm] = useState({ email: "", password: "" });
-    const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+    const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+        {},
+    );
     const [errorMessage, setErrorMessage] = useState("");
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setForm(prev => ({ ...prev, [name]: value }));
+        setForm((prev) => ({ ...prev, [name]: value }));
 
         if (name === "email" && !value.includes("@")) {
-            setErrors(prev => ({ ...prev, email: "유효한 이메일을 입력해주세요." }));
+            setErrors((prev) => ({
+                ...prev,
+                email: "유효한 이메일을 입력해주세요.",
+            }));
         } else {
-            setErrors(prev => ({ ...prev, [name]: undefined }));
+            setErrors((prev) => ({ ...prev, [name]: undefined }));
         }
     };
 
@@ -57,7 +62,8 @@ export default function LoginForm() {
             <h2>로그인</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="email">이메일(아이디)</label><br />
+                    <label htmlFor="email">이메일(아이디)</label>
+                    <br />
                     <input
                         type="email"
                         id="email"
@@ -66,13 +72,12 @@ export default function LoginForm() {
                         onChange={handleChange}
                         placeholder="이메일"
                     />
-                    {errors.email && (
-                        <div>{errors.email}</div>
-                    )}
+                    {errors.email && <div>{errors.email}</div>}
                 </div>
 
                 <div style={{ marginBottom: "1rem" }}>
-                    <label htmlFor="password">비밀번호</label><br />
+                    <label htmlFor="password">비밀번호</label>
+                    <br />
                     <input
                         type="password"
                         id="password"
@@ -81,17 +86,11 @@ export default function LoginForm() {
                         onChange={handleChange}
                         placeholder="비밀번호"
                     />
-                    {errors.password && (
-                        <div>{errors.password}</div>
-                    )}
+                    {errors.password && <div>{errors.password}</div>}
                 </div>
-                {errorMessage && (
-                    <div>{errorMessage}</div>
-                )}
+                {errorMessage && <div>{errorMessage}</div>}
 
-                <button type="submit">
-                    로그인
-                </button>
+                <button type="submit">로그인</button>
                 <p>
                     계정이 없으신가요? <a href="/signup">회원가입하기</a>
                 </p>

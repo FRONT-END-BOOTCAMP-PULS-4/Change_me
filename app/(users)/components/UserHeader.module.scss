@@ -1,0 +1,76 @@
+.header {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    width: 100%;
+    user-select: none;
+
+    // 브레이크포인트 이하일 땐 수직 정렬
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    > .logo,
+    > .user {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 120px;
+    }
+
+    > .logo {
+        gap: 8px;
+
+        > img {
+            width: 80px;
+            height: 80px;
+        }
+
+        > h1 {
+            color: var(--color-main1);
+            font-size: var(--fontSize-2xl);
+        }
+
+        @media (max-width: 768px) {
+            margin-top: 16px;
+            > img {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    }
+
+    > .nav {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+        white-space: nowrap;
+
+        @media (max-width: 768px) {
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+    }
+
+    > .user {
+        gap: 12px;
+        font-size: var(--fontSize-xl);
+        font-weight: var(--fontWeight-regular);
+
+        :hover {
+            font-weight: var(--fontWeight-semiBold);
+        }
+
+        @media (max-width: 768px) {
+            min-width: 0;
+            position: absolute;
+            right: 8px;
+            font-size: var(--fontSize-xs);
+        }
+    }
+}
