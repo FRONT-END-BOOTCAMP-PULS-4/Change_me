@@ -2,7 +2,7 @@
 
 import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
 import { MessageListDto } from "@/application/usecase/message/dto/MessageListDto";
-import { getToken, useMemberStore } from "@/stores/memberStore";
+import { getToken, useMemberStore } from "@/stores/MemberStore";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 

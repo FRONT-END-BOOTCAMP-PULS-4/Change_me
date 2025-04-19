@@ -3,28 +3,18 @@
 import { useMemberStore } from "@/stores/MemberStore";
 import HeaderIcon from "./HeaderIcon";
 import Link from "next/link";
-import styles from "./BaseHeader.module.scss";
+import styles from "./Header.module.scss";
 import { useRouter } from "next/navigation";
 
-const iconLinkList = [
-    {
-        to: "/",
-        imgPath: "/images/LogoOurHabits.png",
-        title: "모두의 습관",
-    },
-    {
-        to: "/member/daily-routine",
-        imgPath: "/images/LogoDailyRoutine.png",
-        title: "오늘의 루틴",
-    },
-    {
-        to: "/member/record",
-        imgPath: "/images/LogoRecord.png",
-        title: "기록 보기",
-    },
-];
+type HeaderProps = {
+    iconLinks?: {
+        to: string;
+        imgPath: string;
+        title: string;
+    }[];
+};
 
-export default function BaseHeader() {
+export default function Header({ iconLinks }: HeaderProps) {
     const isLoggedIn = useMemberStore((state) => state.isLoggedIn);
     const logout = useMemberStore((state) => state.logout);
     const router = useRouter();
@@ -40,7 +30,7 @@ export default function BaseHeader() {
                 <h1>Change Me</h1>
             </div>
             <nav className={styles.nav}>
-                {iconLinkList.map((link, idx) => (
+                {iconLinks?.map((link, idx) => (
                     <HeaderIcon
                         key={idx}
                         to={link.to}
@@ -52,7 +42,7 @@ export default function BaseHeader() {
             <div className={styles.user}>
                 {isLoggedIn ? (
                     <>
-                        <Link href="/profile">마이페이지</Link>
+                        <Link href="/member/profile">마이페이지</Link>
                         <button onClick={handleLogout}>로그아웃</button>
                     </>
                 ) : (
