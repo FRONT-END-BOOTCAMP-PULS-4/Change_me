@@ -124,7 +124,6 @@ export class SbMessageRepository implements MessageRepository {
         const { data, error } = await supabase
             .from("message")
             .update({
-                member_id: message.memberId,
                 content: message.content,
                 modified_at: new Date().toISOString(),
             })

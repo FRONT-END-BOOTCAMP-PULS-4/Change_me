@@ -1,13 +1,24 @@
-export class UpdateMessageUsecase {
-    constructor(
-        public id: number,
-        public content: string,
-        public modifiedAt: Date,
-    ) {}
+import { MessageRepository } from "@/domain/repositories/MessageRepository";
+import { UpdateMessageDto } from "./dto/UpdateMessageDto";
+import { Message } from "@/domain/entities/Message";
 
-    async execute() {
-        // Logic to update the message in the database
-        // This would typically involve calling a repository method
-        // to perform the update operation.
+export class UpdateMessageUsecase {
+    private messageRepository: MessageRepository;
+
+    constructor(messageRepository: MessageRepository) {
+        this.messageRepository = messageRepository;
+    }
+
+    async execute(updateMessageDto: UpdateMessageDto): Promise<Message> {
+        const message: Message = new Message(
+            updateMessageDto.id,
+            updateMessageDto.memberId,
+            updateMessageDto.content,
+            new Date(),
+            new Date(),
+        );
+
+        const newMessage = this.messageRepository.update(message);
+        return newMessage;
     }
 }
