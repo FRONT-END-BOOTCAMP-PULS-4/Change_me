@@ -1,6 +1,6 @@
 import { MessageRepository } from "@/domain/repositories/MessageRepository";
 import { MessageListDto } from "./dto/MessageListDto";
-import { GetMessageListQueryDto } from "./dto/GetMessageListQueryDto";
+import { GetMessageListDto } from "./dto/GetMessageListDto";
 import { MessageFilter } from "@/domain/repositories/filters/MessageFilter";
 import { Message } from "@/domain/entities/Message";
 import { MemberRepository } from "@/domain/repositories/MemberRepository";
@@ -23,17 +23,18 @@ export class GetMessageListUsecase {
         this.messageLikeRepository = messageLikeRepository;
     }
 
-    async execute(queryDto: GetMessageListQueryDto): Promise<MessageListDto> {
+    async execute(
+        getMessageListDto: GetMessageListDto,
+    ): Promise<MessageListDto> {
         try {
             // page setups
             const pageSize: number = 5; // number of messages per page
-            const currentPage: number = queryDto.currentPage || 1;
-            const mine: boolean = queryDto.mine || false; // default to false
-
+            const currentPage: number =
+                getMessageListDto.queryString.currentPage || 1;
+            const mine: boolean = getMessageListDto.queryString.mine || false; // default to false
+            const memberId = mine ? getMessageListDto.memberId : null; // if mine is true, set memberId to the filter
             const offset: number = (currentPage - 1) * pageSize;
             const limit: number = pageSize;
-
-            const memberId: string = "temp"; // TODO: using JWT token to get memberId
 
             // data query
             const filter = new MessageFilter(
@@ -52,23 +53,24 @@ export class GetMessageListUsecase {
             // convert Message to MessageDto
             const messageDtos: MessageDto[] = await Promise.all(
                 messages.map(async (message) => {
-                    let member: Member | null =
+                    let writer: Member | null =
                         await this.memberRepository.findById(message.memberId);
                     let likeCount: number =
                         await this.messageLikeRepository.count({
                             messageId: message.id,
+                            memberId: null,
                         });
                     let isLiked: boolean =
                         (await this.messageLikeRepository.findAll({
-                            memberId: member?.id,
+                            memberId: getMessageListDto.memberId,
                             messageId: message.id,
                         })) !== null;
 
                     return {
                         id: message.id,
-                        writer: member?.name || "Unknown",
+                        writer: writer?.name || "Unknown",
                         profileUrl:
-                            member?.imageUrl ||
+                            writer?.imageUrl ||
                             "@/public/images/ProfileCircle.png",
                         content: message.content,
                         createdAt: message.createdAt,

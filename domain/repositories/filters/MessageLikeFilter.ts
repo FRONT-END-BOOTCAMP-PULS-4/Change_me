@@ -1,6 +1,6 @@
 export class MessageLikeFilter {
     constructor(
-        public messageId?: number,
-        public memberId?: string,
+        public messageId: number | null,
+        public memberId: string | null,
     ) {}
 }

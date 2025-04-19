@@ -11,7 +11,7 @@ export class CreateMessageUsecase {
 
     async execute(createMessageDto: CreateMessageDto): Promise<Message> {
         const message: Message = new Message(
-            null,
+            -1, // ignore it, message id is auto-incremented by supabase.
             createMessageDto.memberId,
             createMessageDto.content,
             new Date(),
