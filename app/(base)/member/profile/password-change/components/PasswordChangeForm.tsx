@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/authStore";
+import styles from "./PasswordChangeForm.module.scss";
 
 export default function PasswordChangeForm() {
     const router = useRouter();
@@ -81,44 +82,65 @@ export default function PasswordChangeForm() {
     };
 
     return (
-        <div>
-            <h2>비밀번호 변경</h2>
-            <p>안전한 비밀번호로 내 정보를 보호하세요</p>
+        <div className={styles.container}>
+            <div className={styles.formBox}>
+                <div className={styles.header}>
+                    <div className={styles.texts}>
+                        <h2>비밀번호 변경</h2>
+                        <p>
+                            안전한 비밀번호로 내 정보를 보호하세요<br />
+                            <a>다른 아이디/사이트에서 사용한 적 없는 비밀번호</a><br />
+                            <a>이전에 사용한 적 없는 비밀번호</a>가 안전합니다.
+                        </p>
+                    </div>
+                    <div className={styles.image}>
+                        <img src="/images/Security.png" alt="보안 이미지" />
+                    </div>
+                </div>
 
-            <div>
-                <label>현재 비밀번호</label>
-                <input
-                    type="password"
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                    placeholder="비밀번호"
-                />
+                <div className={styles.inputGroup}>
+                    <div className={styles.inputRow}>
+                        <label>현재 비밀번호</label>
+                        <input
+                            type="password"
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                            placeholder="비밀번호 입력"
+                        />
+                    </div>
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <div className={styles.inputRow}>
+                        <label>새 비밀번호</label>
+                        <input
+                            type="password"
+                            value={newPassword}
+                            onChange={handleNewPasswordChange}
+                            placeholder="새 비밀번호"
+                        />
+                    </div>
+                    {passwordError && (
+                        <div className={styles.error}>{passwordError}</div>
+                    )}
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <div className={styles.inputRow}>
+                        <label>새 비밀번호 확인</label>
+                        <input
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="새 비밀번호 확인"
+                        />
+                    </div>
+                </div>
+
+                <button onClick={handleSubmit} className={styles.submitButton}>
+                    변경
+                </button>
             </div>
-
-            <div>
-                <label>새 비밀번호</label>
-                <input
-                    type="password"
-                    value={newPassword}
-                    onChange={handleNewPasswordChange}
-                    placeholder="새 비밀번호"
-                />
-                {passwordError && (
-                    <div style={{ color: "red", fontSize: "12px" }}>{passwordError}</div>
-                )}
-            </div>
-
-            <div>
-                <label>새 비밀번호 확인</label>
-                <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="새 비밀번호 확인"
-                />
-            </div>
-
-            <button onClick={handleSubmit}>변경</button>
         </div>
     );
 }
