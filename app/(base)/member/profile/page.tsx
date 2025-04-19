@@ -4,13 +4,14 @@ import ProfileForm from "./components/ProfileForm";
 import WithdrawButton from "./components/WithdrawButton";
 import ChangePasswordButton from "./components/ChangePasswordButton";
 import styles from "./page.module.scss";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState<any>(null);
 
     useEffect(() => {
         const fetchProfile = async () => {
-            const token = localStorage.getItem("access_token");
+            const token = useAuthStore.getState().token;
             const res = await fetch("/api/members/profile", {
                 headers: {
                     Authorization: `Bearer ${token}`,
