@@ -2,7 +2,7 @@
 
 import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
 import { MessageListDto } from "@/application/usecase/message/dto/MessageListDto";
-import { getToken, useMemberStore } from "@/stores/MemberStore";
+import { useAuthStore } from "@/stores/authStore";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -22,10 +22,10 @@ export default function MessageListPage() {
     if (currentPageParam) setCurrentPage(Number(currentPageParam));
     if (mineParam) setMine(mineParam === "true");
 
-    useEffect(() => {
-        const token = getToken();
-        console.log("token", token);
+    const token = useAuthStore((state) => state.token);
+    console.log("token", token);
 
+    useEffect(() => {
         async function fetchMessages() {
             try {
                 const params = new URLSearchParams();

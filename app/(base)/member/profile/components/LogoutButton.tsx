@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemberStore } from "@/stores/MemberStore";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function LogoutButton() {
-    const logout = useMemberStore((state) => state.logout);
+    const logout = useAuthStore((state) => state.logout);
     const router = useRouter();
 
     const handleLogout = () => {

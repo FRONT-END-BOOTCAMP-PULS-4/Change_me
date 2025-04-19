@@ -5,6 +5,7 @@
     align-items: center;
     padding: 24px;
     width: 100%;
+    min-height: 150px;
     user-select: none;
 
     // 브레이크포인트 이하일 땐 수직 정렬
@@ -44,6 +45,10 @@
         }
     }
 
+    > .admin {
+        cursor: pointer;
+    }
+
     > .nav {
         flex: 1;
         display: flex;
@@ -59,7 +64,7 @@
 
     > .user {
         gap: 12px;
-        font-size: var(--fontSize-xl);
+        font-size: var(--fontSize-lg);
         font-weight: var(--fontWeight-regular);
 
         :hover {

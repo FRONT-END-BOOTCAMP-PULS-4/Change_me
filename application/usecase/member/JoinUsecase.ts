@@ -1,12 +1,12 @@
 import { MemberRepository } from "@/domain/repositories/MemberRepository";
 import { Member } from "@/domain/entities/Member";
 import bcrypt from "bcrypt";
-import { JoinMemberDto } from "./dto/JoinMemberDto";
+import { JoinDto } from "./dto/JoinDto";
 
-export class JoinMemberUseCase {
-    constructor(private readonly memberRepository: MemberRepository) { }
+export class JoinUsecase {
+    constructor(private readonly memberRepository: MemberRepository) {}
 
-    async execute(dto: JoinMemberDto): Promise<Member> {
+    async execute(dto: JoinDto): Promise<void> {
         const hashedPassword = await bcrypt.hash(dto.password, 10);
         const now = new Date();
 
@@ -20,10 +20,9 @@ export class JoinMemberUseCase {
             0,
             now,
             null,
-            null
+            null,
         );
 
-        const savedMember = await this.memberRepository.create(newMember);
-        return savedMember;
+        await this.memberRepository.save(newMember);
     }
 }
