@@ -2,15 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import styles from "./WithdrawButton.module.scss";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function WithdrawButton() {
     const router = useRouter();
+    const { logout } = useAuthStore.getState();
 
     const handleWithdraw = async () => {
         const confirmed = window.confirm("정말 탈퇴하시겠습니까?");
         if (!confirmed) return;
 
-        const token = localStorage.getItem("access_token");
+        const token = useAuthStore.getState().token;
         if (!token) return;
 
         const res = await fetch("/api/members/withdraw", {
@@ -21,7 +23,7 @@ export default function WithdrawButton() {
         });
 
         if (res.ok) {
-            localStorage.removeItem("access_token");
+            logout();
             alert("탈퇴가 완료되었습니다.");
             router.push("/login");
         } else {
