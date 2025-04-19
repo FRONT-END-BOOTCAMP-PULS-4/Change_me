@@ -1,6 +1,6 @@
 .pager-box {
     width: 100%;
-    max-width: 600px;
+    max-width: 500px;
     height: 100%;
     margin: 0 auto;
     padding: 40px;
@@ -10,28 +10,51 @@
     align-items: center;
 
     > .pager {
-        > h1 {
-            display: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+
+        > .page-mover {
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-size: var(--fontSize-xs);
+            color: var(--color-darkGray);
+            transition: all 200ms ease;
         }
 
-        > button {
-            padding: 0.5rem 0.75rem;
-            border: 1px solid #ccc;
-            background-color: white;
-            color: #333;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-
-            &:hover:not(.disabled) {
-                background-color: #f0f0f0;
-            }
+        > .page-mover:hover:not(.disabled) {
+            color: var(--color-black);
+            font-weight: var(--fontWeight-semiBold);
         }
 
         > .disabled {
-            opacity: 0.5;
-            pointer-events: none;
-            cursor: not-allowed;
+            user-select: none;
+        }
+
+        > .page-nums {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-black);
+            font-size: var(--fontSize-md);
+
+            button {
+                width: 24px;
+                height: 24px;
+                border-radius: 4px;
+                transition: all 200ms ease;
+            }
+
+            button:hover:not(.active) {
+                font-weight: var(--fontWeight-semiBold);
+            }
+
+            .active {
+                background-color: var(--color-main3);
+                font-weight: var(--fontWeight-semiBold);
+            }
         }
     }
 }

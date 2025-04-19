@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemberStore } from "@/stores/memberStore";
+import { useMemberStore } from "@/stores/MemberStore";
 import HeaderIcon from "./HeaderIcon";
 import Link from "next/link";
 import styles from "./BaseHeader.module.scss";

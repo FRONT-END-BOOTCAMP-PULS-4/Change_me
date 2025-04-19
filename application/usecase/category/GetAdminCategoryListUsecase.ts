@@ -23,8 +23,14 @@ export class GetAdminCategoryListUsecase {
             const categories: CategoryDto[] =
                 await this.categoryRepository.findAll(filter);
             const totalCount = await this.categoryRepository.count();
+
+            const startPage =
+                Math.floor((currentPage - 1) / PAGE_SIZE) * PAGE_SIZE + 1;
             const endPage = Math.ceil(totalCount / PAGE_SIZE);
-            const pages = Array.from({ length: endPage }, (_, i) => i + 1);
+            const pages = Array.from(
+                { length: 10 },
+                (_, i) => startPage + i,
+            ).filter((pageNumber) => pageNumber <= endPage);
 
             const adminCategoryListDto: AdminCategoryListDto = {
                 categories: categories,
