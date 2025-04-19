@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 import { MessageListDto } from "@/application/usecase/message/dto/MessageListDto";
 import { MessageRepository } from "@/domain/repositories/MessageRepository";
 import { MemberRepository } from "@/domain/repositories/MemberRepository";
-import { GetMessageListQueryDto } from "@/application/usecase/message/dto/GetMessageListQueryDto";
+import { GetMessageListDto } from "@/application/usecase/message/dto/GetMessageListDto";
 import { getMemberIdFromToken } from "@/utils/auth";
 import { CreateMessageDto } from "@/application/usecase/message/dto/CreateMessageDto";
 import { CreateMessageUsecase } from "@/application/usecase/message/CreateMessageUsecase";
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
         );
 
         // set up query Dto
-        const queryDto = new GetMessageListQueryDto(
+        const queryDto = new GetMessageListDto(
             Number(currentPageParam),
             mineParam === "true",
         );
