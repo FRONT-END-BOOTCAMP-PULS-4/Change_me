@@ -38,7 +38,7 @@ export default function MessageListPage() {
 
                 // call API
                 const response = await fetch(
-                    `/api/messages?${params.toString()}`,
+                    `/api/members/messages?${params.toString()}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

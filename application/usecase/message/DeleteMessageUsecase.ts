@@ -1,8 +1,17 @@
-export class DeleteMessageUsecase {
-    constructor(private messageId: number) {}
+import { MessageRepository } from "@/domain/repositories/MessageRepository";
 
-    async execute() {
-        // Logic to delete the message using the messageId
-        // This could involve calling a repository method to remove the message from the database
+export class DeleteMessageUsecase {
+    private messageRepository: MessageRepository;
+
+    constructor(messageRepository: MessageRepository) {
+        this.messageRepository = messageRepository;
+    }
+
+    async execute(id: number): Promise<void> {
+        if (id) {
+            throw new Error("id is required");
+        }
+
+        await this.messageRepository.deleteById(id);
     }
 }
