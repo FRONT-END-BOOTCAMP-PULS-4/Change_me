@@ -18,18 +18,17 @@ export async function POST(req: NextRequest) {
         const joinMemberUseCase = new JoinUsecase(memberRepository);
         await joinMemberUseCase.execute(dto);
 
-        return NextResponse.json({message : "가입 성공"}, { status: 201 });
+        return NextResponse.json({ message: "가입 성공" }, { status: 201 });
     } catch (error) {
-      if (error instanceof Error) {
+        if (error instanceof Error) {
+            return NextResponse.json(
+                { message: error.message || "가입 실패" },
+                { status: 400 },
+            );
+        }
         return NextResponse.json(
-            { message: error.message || "가입 실패" },
-            { status: 400 },
+            { message: "알 수 없는 오류 발생" },
+            { status: 500 },
         );
-    }
-    return NextResponse.json(
-        { message: "알 수 없는 오류 발생" },
-        { status: 500 },
-    );
-}
     }
 }

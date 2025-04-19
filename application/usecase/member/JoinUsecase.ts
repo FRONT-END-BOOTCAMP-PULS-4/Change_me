@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { JoinDto } from "./dto/JoinDto";
 
 export class JoinUsecase {
-    constructor(private readonly memberRepository: MemberRepository) {}
+    constructor(private readonly memberRepository: MemberRepository) { }
 
     async execute(dto: JoinDto): Promise<void> {
         const hashedPassword = await bcrypt.hash(dto.password, 10);

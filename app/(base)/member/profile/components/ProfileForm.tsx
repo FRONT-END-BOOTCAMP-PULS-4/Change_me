@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import Image from "next/image";
 import styles from "./ProfileForm.module.scss";
+import { useAuthStore } from "@/stores/authStore";
 
 type Props = {
     profile: {
@@ -54,7 +55,7 @@ export default function ProfileForm({ profile }: Props) {
             return;
         }
 
-        const token = localStorage.getItem("access_token");
+        const token = useAuthStore.getState().token;
         // 비밀번호 검증
         const passwordRes = await fetch("/api/members/verify-password", {
             method: "POST",

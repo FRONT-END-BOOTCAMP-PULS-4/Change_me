@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function PasswordChangeForm() {
     const router = useRouter();
@@ -38,7 +39,7 @@ export default function PasswordChangeForm() {
             return;
         }
 
-        const token = localStorage.getItem("access_token");
+        const token = useAuthStore.getState().token;
         if (!token) {
             alert("로그인이 필요합니다.");
             return;
