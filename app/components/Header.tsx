@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemberStore } from "@/stores/MemberStore";
+import { useAuthStore } from "@/stores/authStore";
 import HeaderIcon from "./HeaderIcon";
 import Link from "next/link";
 import styles from "./Header.module.scss";
@@ -15,17 +15,26 @@ type HeaderProps = {
 };
 
 export default function Header({ iconLinks }: HeaderProps) {
-    const isLoggedIn = useMemberStore((state) => state.isLoggedIn);
-    const logout = useMemberStore((state) => state.logout);
+    const isLoggedIn = !!useAuthStore((state) => state.token);
+    const { logout, isAdmin } = useAuthStore();
     const router = useRouter();
 
     const handleLogout = () => {
         logout();
         router.push("/");
     };
+
+    const handleLogoClick = () => {
+        if (!isAdmin()) return;
+        router.push("/");
+    };
+
     return (
         <header className={styles.header}>
-            <div className={styles.logo}>
+            <div
+                className={`${styles.logo} ${isAdmin() ? styles.admin : ""}`}
+                onClick={handleLogoClick}
+            >
                 <img src={"/images/LogoChangeMe.png"} alt="Change Me" />
                 <h1>Change Me</h1>
             </div>
@@ -42,6 +51,8 @@ export default function Header({ iconLinks }: HeaderProps) {
             <div className={styles.user}>
                 {isLoggedIn ? (
                     <>
+                        {" "}
+                        {isAdmin() && <Link href="/admin"> 카테고리 관리</Link>}
                         <Link href="/member/profile">마이페이지</Link>
                         <button onClick={handleLogout}>로그아웃</button>
                     </>

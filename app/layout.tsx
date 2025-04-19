@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import ClientLayoutWrapper from "./components/ClientLayoutWrapper";
 
 const NotoSans = localFont({
     src: [
@@ -35,9 +34,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ko" className={NotoSans.className}>
-            <body>
-                <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
-            </body>
+            <body>{children}</body>
         </html>
     );
 }

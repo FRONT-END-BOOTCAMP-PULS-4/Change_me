@@ -1,29 +1,20 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Header from "../components/Header";
-import Loading from "../components/Loading";
-import { usePathname, useRouter } from "next/navigation";
+import Loading from "@/app/components/Loading";
 import { useAuthStore } from "@/stores/authStore";
+import { usePathname, useRouter } from "next/navigation";
+import { ReactNode, useEffect, useState } from "react";
 
-export default function AdminLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function MemberLayout({ children }: { children: ReactNode }) {
     const pathname = usePathname();
     const router = useRouter();
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-
-    const isAdmin = useAuthStore((state) => state.isAdmin);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         if (!isAuthenticated()) {
             localStorage.setItem("returnURL", pathname); // Use window.location.pathname for the current URL path
             router.push("/login"); // Redirect to login page
-        } else if (!isAdmin()) {
-            router.push("/error/403");
         } else {
             setIsLoading(false); // Loading complete after login check
         }
@@ -33,10 +24,5 @@ export default function AdminLayout({
         return <Loading />;
     }
 
-    return (
-        <>
-            <Header />
-            <main>{children}</main>
-        </>
-    );
+    return <>{children}</>;
 }

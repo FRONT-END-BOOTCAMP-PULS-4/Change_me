@@ -1,18 +1,18 @@
-"use client";
+// "use client";
 
-import { useEffect } from "react";
-import { useMemberStore } from "@/stores/MemberStore";
+// import { useEffect } from "react";
+// import { useMemberStore } from "@/stores/MemberStore";
 
-export default function ClientLayoutWrapper({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    const tryAutoLogin = useMemberStore((state) => state.tryAutoLogin);
+// export default function ClientLayoutWrapper({
+//     children,
+// }: {
+//     children: React.ReactNode;
+// }) {
+//     const tryAutoLogin = useMemberStore((state) => state.tryAutoLogin);
 
-    useEffect(() => {
-        tryAutoLogin();
-    }, []);
+//     useEffect(() => {
+//         tryAutoLogin();
+//     }, []);
 
-    return <>{children}</>;
-}
+//     return <>{children}</>;
+// }

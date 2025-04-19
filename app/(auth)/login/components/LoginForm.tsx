@@ -2,12 +2,12 @@
 
 import { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
-import { useMemberStore } from "@/stores/MemberStore";
+import { useAuthStore } from "@/stores/authStore";
 import styles from "./LoginForm.module.scss";
 
 export default function LoginForm() {
     const router = useRouter();
-    const setUser = useMemberStore((state) => state.setUser);
+    const { login, setToken } = useAuthStore();
     const [form, setForm] = useState({ email: "", password: "" });
     const [errors, setErrors] = useState<{ email?: string; password?: string }>(
         {},
@@ -60,8 +60,16 @@ export default function LoginForm() {
                 return;
             }
 
-            setUser(data.user, data.token);
-            router.push("/member/profile");
+            login(data.user);
+            setToken(data.token);
+
+            const returnURL = localStorage.getItem("returnURL");
+            if (returnURL) {
+                localStorage.removeItem("returnURL");
+                router.push(returnURL);
+            } else {
+                router.push("/member/daily-routine");
+            }
         } catch (err) {
             setErrorMessage("서버 오류가 발생했습니다.");
         }

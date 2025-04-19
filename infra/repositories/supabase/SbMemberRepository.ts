@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/Server";
 
 export class SbMemberRepository implements MemberRepository {
     // 회원가입
-    async create(member: Member): Promise<Member> {
+    async save(member: Member): Promise<void> {
         const supabase = await createClient();
 
         const { data, error } = await supabase
@@ -24,21 +24,8 @@ export class SbMemberRepository implements MemberRepository {
             .single();
 
         if (error || !data) {
-            throw new Error(error?.message || "회원 생성 실패");
+            throw new Error(error?.message || "가입 실패패");
         }
-
-        return new Member(
-            data.id,
-            data.name,
-            data.email,
-            data.password,
-            data.nickname,
-            data.image_url ?? null,
-            data.role,
-            new Date(data.created_at),
-            data.modified_at ?? null,
-            data.deleted_at ?? null
-        );
     }
 
     // 이메일 중복확인
@@ -76,7 +63,7 @@ export class SbMemberRepository implements MemberRepository {
             data.role,
             new Date(data.created_at),
             data.modified_at ?? null,
-            data.deleted_at ?? null
+            data.deleted_at ?? null,
         );
     }
 
@@ -102,7 +89,7 @@ export class SbMemberRepository implements MemberRepository {
             data.role,
             new Date(data.created_at),
             data.modified_at ?? null,
-            data.deleted_at ?? null
+            data.deleted_at ?? null,
         );
     }
 
@@ -122,7 +109,11 @@ export class SbMemberRepository implements MemberRepository {
     }
 
     // 프로필 이미지 변경
-    async uploadProfileImage(id: string, file: File, oldPath?: string): Promise<{ path: string }> {
+    async uploadProfileImage(
+        id: string,
+        file: File,
+        oldPath?: string,
+    ): Promise<{ path: string }> {
         const supabase = await createClient();
         const filename = `${id}_${Date.now()}`;
 
@@ -149,7 +140,11 @@ export class SbMemberRepository implements MemberRepository {
     }
 
     // 프로필 변경
-    async updateProfile(id: string, nickname: string, imageUrl?: string | null): Promise<void> {
+    async updateProfile(
+        id: string,
+        nickname: string,
+        imageUrl?: string | null,
+    ): Promise<void> {
         const supabase = await createClient();
 
         const updates: Record<string, any> = {

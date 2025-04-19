@@ -33,6 +33,16 @@ body {
     margin: auto;
 }
 
+main {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    @media (max-width: 768px) {
+        width: 100%;
+    }
+}
+
 * {
     box-sizing: border-box;
     padding: 0;

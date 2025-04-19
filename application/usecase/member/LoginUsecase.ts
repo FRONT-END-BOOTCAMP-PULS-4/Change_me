@@ -1,12 +1,13 @@
 import { MemberRepository } from "@/domain/repositories/MemberRepository";
-import { LoginMemberDto } from "./dto/LoginMemberDto";
+import { LoginDto } from "./dto/LoginDto";
 import { signJWT } from "@/utils/jwt";
 import bcrypt from "bcrypt";
+import { LoggedInDto } from "./dto/LoggedInDto";
 
-export class LoginMemberUseCase {
-    constructor(private readonly memberRepository: MemberRepository) { }
+export class LoginUsecase {
+    constructor(private readonly memberRepository: MemberRepository) {}
 
-    async execute(dto: LoginMemberDto) {
+    async execute(dto: LoginDto): Promise<LoggedInDto> {
         const member = await this.memberRepository.findByEmail(dto.email);
         if (!member) {
             throw new Error("이메일 또는 비밀번호가 일치하지 않습니다.");
@@ -32,7 +33,9 @@ export class LoginMemberUseCase {
             user: {
                 id: member.id,
                 name: member.name,
+                email: member.email,
                 nickname: member.nickname,
+                role: member.role,
             },
         };
     }
