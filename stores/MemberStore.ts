@@ -49,5 +49,5 @@ export const useMemberStore = create<MemberState>((set) => ({
         } else {
             localStorage.removeItem("access_token");
         }
-    },    
+    },
 }));

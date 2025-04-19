@@ -2,7 +2,7 @@
 
 import { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
-import { useMemberStore } from "@/stores/memberStore";
+import { useMemberStore } from "@/stores/MemberStore";
 import styles from "./LoginForm.module.scss";
 
 export default function LoginForm() {
@@ -70,9 +70,7 @@ export default function LoginForm() {
     return (
         <div className={styles.container}>
             {errorMessage && (
-                <div className={styles.warningMessage}>
-                    ⚠️ {errorMessage}
-                </div>
+                <div className={styles.warningMessage}>⚠️ {errorMessage}</div>
             )}
 
             <h2>로그인</h2>

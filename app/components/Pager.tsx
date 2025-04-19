@@ -1,41 +1,39 @@
 "use client";
 
-import React, { FC } from "react";
+import React from "react";
 import styles from "./Pager.module.scss";
 
 const {
     ["pager-box"]: pagerBox,
     ["pager"]: pager,
     ["disabled"]: disabled,
+    ["page-mover"]: pageMover,
+    ["page-nums"]: pageNums,
+    ["active"]: active,
 } = styles;
 
 type PagerProps = {
     currentPage: number;
+    pages: number[];
     endPage: number;
-    pageSize: number; // number of pages to show in the pager
     onPageChange: (newPage: number) => void;
 };
 
-const Pager: FC<PagerProps> = ({
+export default function Pager({
     currentPage,
+    pages,
     endPage,
-    pageSize,
     onPageChange,
-}) => {
-    const startNumber = Math.floor((currentPage - 1) / pageSize) * pageSize + 1;
-    const pages = Array.from(
-        { length: pageSize },
-        (_, i) => startNumber + i,
-    ).filter((page) => page <= endPage);
-    const hasNextPage = startNumber + pageSize <= endPage;
-    const hasPreviousPage = currentPage > pageSize;
+}: PagerProps) {
+    const hasNextPage = currentPage + 1 <= endPage;
+    const hasPreviousPage = currentPage > 1;
 
     return (
         <div className={pagerBox}>
             <section className={pager}>
-                <h1>페이저</h1>
                 {hasPreviousPage ? (
                     <button
+                        className={pageMover}
                         onClick={() =>
                             onPageChange(Math.max(currentPage - 1, 1))
                         }
@@ -43,13 +41,13 @@ const Pager: FC<PagerProps> = ({
                         이전
                     </button>
                 ) : (
-                    <div className={disabled}>이전</div>
+                    <div className={`${pageMover} ${disabled}`}>이전</div>
                 )}
-                <ul>
+                <ul className={pageNums}>
                     {pages.map((pageNumber) => (
                         <li key={pageNumber}>
                             <button
-                                className={`${pageNumber === currentPage ? "active" : ""}`}
+                                className={`${pageNumber === currentPage ? active : ""}`}
                                 onClick={() => onPageChange(pageNumber)}
                             >
                                 {pageNumber}
@@ -59,16 +57,17 @@ const Pager: FC<PagerProps> = ({
                 </ul>
                 {hasNextPage ? (
                     <button
+                        className={pageMover}
                         onClick={() =>
-                            onPageChange(Math.max(currentPage - 1, 1))
+                            onPageChange(Math.min(currentPage + 1, endPage))
                         }
                     >
                         다음
                     </button>
                 ) : (
-                    <div className={disabled}>다음</div>
+                    <div className={`${pageMover} ${disabled}`}>다음</div>
                 )}
             </section>
         </div>
     );
-};
+}
