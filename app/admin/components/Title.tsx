@@ -6,6 +6,7 @@ import styles from "./Title.module.scss";
 
 export default function Title() {
     const { openModal } = useModalStore();
+
     return (
         <div className={styles.title}>
             <h2>카테고리 관리</h2>
