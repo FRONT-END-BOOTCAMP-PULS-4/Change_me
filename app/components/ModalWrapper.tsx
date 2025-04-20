@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
-import styles from "./Modal.module.scss";
+import styles from "./ModalWrapper.module.scss";
 
 type ModalProps = {
     isOpen: boolean;
@@ -8,7 +8,11 @@ type ModalProps = {
     children: React.ReactNode;
 };
 
-export default function Modal({ isOpen, onClose, children }: ModalProps) {
+export default function ModalWrapper({
+    isOpen,
+    onClose,
+    children,
+}: ModalProps) {
     if (!isOpen) return null;
 
     useEffect(() => {
