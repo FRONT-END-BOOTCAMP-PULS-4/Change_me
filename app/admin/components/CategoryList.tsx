@@ -3,14 +3,30 @@ import Pager from "@/app/components/Pager";
 import React from "react";
 import styles from "./CategoryList.module.scss";
 import CategoryItem from "./CategoryItem";
-
-const categories = [
-    { id: 1, name: "운동", habitCount: 0 },
-    { id: 2, name: "공부", habitCount: 10000000 },
-    { id: 3, name: "생활습관", habitCount: 532 },
-];
+import { useAdminCategories } from "@/hooks/useAdminCategories";
+import Loading from "@/app/components/Loading";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function CategoryList() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const currentPage = Number(searchParams.get("page")) || 1;
+
+    const {
+        categories,
+        pages,
+        endPage,
+        isLoading,
+        deleteCategory,
+        updateCategory,
+    } = useAdminCategories(currentPage);
+
+    const handlePageChange = (page: number) => {
+        router.push(`?page=${page}`);
+    };
+
+    if (isLoading) return <Loading />;
+
     return (
         <div className={styles.wrapper}>
             <div className={styles.index}>
@@ -20,19 +36,22 @@ export default function CategoryList() {
             </div>
 
             <ul className={styles.list}>
-                {categories.map((category) => (
+                {categories?.map((category) => (
                     <CategoryItem
                         key={category.id}
+                        id={category.id}
                         name={category.name}
                         habitCount={category.habitCount}
+                        handleDelete={deleteCategory}
+                        handleUpdate={updateCategory}
                     />
                 ))}
             </ul>
             <Pager
                 currentPage={1}
-                pages={[1, 2, 3, 4, 5]}
-                endPage={10}
-                onPageChange={(page: number) => {}}
+                pages={pages}
+                endPage={endPage}
+                onPageChange={(page: number) => handlePageChange(page)}
             />
         </div>
     );
