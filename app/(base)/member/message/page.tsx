@@ -6,6 +6,9 @@ import { useAuthStore } from "@/stores/authStore";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import MessageList from "./components/MessageList";
+import WriteMessageForm from "./components/WriteMessageForm";
+
 export default function MessageListPage() {
     // search params initialization
     const searchParams = useSearchParams();
@@ -73,37 +76,8 @@ export default function MessageListPage() {
                     </li>
                 </ol>
             </header>
-
-            <ol>
-                {messages.map((message) => {
-                    return (
-                        <li key={message.id}>
-                            <div>
-                                <img
-                                    src={message.profileUrl}
-                                    width={40}
-                                    height={40}
-                                />
-                                <div>
-                                    <strong>{message.writer}</strong>
-                                    <span>
-                                        {message.createdAt.toISOString()}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <p>{message.content}</p>
-
-                            <div>
-                                <button>
-                                    {message.isLiked ? "❤️" : "🤍"}{" "}
-                                    {message.likeCount}
-                                </button>
-                            </div>
-                        </li>
-                    );
-                })}
-            </ol>
+            <WriteMessageForm />
+            <MessageList messages={messages} />
         </main>
     );
 }
