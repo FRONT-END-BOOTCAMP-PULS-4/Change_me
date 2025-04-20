@@ -1,6 +1,6 @@
 import { HabitRepository } from '@/domain/repositories/HabitRepository';
-import { ViewQueryDto } from '@/dto/ViewQueryDto';
-import { HabitListDto } from '@/dto/HabitListDto';
+import { ViewQueryDto } from './dto/ViewQueryDto';
+import { HabitListDto } from './dto/HabitListDto';
 import { HabitFilter } from '@/domain/repositories/filters/HabitFilter';
 import { HabitDto } from './dto/HabitDto';
 import { Habit } from '@/domain/entities/Habit';
@@ -17,11 +17,17 @@ export class GetHabitListUsecase {
         try {
             const pageSize: number = 10;
             const currentPage: number = queryDto.currentPage || 1;
-            const memberId: string = queryDto.memberId;
+            const memberId: string | undefined = queryDto.memberId;
             const categoryId: number | undefined = queryDto.categoryId;
             const status: number | undefined = queryDto.status;
             
-            const offset: number = (currentPage - 1) * pageSize;
+            const offset: number = (currentPage - 1) * pageSize; // Q : offset은 왜 QueryDto에 포함되지 않나요?
+            // offset은 페이지네이션을 위해 계산된 값으로, 쿼리 파라미터로 전달할 필요가 없습니다.
+            // 페이지네이션을 위해 쿼리 파라미터로 전달되는 currentPage를 사용하여 offset을 계산합니다.
+            // 그러면 왜 currentPage는 QueryDto에 포함되나요?
+            // A : currentPage는 클라이언트에서 요청할 때 사용자가 지정하는 값입니다.
+            // 그러면 왜 페이지네이션은 QueryDto에 포함되지 않나요?
+            // A : 페이지네이션은 클라이언트에서 요청할 때 사용자가 지정하는 값입니다.
             const limit: number = pageSize;
             
             // HabitFilter를 사용하여 필터링 조건 설정
