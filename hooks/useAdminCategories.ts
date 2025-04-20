@@ -2,7 +2,7 @@ import { fetcher } from "@/utils/fetcher";
 import useSWR, { mutate } from "swr";
 
 export type AdminCategory = {
-    id: string;
+    id: number;
     name: string;
     habitCount: number;
 };
@@ -35,7 +35,7 @@ export const useAdminCategories = (currentPage: number) => {
         mutate(getUrl);
     };
 
-    const deleteCategory = async (id: string) => {
+    const deleteCategory = async (id: number) => {
         await fetcher(`/api/admin/categories/${id}`, {
             method: "DELETE",
         });

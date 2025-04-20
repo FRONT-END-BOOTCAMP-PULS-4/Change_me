@@ -12,8 +12,14 @@ export default function CategoryList() {
     const router = useRouter();
     const currentPage = Number(searchParams.get("page")) || 1;
 
-    const { categories, pages, endPage, isLoading, error } =
-        useAdminCategories(currentPage);
+    const {
+        categories,
+        pages,
+        endPage,
+        isLoading,
+        deleteCategory,
+        updateCategory,
+    } = useAdminCategories(currentPage);
 
     const handlePageChange = (page: number) => {
         router.push(`?page=${page}`);
@@ -33,8 +39,11 @@ export default function CategoryList() {
                 {categories?.map((category) => (
                     <CategoryItem
                         key={category.id}
+                        id={category.id}
                         name={category.name}
                         habitCount={category.habitCount}
+                        handleDelete={deleteCategory}
+                        handleUpdate={updateCategory}
                     />
                 ))}
             </ul>

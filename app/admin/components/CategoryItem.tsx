@@ -4,11 +4,20 @@ import React from "react";
 import styles from "./CategoryItem.module.scss";
 
 type CategoryItemProps = {
+    id: number;
     name: string;
     habitCount: number;
+    handleDelete: (id: number) => void;
+    handleUpdate: (id: number, name: string) => void;
 };
 
-export default function CategoryItem({ name, habitCount }: CategoryItemProps) {
+export default function CategoryItem({
+    id,
+    name,
+    habitCount,
+    handleDelete,
+    handleUpdate,
+}: CategoryItemProps) {
     return (
         <li className={styles.row}>
             <span>{name}</span>
@@ -23,7 +32,11 @@ export default function CategoryItem({ name, habitCount }: CategoryItemProps) {
                 >
                     수정
                 </button>
-                <button disabled={habitCount !== 0} className={styles.delete}>
+                <button
+                    disabled={habitCount !== 0}
+                    className={styles.delete}
+                    onClick={() => handleDelete(id)}
+                >
                     삭제
                 </button>
             </div>
