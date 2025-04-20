@@ -1,22 +1,28 @@
+"use client";
+
 import useModalStore from "@/stores/modalStore";
+import CreateCategoryModal from "../admin/components/CreateCategoryModal";
+import CreateHabitModal from "../(base)/member/components/modals/CreateHabitModal";
+import EditHabitModal from "../(base)/member/components/modals/EditHabitModal";
+import ViewHabitModal from "../(base)/member/components/modals/ViewHabitModal";
 
 export default function Modals() {
-    const { modalType, isOpen, closeModal } = useModalStore();
+    const { modalType, isOpen } = useModalStore();
 
     if (!isOpen) return null;
 
     switch (modalType) {
         case "createCategory":
-            return;
+            return <CreateCategoryModal />;
 
         case "createHabit":
-            return;
+            return <CreateHabitModal />;
 
         case "editHabit":
-            return;
+            return <EditHabitModal />;
 
         case "viewHabit":
-            return;
+            return <ViewHabitModal />;
 
         default:
             return null;

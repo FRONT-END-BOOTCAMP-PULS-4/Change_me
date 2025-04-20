@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import styles from "./ModalWrapper.module.scss";
