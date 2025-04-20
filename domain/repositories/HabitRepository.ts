@@ -7,4 +7,6 @@ export interface HabitRepository {
     save(Habit: Habit): Promise<Habit>;
     update(Habit: Habit): Promise<Habit>;
     deleteById(id: number): Promise<void>;
+
+    TestCreate(habit: Habit): Promise<void>;
 }

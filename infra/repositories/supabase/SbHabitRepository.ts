@@ -1,12 +1,12 @@
-import {Habit} from "../../../domain/entities/Habit";
-import {HabitRepository} from "@/domain/repositories/HabitRepository";
-import {HabitFilter} from "@/domain/repositories/filters/HabitFilter";
+import { Habit } from "../../../domain/entities/Habit";
+import { HabitRepository } from "@/domain/repositories/HabitRepository";
+import { HabitFilter } from "@/domain/repositories/filters/HabitFilter";
 import { createClient } from "@/utils/supabase/Server";
 
 export class SbHabitRepository implements HabitRepository {
     private queryFilter(
-        filter : HabitFilter | undefined,
-        query : any
+        filter: HabitFilter | undefined,
+        query: any
     ) {
         if (filter) {
             if (filter.memberId) {
@@ -22,10 +22,10 @@ export class SbHabitRepository implements HabitRepository {
 
         return query;
     }
-    
-    async findAll(filter?: HabitFilter): Promise<Habit[]>{
+
+    async findAll(filter?: HabitFilter): Promise<Habit[]> {
         const supabase = await createClient();
-        
+
         let query = supabase
             .from('habits')
             .select('*')
@@ -41,18 +41,18 @@ export class SbHabitRepository implements HabitRepository {
 
         console.log("Fetched habits:", data);
 
-        const habits: Habit[] = 
-        data.map((habit: any) => ({
-            id: habit.id,
-            categoryId: habit.category_id,
-            memberId: habit.member_id,
-            name: habit.name,
-            description: habit.description,
-            createdAt: new Date(habit.created_at),
-            finishedAt: new Date(habit.finished_at),
-            stoppedAt: habit.stopped_at,
-            status: habit.status,
-        })) || [];
+        const habits: Habit[] =
+            data.map((habit: any) => ({
+                id: habit.id,
+                categoryId: habit.category_id,
+                memberId: habit.member_id,
+                name: habit.name,
+                description: habit.description,
+                createdAt: new Date(habit.created_at),
+                finishedAt: new Date(habit.finished_at),
+                stoppedAt: habit.stopped_at,
+                status: habit.status,
+            })) || [];
         return habits;
     }
 
@@ -117,18 +117,18 @@ export class SbHabitRepository implements HabitRepository {
     async update(habit: Habit): Promise<Habit> {
         const supabase = await createClient();
 
-        const  { data, error } = await supabase
-        .from('habits')
-        .update({
-            member_id : habit.memberId,
-            description : habit.description,
-            status : habit.status,
-            finished_at : habit.finishedAt,
-            stopped_at : habit.stoppedAt,
-        })
-        .eq('id', habit.id)
-        .select("*")
-        .single()
+        const { data, error } = await supabase
+            .from('habits')
+            .update({
+                member_id: habit.memberId,
+                description: habit.description,
+                status: habit.status,
+                finished_at: habit.finishedAt,
+                stopped_at: habit.stoppedAt,
+            })
+            .eq('id', habit.id)
+            .select("*")
+            .single()
         if (error) {
             throw new Error('Failed to update habit: ${error.message}');
         }
@@ -148,11 +148,29 @@ export class SbHabitRepository implements HabitRepository {
     async deleteById(id: number): Promise<void> {
         const supabase = await createClient();
 
-        const {error} = await supabase.from("habit").delete().eq("id", id);
-        if (error){
+        const { error } = await supabase.from("habit").delete().eq("id", id);
+        if (error) {
             throw new Error(
                 `failed to delete message with id ${id}: ${error.message}`
             );
+        }
+    }
+
+    // [테스트] 습관 등록
+    async TestCreate(habit: Habit): Promise<void> {
+        const supabase = await createClient();
+        const { error } = await supabase.from("habit").insert({
+            category_id: habit.categoryId,
+            member_id: habit.memberId,
+            name: habit.name,
+            description: habit.description,
+            created_at: habit.createdAt.toISOString(),
+            finished_at: habit.finishedAt.toISOString(),
+            status: habit.status,
+        });
+
+        if (error) {
+            throw new Error(`습관 등록 실패: ${error.message}`);
         }
     }
 }
