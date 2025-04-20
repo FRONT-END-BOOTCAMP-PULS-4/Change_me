@@ -5,11 +5,6 @@ import ModalWrapper from "@/app/components/ModalWrapper";
 import useModalStore from "@/stores/modalStore";
 import { useAuthStore } from "@/stores/authStore";
 
-type CategoryOption = {
-    id: number;
-    name: string;
-};
-
 export default function TestCreateHabitModal() {
     const { isOpen, closeModal } = useModalStore();
 
