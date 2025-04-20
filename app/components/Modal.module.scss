@@ -1,0 +1,21 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-darkGray);
+    opacity: 0.5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+    > .content {
+        background: var(--color-lightGray);
+        padding: 20px;
+        border-radius: 24px;
+        max-width: 500px;
+        width: 100%;
+    }
+}
