@@ -1,0 +1,41 @@
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid var(--color-gray);
+    padding: 8px 0;
+    font-size: var(--fontSize-md);
+
+    > .actions {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+
+        > button {
+            border-radius: 20px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            transition: all 200ms ease;
+        }
+
+        > button:hover {
+            font-weight: var(--fontWeight-semiBold);
+        }
+
+        .edit {
+            background-color: var(--color-yellow);
+        }
+
+        .delete {
+            background-color: var(--color-lightRed);
+        }
+    }
+
+    > .disabled {
+        > button {
+            opacity: 0;
+            cursor: auto;
+        }
+    }
+}

@@ -4,7 +4,7 @@ import { AdminCategoryListDto } from "./dto/AdminCategoryListDto";
 import { CategoryFilter } from "@/domain/repositories/filters/CategoryFilter";
 import { CategoryDto } from "./dto/CategoryDto";
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 15;
 
 export class GetAdminCategoryListUsecase {
     constructor(private categoryRepository: CategoryRepository) {}

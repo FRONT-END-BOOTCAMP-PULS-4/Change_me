@@ -1,0 +1,37 @@
+.title {
+    display: flex;
+    justify-content: space-between;
+    padding: 24px;
+    width: 100%;
+    max-width: 1200px;
+
+    > h2 {
+        font-size: var(--fontSize-2xl);
+    }
+
+    .addBtn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        background-color: var(--color-main2);
+        width: 200px;
+        height: 50px;
+        border-radius: 8px;
+        transition: transform 200ms ease-in-out;
+
+        > img {
+            width: 24px;
+            height: 24px;
+        }
+
+        > span {
+            font-size: var(--fontSize-md);
+            font-weight: var(--fontWeight-semiBold);
+        }
+    }
+
+    .addBtn:hover {
+        transform: scale(1.05);
+    }
+}
