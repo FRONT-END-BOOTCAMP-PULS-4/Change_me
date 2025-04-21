@@ -40,7 +40,7 @@ export async function fetcher<T>(
     }
 
     if (!response.ok) {
-        throw new Error(data.message || "API 요청 실패");
+        alert(data.message); //추후 토스트 처리
     }
 
     return data;

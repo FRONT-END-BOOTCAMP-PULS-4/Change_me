@@ -26,7 +26,8 @@ export class SbCategoryRepository implements CategoryRepository {
         let query = supabase
             .from("category_view")
             .select("id, name, habit_count")
-            .order("habit_count", { ascending: false });
+            .order("habit_count", { ascending: false })
+            .order("id", { ascending: true });
 
         if (filter) {
             if (filter.offset !== undefined) {
