@@ -1,9 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import styles from "./MessageItem.module.scss";
-import EditMessageButton from "./EditMessageButton";
-import DeleteMessageButton from "./DeleteMessageButton";
+import MessageButton from "./MessageButton";
 import LikeButton from "./LikeButton";
 import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
 
@@ -17,7 +16,8 @@ export default function MessageItem(props: MessageItemProps) {
     const [memberId, setMemberId] = useState<string>("");
 
     const isAuthor = memberId === messageDto.memberId; // TODO: set the flag
-    const kst = new Date(messageDto.createdAt.getTime() + 9 * 60 * 60 * 1000);
+    const createdAt = new Date(messageDto.createdAt);
+    const kst = new Date(createdAt.getTime() + 9 * 60 * 60 * 1000);
     const pad = (str: String) => str.toString().padStart(2, "0");
     const formattedDate = `${kst.getFullYear()}-${pad(String(kst.getMonth() + 1))}-${pad(String(kst.getDate()))} ${pad(String(kst.getHours()))}:${pad(String(kst.getMinutes()))}`;
 
@@ -43,8 +43,8 @@ export default function MessageItem(props: MessageItemProps) {
                 </div>
                 {isAuthor && (
                     <div className="flex space-x-2 text-sm text-gray-500">
-                        <EditMessageButton />
-                        <DeleteMessageButton />
+                        <MessageButton type="Edit" />
+                        <MessageButton type="Delete" />
                     </div>
                 )}
             </div>
