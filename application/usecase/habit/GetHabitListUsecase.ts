@@ -5,15 +5,19 @@ import { HabitFilter } from '@/domain/repositories/filters/HabitFilter';
 import { HabitDto } from './dto/HabitDto';
 import { Habit } from '@/domain/entities/Habit';
 import { differenceInDays } from 'date-fns';
+import { HabitRecordRepository } from '@/domain/repositories/HabitRecordRepository';
+import { TestHabitRecordDto} from './dto/TestHabitRecordDto';
 
 export class GetHabitListUsecase {
     private habitRepository: HabitRepository;
+    private habitRecordRepository: HabitRecordRepository;
 
     constructor(habitRepository: HabitRepository) {
         this.habitRepository = habitRepository;
+        this.habitRecordRepository = habitRecordRepository;
     }
 
-    async execute(queryDto: ViewQueryDto): Promise<HabitListDto> {
+    async execute(queryDto: ViewQueryDto, testHabitRecordDto : TestHabitRecordDto): Promise<HabitListDto> {
         try {
             const pageSize: number = 10;
             const currentPage: number = queryDto.currentPage || 1;

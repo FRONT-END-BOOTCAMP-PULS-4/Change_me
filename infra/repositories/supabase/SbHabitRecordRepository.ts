@@ -28,12 +28,12 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         const supabase = await createClient();
         
         let query = supabase
-            .from('habit_records')
+            .from('habit_record')
             .select('*');
         
-        // 기본 정렬이 없는 경우 생성일 기준으로 정렬
+        // 기본 정렬이 없는 경우 날짜 기준으로 정렬
         if (!filter?.sortField) {
-            query = query.order('created_at', { ascending: false });
+            query = query.order('date', { ascending: false });
         }
         
         // 페이지네이션 처리
@@ -54,23 +54,20 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         console.log("Fetched habit records:", data);
 
         const habitRecords: HabitRecord[] = data.map((record: any) => new HabitRecord(
-            record.id,
             record.habit_id,
-            record.content,
-            new Date(record.created_at),
-            record.is_completed
+            new Date(record.date)
         )) || [];
         
         return habitRecords;
     }
 
-    async findById(id: number): Promise<HabitRecord | null> {
+    async findById(HabitId: number): Promise<HabitRecord | null> {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from('habit_records')
+            .from('habit_record')
             .select('*')
-            .eq('id', id)
+            .eq('habitId', HabitId)
             .single();
             
         if (error) {
@@ -82,11 +79,8 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         }
         
         return new HabitRecord(
-            data.id,
             data.habit_id,
-            data.content,
-            new Date(data.created_at),
-            data.is_completed
+            new Date(data.date)
         );
     }
 
@@ -94,11 +88,10 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from('habit_records')
+            .from('habit_record')
             .insert({
                 habit_id: habitRecord.habitId,
-                content: habitRecord.content,
-                is_completed: habitRecord.isCompleted
+                date: habitRecord.date
             })
             .select('*')
             .single();
@@ -108,11 +101,8 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         }
 
         return new HabitRecord(
-            data.id,
             data.habit_id,
-            data.content,
-            new Date(data.created_at),
-            data.is_completed
+            new Date(data.date)
         );
     }
 
@@ -120,13 +110,12 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from('habit_records')
+            .from('habit_record')
             .update({
                 habit_id: habitRecord.habitId,
-                content: habitRecord.content,
-                is_completed: habitRecord.isCompleted
+                date: habitRecord.date
             })
-            .eq('id', habitRecord.id)
+            .eq('habitId', habitRecord.habitId)
             .select("*")
             .single();
             
@@ -135,88 +124,97 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         }
         
         return new HabitRecord(
-            data.id,
+
             data.habit_id,
-            data.content,
-            new Date(data.created_at),
-            data.is_completed
+            new Date(data.date)
         );
     }
 
-    async deleteById(id: number): Promise<void> {
+    async deleteById(HabitId: number): Promise<void> {
         const supabase = await createClient();
 
         const { error } = await supabase
-            .from("habit_records")
+            .from("habit_record")
             .delete()
-            .eq("id", id);
+            .eq("habitid", HabitId);
             
         if (error) {
             throw new Error(
-                `Failed to delete habit record with id ${id}: ${error.message}`
+                `Failed to delete habit record with id ${HabitId}: ${error.message}`
             );
         }
     }
-  
-  async TestExists(record: HabitRecord): Promise<boolean> {
-        const supabase = await createClient();
-        const { data } = await supabase
-            .from("habit_record")
-            .select("*")
-            .eq("habit_id", record.habitId)
-            .eq("date", record.date.toISOString().split("T")[0])
-            .maybeSingle();
 
-        return !!data;
+    // 테스트 메서드 구현
+    async TestExists(record: HabitRecord): Promise<boolean> {
+        const supabase = await createClient();
+        
+        const { data, error, count } = await supabase
+            .from('habit_record')
+            .select('*', { count: 'exact' })
+            .eq('habit_id', record.habitId)
+            .eq('date', record.date);
+            
+        if (error) {
+            throw new Error(`Failed to check if habit record exists: ${error.message}`);
+        }
+        
+        return count !== null && count > 0;
     }
 
     async TestSave(record: HabitRecord): Promise<void> {
         const supabase = await createClient();
-        const { error } = await supabase.from("habit_record").insert({
-            habit_id: record.habitId,
-            date: record.date.toISOString().split("T")[0],
-        });
-        if (error) throw new Error("습관 기록 저장 실패: " + error.message);
+        
+        const { error } = await supabase
+            .from('habit_record')
+            .insert({
+                habit_id: record.habitId,
+                date: record.date
+            });
+            
+        if (error) {
+            throw new Error(`Failed to save test habit record: ${error.message}`);
+        }
     }
 
     async TestDelete(record: HabitRecord): Promise<void> {
         const supabase = await createClient();
+        
         const { error } = await supabase
-            .from("habit_record")
+            .from('habit_record')
             .delete()
-            .eq("habit_id", record.habitId)
-            .eq("date", record.date.toISOString().split("T")[0]);
-        if (error) throw new Error("습관 기록 삭제 실패: " + error.message);
+            .eq('habit_id', record.habitId)
+            .eq('date', record.date);
+            
+        if (error) {
+            throw new Error(`Failed to delete test habit record: ${error.message}`);
+        }
     }
 
     async TestGetTodayCheckedHabitIds(memberId: string, date: Date): Promise<number[]> {
         const supabase = await createClient();
-
-        // member의 habit id들 먼저 가져오기
-        const { data: habitList, error: habitError } = await supabase
-            .from("habit")
-            .select("id")
-            .eq("member_id", memberId);
-
-        if (habitError) {
-            throw new Error("습관 ID 조회 실패: " + habitError.message);
+        
+        // 오늘 날짜에 기록된 습관 ID 목록을 가져옵니다
+        const dateStr = date.toISOString();
+        
+        // habit_record와 habit 테이블을 조인하는 쿼리
+        const { data, error } = await supabase
+            .from('habit_record')
+            .select(`
+                habit_id,
+                habit!inner (
+                    id, member_id
+                )
+            `)
+            .eq('habit.member_id', memberId)
+            .gte('date', new Date(dateStr).setHours(0, 0, 0, 0))
+            .lt('date', new Date(dateStr).setHours(23, 59, 59, 999));
+            
+        if (error) {
+            throw new Error(`Failed to get today's checked habit IDs: ${error.message}`);
         }
-
-        const habitIds = (habitList ?? []).map((habit) => habit.id);
-
-        if (habitIds.length === 0) return [];
-
-        // 해당 habit_id 중 오늘 날짜와 일치하는 record 조회
-        const { data: recordList, error: recordError } = await supabase
-            .from("habit_record")
-            .select("habit_id")
-            .eq("date", date.toISOString().split("T")[0])
-            .in("habit_id", habitIds);
-
-        if (recordError) {
-            throw new Error("체크된 습관 목록 조회 실패: " + recordError.message);
-        }
-
-        return (recordList ?? []).map((record) => record.habit_id);
+        
+        // 결과에서 habit_id만 추출
+        return data.map((item: any) => item.habit_id);
     }
 }
