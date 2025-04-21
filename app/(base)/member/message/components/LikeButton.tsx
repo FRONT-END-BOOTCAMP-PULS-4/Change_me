@@ -16,21 +16,29 @@ export default function LikeButton(props: LikeButtonProps) {
                 const res = await fetch("/api/members/like", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ messageId: props.messageLikeDto.messageId }),
+                    body: JSON.stringify({
+                        messageId: props.messageLikeDto.messageId,
+                    }),
                 });
 
                 const data = await res.json();
 
                 // update values
             } else {
-                 const res = await fetch(`/api/members/like/${props.messageLikeDto.messageId}`, {
-                    method: "DELETE",
-                    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-                });
+                const res = await fetch(
+                    `/api/members/like/${props.messageLikeDto.messageId}`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
+                );
 
                 const data = await res.json();
             }
-        }
+        } catch (error) {}
     };
 
     return (

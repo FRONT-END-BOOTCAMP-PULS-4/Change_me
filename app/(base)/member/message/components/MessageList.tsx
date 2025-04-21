@@ -20,12 +20,12 @@ export default function MessageList(props: MessageListProps) {
                     <MessageItem messageDto={message} />
                 ))}
             </ol>
-            <Pager
+            {/* <Pager
                 currentPage={1}
                 pages={pages}
                 endPage={endPage}
                 onPageChange={(page: number) => {}}
-            />
+            /> */}
         </div>
     );
 }

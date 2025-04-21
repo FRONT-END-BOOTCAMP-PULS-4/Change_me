@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 import MessageList from "./components/MessageList";
 import WriteMessageForm from "./components/WriteMessageForm";
+import MemberFilterButtons from "./components/MemberFilterButtons";
 
 export default function MessageListPage() {
     // search params initialization
@@ -67,14 +68,7 @@ export default function MessageListPage() {
         <main>
             <header>
                 <h1>Daily Message</h1>
-                <ol>
-                    <li>
-                        <button>전체</button>
-                    </li>
-                    <li>
-                        <button>내 메시지</button>
-                    </li>
-                </ol>
+                <MemberFilterButtons />
             </header>
             <WriteMessageForm />
             <MessageList messageListDto={{ messages, currentPage }} />
