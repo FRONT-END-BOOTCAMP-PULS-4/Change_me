@@ -4,6 +4,5 @@ export class ViewQueryDto {
         public memberId?: string,
         public categoryId?: number,
         public status?: number,
-        public userId?: 
     ) {}
 }

@@ -42,18 +42,22 @@ export class SbHabitRepository implements HabitRepository {
 
         console.log("Fetched habits:", data);
 
-        const habits: Habit[] =
-            data.map((habit: any) => ({
-                id: habit.id,
-                categoryId: habit.category_id,
-                memberId: habit.member_id,
-                name: habit.name,
-                description: habit.description,
-                createdAt: new Date(habit.created_at),
-                finishedAt: new Date(habit.finished_at),
-                stoppedAt: habit.stopped_at,
-                status: habit.status,
-            })) || [];
+        const habits: Habit[] = 
+        data.map((habit: any) => ({ // Q : data.map은 어떤 역할을 하나요?
+            // A : data.map은 데이터베이스에서 가져온 각 habit 객체를 Habit 객체로 변환하는 역할을 합니다.
+            // Habit 객체는 도메인 모델로, 비즈니스 로직에서 사용됩니다.
+            // data.map은 각 habit 객체를 반복하면서 새로운 배열을 생성합니다.
+            id: habit.id,
+            categoryId: habit.category_id,
+            memberId: habit.member_id,
+            name: habit.name,
+            description: habit.description,
+            createdAt: new Date(habit.created_at),
+            finishedAt: new Date(habit.finished_at),
+            stoppedAt: habit.stopped_at,
+            status: habit.status,
+        })) || [];
+
         return habits;
     }
 

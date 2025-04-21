@@ -11,7 +11,7 @@ export async function GET(request: Request) {
         const url = new URL(request.url);
         const currentPage = url.searchParams.get('page') ? parseInt(url.searchParams.get('page')!) : 1;
         const categoryId = url.searchParams.get('categoryId') ? parseInt(url.searchParams.get('categoryId')!) : undefined;
-        const status = url.searchParams.get('status') ? parseInt(url.searchParams.get('status')!) : undefined;
+        const status = url.searchParams.get('status')? parseInt(url.searchParams.get('status')!) : undefined;
         
         // 인증 토큰에서 사용자 ID 추출
         const authHeader = request.headers.get("Authorization") || "";
@@ -22,14 +22,14 @@ export async function GET(request: Request) {
         }
 
         // 비즈니스 로직 실행을 위한 DTO 생성
-        const queryDto = new ViewQueryDto(currentPage, memberId, categoryId, status);
+        const viewQueryDto = new ViewQueryDto(currentPage, memberId, categoryId, status);
         
         // 리포지토리와 유스케이스 인스턴스 생성
-        const habitRepository = new SbHabitRepository();
-        const getHabitListUsecase = new GetHabitListUsecase(habitRepository);
+        const sbHabitRepository = new SbHabitRepository();
+        const getHabitListUsecase = new GetHabitListUsecase(sbHabitRepository);
         
         // 유스케이스 실행 및 결과 반환
-        const result = await getHabitListUsecase.execute(queryDto);
+        const result = await getHabitListUsecase.execute(viewQueryDto);
         return NextResponse.json(result);
         
     } catch (error) {
