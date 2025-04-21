@@ -77,7 +77,7 @@ export default function MessageListPage() {
                 </ol>
             </header>
             <WriteMessageForm />
-            <MessageList messages={messages} />
+            <MessageList messageListDto={{ messages, currentPage }} />
         </main>
     );
 }

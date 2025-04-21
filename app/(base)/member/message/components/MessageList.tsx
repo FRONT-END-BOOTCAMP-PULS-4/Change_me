@@ -6,21 +6,18 @@ import MessageItem from "./MessageItem";
 import { MessageListDto } from "@/application/usecase/message/dto/MessageListDto";
 import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
 
-export default function MessageList(messageListDto: MessageListDto) {
-    const { messages, totalCount, endPage, pages } = messageListDto;
+type MessageListProps = {
+    messageListDto: MessageListDto;
+};
+
+export default function MessageList(props: MessageListProps) {
+    const { messages, totalCount, endPage, pages } = props.messageListDto;
 
     return (
         <div className={styles.wrapper}>
             <ol className={styles.list}>
                 {messages.map((message: MessageDto) => (
-                    <MessageItem
-                        imageUrl={message.imageUrl}
-                        writer={message.writer}
-                        createdAt={message.createdAt}
-                        content={message.content}
-                        isLiked={message.isLiked}
-                        likeCount={message.likeCount}
-                    />
+                    <MessageItem messageDto={message} />
                 ))}
             </ol>
             <Pager
