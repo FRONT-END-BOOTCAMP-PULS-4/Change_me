@@ -21,7 +21,11 @@ export default function CategoryItem({
 }: CategoryItemProps) {
     const { openModal } = useModalStore();
     const handleEditClick = () => {
-        openModal("editCategory", { id, name, handleUpdate });
+        openModal("category", {
+            type: "edit",
+            onConfirm: (input: string) => handleUpdate(id, input),
+            name,
+        });
     };
 
     return (

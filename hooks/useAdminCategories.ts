@@ -11,7 +11,6 @@ export type ResponseType = {
     categories: AdminCategory[];
     endPage: number;
     pages: number[];
-    totalCount: number;
 };
 
 export const useAdminCategories = (currentPage: number) => {
@@ -19,10 +18,10 @@ export const useAdminCategories = (currentPage: number) => {
 
     const { data, error, isLoading } = useSWR<ResponseType>(getUrl, fetcher);
 
-    const createCategory = async (category: Pick<AdminCategory, "name">) => {
+    const createCategory = async (name: string) => {
         await fetcher("/api/admin/categories", {
             method: "POST",
-            body: category,
+            body: { name },
         });
         mutate(getUrl);
     };
@@ -44,7 +43,6 @@ export const useAdminCategories = (currentPage: number) => {
 
     return {
         categories: data?.categories || [],
-        totalCount: data?.totalCount || 0,
         endPage: data?.endPage || 1,
         pages: data?.pages || [],
         isLoading,

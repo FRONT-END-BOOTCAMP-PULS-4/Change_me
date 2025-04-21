@@ -18,6 +18,8 @@ export default function AdminPage() {
         pages,
         endPage,
         isLoading,
+        error,
+        createCategory,
         deleteCategory,
         updateCategory,
     } = useAdminCategories(currentPage);
@@ -27,10 +29,13 @@ export default function AdminPage() {
     };
 
     if (isLoading) return <Loading />;
+    if (error) {
+        console.log(error);
+    }
 
     return (
         <section className={styles.admin}>
-            <Title />
+            <Title createCategory={(name: string) => createCategory(name)} />
             <CategoryList
                 categories={categories}
                 deleteCategory={(id: number) => deleteCategory(id)}
@@ -39,7 +44,7 @@ export default function AdminPage() {
                 }
             />
             <Pager
-                currentPage={1}
+                currentPage={currentPage}
                 pages={pages}
                 endPage={endPage}
                 onPageChange={(page: number) => handlePageChange(page)}

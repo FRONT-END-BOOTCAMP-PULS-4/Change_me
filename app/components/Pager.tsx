@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Pager.module.scss";
 
 const {
@@ -25,8 +25,14 @@ export default function Pager({
     endPage,
     onPageChange,
 }: PagerProps) {
+    const [selected, setSelected] = useState(currentPage);
     const hasNextPage = currentPage + 1 <= endPage;
     const hasPreviousPage = currentPage > 1;
+
+    const handlePageClick = (num: number) => {
+        setSelected(num);
+        onPageChange(num);
+    };
 
     return (
         <div className={pagerBox}>
@@ -48,7 +54,7 @@ export default function Pager({
                         <li key={pageNumber}>
                             <button
                                 className={`${pageNumber === currentPage ? active : ""}`}
-                                onClick={() => onPageChange(pageNumber)}
+                                onClick={() => handlePageClick(pageNumber)}
                             >
                                 {pageNumber}
                             </button>

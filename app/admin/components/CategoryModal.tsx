@@ -3,22 +3,22 @@
 import ModalWrapper from "@/app/components/ModalWrapper";
 import useModalStore from "@/stores/modalStore";
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import styles from "./EditCategoryModal.module.scss";
+import styles from "./CategoryModal.module.scss";
 
-type EditCategoryModalProps = {
-    id: number;
-    name: string;
-    handleUpdate: (id: number, name: string) => void;
+type CategoryModalProps = {
+    type: "create" | "edit";
+    onConfirm: (input: string) => void;
+    name?: string;
 };
 
-export default function EditCategoryModal({
-    id,
+export default function CategoryModal({
     name,
-    handleUpdate,
-}: EditCategoryModalProps) {
+    onConfirm,
+    type,
+}: CategoryModalProps) {
     const { isOpen, closeModal } = useModalStore();
-    const [input, setInput] = useState<string>(name);
-    const [count, setCount] = useState<number>(name.length);
+    const [input, setInput] = useState<string>(name || "");
+    const [count, setCount] = useState<number>(name?.length || 0);
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -27,7 +27,15 @@ export default function EditCategoryModal({
             return;
         }
 
-        if (input !== name) handleUpdate(id, input);
+        if (type === "create") {
+            onConfirm(input);
+        }
+        if (type === "edit") {
+            if (name !== input) {
+                onConfirm(input);
+            }
+        }
+
         closeModal();
     };
 
