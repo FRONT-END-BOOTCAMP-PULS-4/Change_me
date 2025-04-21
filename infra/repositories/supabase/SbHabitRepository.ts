@@ -205,4 +205,17 @@ export class SbHabitRepository implements HabitRepository {
                 )
         );
     }
+
+    // 습관 삭제
+    async TestDeleteById(habitId: number): Promise<void> {
+        const supabase = await createClient();
+        const { error } = await supabase
+            .from("habit")
+            .delete()
+            .eq("id", habitId);
+
+        if (error) {
+            throw new Error(`습관 삭제 실패: ${error.message}`);
+        }
+    }
 }
