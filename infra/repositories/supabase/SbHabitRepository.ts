@@ -1,3 +1,4 @@
+import { TestHabit } from "@/domain/entities/TestHabit";
 import { Habit } from "../../../domain/entities/Habit";
 import { HabitRepository } from "@/domain/repositories/HabitRepository";
 import { HabitFilter } from "@/domain/repositories/filters/HabitFilter";
@@ -172,5 +173,36 @@ export class SbHabitRepository implements HabitRepository {
         if (error) {
             throw new Error(`습관 등록 실패: ${error.message}`);
         }
+    }
+
+    // [테스트] 습관 조회 (진행 중인 습관)
+    async TestFindOngoingByMemberId(memberId: string): Promise<TestHabit[]> {
+        const supabase = await createClient();
+
+        const { data, error } = await supabase
+            .from("habit")
+            .select("*, category(name)") // ← category 테이블에서 name 조인
+            .eq("member_id", memberId)
+            .eq("status", 0);
+
+        if (error) {
+            throw new Error(`진행 중인 습관 조회 실패: ${error.message}`);
+        }
+
+        return data.map(
+            (item) =>
+                new TestHabit(
+                    item.id,
+                    item.category_id,
+                    item.member_id,
+                    item.name,
+                    item.description,
+                    new Date(item.created_at),
+                    new Date(item.finished_at),
+                    item.stopped_at ? new Date(item.stopped_at) : null,
+                    item.status,
+                    item.category.name
+                )
+        );
     }
 }
