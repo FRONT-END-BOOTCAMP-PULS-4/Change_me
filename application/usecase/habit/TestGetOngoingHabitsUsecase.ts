@@ -35,7 +35,8 @@ export class TestGetOngoingHabitsUsecase {
                 formatDate(end),
                 clampedDays,
                 totalDays,
-                `${rate}% (${clampedDays}일 / ${totalDays}일)`
+                `${rate}% (${clampedDays}일 / ${totalDays}일)`,
+                clampedDays / totalDays < 0.8
             );
         });
     }

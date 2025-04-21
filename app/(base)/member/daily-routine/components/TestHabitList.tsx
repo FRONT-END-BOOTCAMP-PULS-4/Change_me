@@ -14,6 +14,7 @@ type Habit = {
     daysPassed: number;
     totalDays: number;
     rate: string;
+    canGiveUp: boolean;
 };
 
 export default function HabitList() {
@@ -117,6 +118,30 @@ export default function HabitList() {
         }
     };
 
+    const handleGiveUp = async (habitId: number) => {
+        const confirm = window.confirm("정말 이 습관을 포기하시겠습니까?");
+        if (!confirm) return;
+
+        try {
+            const res = await fetch(`/api/test-habits/${habitId}/giveup`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                alert("습관을 포기했습니다.");
+                setHabits((prev) => prev.filter((habit) => habit.id !== habitId));
+            } else {
+                alert(data.error || "포기 실패");
+            }
+        } catch (error) {
+            console.error("포기 요청 실패:", error);
+        }
+    };
+
     return (
         <div>
             {habits.map((habit) => (
@@ -137,6 +162,14 @@ export default function HabitList() {
                         {habit.startAt === today && (
                             <button onClick={() => handleDelete(habit.id)} style={{ marginLeft: "10px" }}>
                                 삭제
+                            </button>
+                        )}
+                        {habit.canGiveUp === true && habit.startAt !== today && (
+                            <button
+                                onClick={() => handleGiveUp(habit.id)}
+                                style={{ marginLeft: "10px", color: "red" }}
+                            >
+                                포기
                             </button>
                         )}
                     </label>

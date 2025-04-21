@@ -12,4 +12,5 @@ export interface HabitRepository {
     TestCreate(habit: Habit): Promise<void>;
     TestFindOngoingByMemberId(memberId: string): Promise<TestHabit[]>;
     TestDeleteById(habitId: number): Promise<void>;
+    TestGiveUpById(habitId: number): Promise<void>;
 }

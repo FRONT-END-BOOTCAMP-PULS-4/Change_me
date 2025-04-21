@@ -9,6 +9,7 @@ export class TestHabitProgressDto {
         public finishedAt: string,
         public daysPassed: number,
         public duration: number,
-        public rate: string
+        public rate: string,
+        public canGiveUp: boolean
     ) { }
 }

@@ -218,4 +218,21 @@ export class SbHabitRepository implements HabitRepository {
             throw new Error(`습관 삭제 실패: ${error.message}`);
         }
     }
+
+    // 습관 포기
+    async TestGiveUpById(habitId: number): Promise<void> {
+        const supabase = await createClient();
+        const now = new Date().toISOString();
+        const { error } = await supabase
+            .from("habit")
+            .update({
+                status: 2,
+                stopped_at: now,
+            })
+            .eq("id", habitId);
+
+        if (error) {
+            throw new Error("습관 포기 처리 실패: " + error.message);
+        }
+    }
 }
