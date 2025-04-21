@@ -49,7 +49,9 @@ export default function CategoryModal({
     return (
         <ModalWrapper isOpen={isOpen} onClose={closeModal}>
             <div className={styles.container}>
-                <h2 className={styles.title}>카테고리 수정</h2>
+                <h2 className={styles.title}>
+                    {type === "edit" ? "카테고리 수정" : "카테고리 생성"}
+                </h2>
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <div className={styles.field}>
                         <label>
@@ -64,7 +66,7 @@ export default function CategoryModal({
                             onChange={handleInputChange}
                         />
                     </div>
-                    <button>수정</button>
+                    <button>{type === "edit" ? "수정" : "추가"}</button>
                 </form>
             </div>
         </ModalWrapper>
