@@ -55,7 +55,7 @@ export default function HabitList() {
             const data = await res.json();
             if (Array.isArray(data.checkedIds)) {
                 const state: { [id: number]: boolean } = {};
-                data.checkedIds.forEach((id) => (state[id] = true));
+                data.checkedIds.forEach((id: number) => (state[id] = true));
                 setCheckedHabits(state);
             }
         };
@@ -93,6 +93,30 @@ export default function HabitList() {
         }
     };
 
+    const handleDelete = async (habitId: number) => {
+        const confirmDelete = confirm("정말 삭제하시겠습니까?");
+        if (!confirmDelete) return;
+
+        try {
+            const res = await fetch(`/api/test-habits/${habitId}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                alert("삭제 완료");
+                setHabits((prev) => prev.filter((habit) => habit.id !== habitId));
+            } else {
+                alert(data.error || "삭제 실패");
+            }
+        } catch (error) {
+            console.error("삭제 요청 실패:", error);
+        }
+    };
+
     return (
         <div>
             {habits.map((habit) => (
@@ -110,6 +134,11 @@ export default function HabitList() {
                         {habit.finishedAt} &nbsp;|&nbsp;
                         {habit.daysPassed}일차 &nbsp;|&nbsp;
                         {habit.rate}
+                        {habit.startAt === today && (
+                            <button onClick={() => handleDelete(habit.id)} style={{ marginLeft: "10px" }}>
+                                삭제
+                            </button>
+                        )}
                     </label>
                 </div>
             ))}
