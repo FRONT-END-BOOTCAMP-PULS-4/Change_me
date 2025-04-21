@@ -1,32 +1,20 @@
 "use client";
-import Pager from "@/app/components/Pager";
 import React from "react";
 import styles from "./CategoryList.module.scss";
 import CategoryItem from "./CategoryItem";
-import { useAdminCategories } from "@/hooks/useAdminCategories";
-import Loading from "@/app/components/Loading";
-import { useSearchParams, useRouter } from "next/navigation";
+import { AdminCategory } from "@/hooks/useAdminCategories";
 
-export default function CategoryList() {
-    const searchParams = useSearchParams();
-    const router = useRouter();
-    const currentPage = Number(searchParams.get("page")) || 1;
+type CategoryListProps = {
+    categories: AdminCategory[];
+    deleteCategory: (id: number) => void;
+    updateCategory: (id: number, name: string) => void;
+};
 
-    const {
-        categories,
-        pages,
-        endPage,
-        isLoading,
-        deleteCategory,
-        updateCategory,
-    } = useAdminCategories(currentPage);
-
-    const handlePageChange = (page: number) => {
-        router.push(`?page=${page}`);
-    };
-
-    if (isLoading) return <Loading />;
-
+export default function CategoryList({
+    categories,
+    deleteCategory,
+    updateCategory,
+}: CategoryListProps) {
     return (
         <div className={styles.wrapper}>
             <div className={styles.index}>
@@ -47,12 +35,6 @@ export default function CategoryList() {
                     />
                 ))}
             </ul>
-            <Pager
-                currentPage={1}
-                pages={pages}
-                endPage={endPage}
-                onPageChange={(page: number) => handlePageChange(page)}
-            />
         </div>
     );
 }

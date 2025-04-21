@@ -2,6 +2,7 @@
 
 import React from "react";
 import styles from "./CategoryItem.module.scss";
+import useModalStore from "@/stores/modalStore";
 
 type CategoryItemProps = {
     id: number;
@@ -18,6 +19,11 @@ export default function CategoryItem({
     handleDelete,
     handleUpdate,
 }: CategoryItemProps) {
+    const { openModal } = useModalStore();
+    const handleEditClick = () => {
+        openModal("editCategory", { id, name, handleUpdate });
+    };
+
     return (
         <li className={styles.row}>
             <span>{name}</span>
@@ -29,6 +35,7 @@ export default function CategoryItem({
                 <button
                     disabled={habitCount !== 0}
                     className={`${styles.edit}`}
+                    onClick={handleEditClick}
                 >
                     수정
                 </button>
