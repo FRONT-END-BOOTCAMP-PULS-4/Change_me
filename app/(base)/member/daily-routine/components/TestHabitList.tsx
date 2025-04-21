@@ -18,12 +18,16 @@ type Habit = {
 
 export default function HabitList() {
     const [habits, setHabits] = useState<Habit[]>([]);
+    const [checkedHabits, setCheckedHabits] = useState<{ [habitId: number]: boolean }>({});
+
+    const token = useAuthStore.getState().token;
+
+    // 오늘 날짜 (YYYY-MM-DD)
+    const today = new Date().toISOString().slice(0, 10);
 
     useEffect(() => {
         const fetchHabits = async () => {
             try {
-                const token = useAuthStore.getState().token;
-
                 const res = await fetch("/api/test-habits/", {
                     method: "GET",
                     headers: {
@@ -35,31 +39,78 @@ export default function HabitList() {
                 const habits = Array.isArray(data) ? data : data.habits;
                 setHabits(habits);
             } catch (error) {
-                console.error("습관 불러오기 실패:", error);
+                console.error("불러오기 실패:", error);
             }
         };
 
         fetchHabits();
     }, []);
 
-    if (habits.length === 0) return <p>진행 중인 습관이 없습니다.</p>;
+    useEffect(() => {
+        const fetchCheckedHabits = async () => {
+            const res = await fetch("/api/test-habit-records/checked", {
+                method: "GET",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await res.json();
+            if (Array.isArray(data.checkedIds)) {
+                const state: { [id: number]: boolean } = {};
+                data.checkedIds.forEach((id) => (state[id] = true));
+                setCheckedHabits(state);
+            }
+        };
+
+        if (token) fetchCheckedHabits();
+    }, [token]);
+
+    const toggleCheckbox = async (habitId: number) => {
+        const isChecked = !!checkedHabits[habitId];
+
+        try {
+            const res = await fetch("/api/test-habit-records", {
+                method: isChecked ? "DELETE" : "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    habitId,
+                    date: today,
+                }),
+            });
+
+            if (res.ok) {
+                setCheckedHabits((prev) => ({
+                    ...prev,
+                    [habitId]: !isChecked,
+                }));
+            } else {
+                const data = await res.json();
+                alert(data.error || "처리 실패");
+            }
+        } catch (error) {
+            console.error("체크 처리 실패:", error);
+        }
+    };
 
     return (
-        <div style={{ marginTop: "2rem" }}>
+        <div>
             {habits.map((habit) => (
-                <div key={habit.id} style={{ border: "1px solid #ccc", padding: "1rem", marginBottom: "1rem" }}>
-                    <h3 style={{ marginBottom: "0.5rem" }}>
-                        {habit.name}{" "}
-                        <span style={{ fontSize: "0.9rem", color: "gray" }}>({habit.categoryName})</span>
-                    </h3>
-                    <p>{habit.description}</p>
-
-                    <div style={{ lineHeight: "1.8" }}>
-                        <p><strong>시작일:</strong> {habit.startAt}</p>
-                        <p><strong>종료일:</strong> {habit.finishedAt}</p>
-                        <p><strong>진행일:</strong> {habit.daysPassed}일차</p>
-                        <p><strong>달성률:</strong> {habit.rate}</p>
-                    </div>
+                <div key={habit.id}>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={checkedHabits[habit.id] || false}
+                            onChange={() => toggleCheckbox(habit.id)}
+                        />
+                        {habit.categoryName} &nbsp;|&nbsp;
+                        {habit.name} &nbsp;|&nbsp;
+                        {habit.description} &nbsp;|&nbsp;
+                        {habit.startAt} &nbsp;|&nbsp;
+                        {habit.finishedAt} &nbsp;|&nbsp;
+                        {habit.daysPassed}일차 &nbsp;|&nbsp;
+                        {habit.rate}
+                    </label>
                 </div>
             ))}
         </div>
