@@ -6,6 +6,10 @@ import { useAuthStore } from "@/stores/authStore";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import MessageList from "./components/MessageList";
+import WriteMessageForm from "./components/WriteMessageForm";
+import MemberFilterButtons from "./components/MemberFilterButtons";
+
 export default function MessageListPage() {
     // search params initialization
     const searchParams = useSearchParams();
@@ -64,46 +68,10 @@ export default function MessageListPage() {
         <main>
             <header>
                 <h1>Daily Message</h1>
-                <ol>
-                    <li>
-                        <button>전체</button>
-                    </li>
-                    <li>
-                        <button>내 메시지</button>
-                    </li>
-                </ol>
+                <MemberFilterButtons />
             </header>
-
-            <ol>
-                {messages.map((message) => {
-                    return (
-                        <li key={message.id}>
-                            <div>
-                                <img
-                                    src={message.profileUrl}
-                                    width={40}
-                                    height={40}
-                                />
-                                <div>
-                                    <strong>{message.writer}</strong>
-                                    <span>
-                                        {message.createdAt.toISOString()}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <p>{message.content}</p>
-
-                            <div>
-                                <button>
-                                    {message.isLiked ? "❤️" : "🤍"}{" "}
-                                    {message.likeCount}
-                                </button>
-                            </div>
-                        </li>
-                    );
-                })}
-            </ol>
+            <WriteMessageForm />
+            <MessageList messageListDto={{ messages, currentPage }} />
         </main>
     );
 }

@@ -68,7 +68,8 @@ export class GetMessageListUsecase {
 
                     return {
                         id: message.id,
-                        writer: writer?.name || "Unknown",
+                        memberId: writer?.id,
+                        writer: writer?.nickname || "Unknown",
                         profileUrl:
                             writer?.imageUrl ||
                             "@/public/images/ProfileCircle.png",

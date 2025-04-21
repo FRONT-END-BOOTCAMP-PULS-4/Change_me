@@ -1,8 +1,9 @@
 export class MessageDto {
     constructor(
         public id: number,
+        public memberId: string,
         public writer: string,
-        public profileUrl: string,
+        public imageUrl: string,
         public content: string,
         public createdAt: Date,
         public likeCount: number,
