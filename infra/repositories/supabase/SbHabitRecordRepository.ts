@@ -12,30 +12,30 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             if (filter.habitId) {
                 query = query.eq('habit_id', filter.habitId);
             }
-            
+
             // 정렬 필드가 있는 경우 정렬 적용
             if (filter.sortField) {
-                query = query.order(filter.sortField, { 
-                    ascending: filter.ascending ?? false 
+                query = query.order(filter.sortField, {
+                    ascending: filter.ascending ?? false
                 });
             }
         }
 
         return query;
     }
-    
+
     async findAll(filter?: HabitRecordFilter): Promise<HabitRecord[]> {
         const supabase = await createClient();
-        
+
         let query = supabase
             .from('habit_records')
             .select('*');
-        
+
         // 기본 정렬이 없는 경우 생성일 기준으로 정렬
         if (!filter?.sortField) {
             query = query.order('created_at', { ascending: false });
         }
-        
+
         // 페이지네이션 처리
         query = query.range(
             filter?.offset || 0,
@@ -60,7 +60,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             new Date(record.created_at),
             record.is_completed
         )) || [];
-        
+
         return habitRecords;
     }
 
@@ -72,15 +72,15 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .select('*')
             .eq('id', id)
             .single();
-            
+
         if (error) {
             throw new Error(`Failed to find habit record by ID: ${error.message}`);
         }
-        
+
         if (!data) {
             return null;
         }
-        
+
         return new HabitRecord(
             data.id,
             data.habit_id,
@@ -129,11 +129,11 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .eq('id', habitRecord.id)
             .select("*")
             .single();
-            
+
         if (error) {
             throw new Error(`Failed to update habit record: ${error.message}`);
         }
-        
+
         return new HabitRecord(
             data.id,
             data.habit_id,
@@ -150,15 +150,15 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .from("habit_records")
             .delete()
             .eq("id", id);
-            
+
         if (error) {
             throw new Error(
                 `Failed to delete habit record with id ${id}: ${error.message}`
             );
         }
     }
-  
-  async TestExists(record: HabitRecord): Promise<boolean> {
+
+    async TestExists(record: HabitRecord): Promise<boolean> {
         const supabase = await createClient();
         const { data } = await supabase
             .from("habit_record")
@@ -218,5 +218,21 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         }
 
         return (recordList ?? []).map((record) => record.habit_id);
+    }
+
+    // 달성률을 계산하기 위해 habit_record 테이블에서 체크된 기록 수를 가져오는 메서드
+    async TestCountByHabitId(habitId: number): Promise<number> {
+        const supabase = await createClient();
+
+        const { count, error } = await supabase
+            .from("habit_record")
+            .select("*", { count: "exact", head: true })
+            .eq("habit_id", habitId);
+
+        if (error) {
+            throw new Error("체크된 기록 수 조회 실패: " + error.message);
+        }
+
+        return count || 0;
     }
 }
