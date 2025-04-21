@@ -1,4 +1,5 @@
 import { Habit } from "../entities/Habit";
+import { TestHabit } from "../entities/TestHabit";
 import { HabitFilter } from "./filters/HabitFilter";
 
 export interface HabitRepository {
@@ -9,4 +10,5 @@ export interface HabitRepository {
     deleteById(id: number): Promise<void>;
 
     TestCreate(habit: Habit): Promise<void>;
+    TestFindOngoingByMemberId(memberId: string): Promise<TestHabit[]>;
 }
