@@ -25,14 +25,8 @@ export default function Pager({
     endPage,
     onPageChange,
 }: PagerProps) {
-    const [selected, setSelected] = useState(currentPage);
     const hasNextPage = currentPage + 1 <= endPage;
     const hasPreviousPage = currentPage > 1;
-
-    const handlePageClick = (num: number) => {
-        setSelected(num);
-        onPageChange(num);
-    };
 
     return (
         <div className={pagerBox}>
@@ -54,7 +48,7 @@ export default function Pager({
                         <li key={pageNumber}>
                             <button
                                 className={`${pageNumber === currentPage ? active : ""}`}
-                                onClick={() => handlePageClick(pageNumber)}
+                                onClick={() => onPageChange(pageNumber)}
                             >
                                 {pageNumber}
                             </button>
