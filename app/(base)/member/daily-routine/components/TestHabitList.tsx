@@ -46,6 +46,23 @@ export default function HabitList() {
         fetchHabits();
     }, []);
 
+    useEffect(() => {
+        const fetchCheckedHabits = async () => {
+            const res = await fetch("/api/test-habit-records/checked", {
+                method: "GET",
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await res.json();
+            if (Array.isArray(data.checkedIds)) {
+                const state: { [id: number]: boolean } = {};
+                data.checkedIds.forEach((id) => (state[id] = true));
+                setCheckedHabits(state);
+            }
+        };
+
+        if (token) fetchCheckedHabits();
+    }, [token]);
+
     const toggleCheckbox = async (habitId: number) => {
         const isChecked = !!checkedHabits[habitId];
 

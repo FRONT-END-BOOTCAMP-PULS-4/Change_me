@@ -11,4 +11,5 @@ export interface HabitRecordRepository {
     TestExists(record: HabitRecord): Promise<boolean>;
     TestSave(record: HabitRecord): Promise<void>;
     TestDelete(record: HabitRecord): Promise<void>;
+    TestGetTodayCheckedHabitIds(memberId: string, date: Date): Promise<number[]>;
 }

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getMemberIdFromToken } from "@/utils/auth";
 import { TestHabitRecordDto } from "@/application/usecase/habit/dto/TestHabitRecordDto";
 import { TestHabitRecordUsecase } from "@/application/usecase/habit/TestHabitRecordUsecase";
 import { SbHabitRecordRepository } from "@/infra/repositories/supabase/SbHabitRecordRepository";
