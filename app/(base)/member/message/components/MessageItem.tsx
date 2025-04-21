@@ -13,7 +13,8 @@ type MessageItemProps = {
 
 export default function MessageItem(props: MessageItemProps) {
     const messageDto = props.messageDto;
-    const memberId = useMemberId();
+
+    const [memberId, setMemberId] = useState<string>("");
 
     const isAuthor = memberId === messageDto.memberId; // TODO: set the flag
     const kst = new Date(messageDto.createdAt.getTime() + 9 * 60 * 60 * 1000);

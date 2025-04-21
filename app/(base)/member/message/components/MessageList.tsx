@@ -1,5 +1,4 @@
 "use client";
-import Pager from "@/app/components/Pager";
 import React, { useEffect, useState } from "react";
 import styles from "./MessageList.module.scss";
 import MessageItem from "./MessageItem";

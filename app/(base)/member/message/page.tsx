@@ -1,10 +1,8 @@
 "use client";
 
-import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
-import { MessageListDto } from "@/application/usecase/message/dto/MessageListDto";
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import MessageList from "./components/MessageList";
 import WriteMessageForm from "./components/WriteMessageForm";
