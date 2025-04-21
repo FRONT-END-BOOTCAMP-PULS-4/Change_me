@@ -68,7 +68,8 @@ export default function LoginForm() {
                 localStorage.removeItem("returnURL");
                 router.push(returnURL);
             } else {
-                router.push("/member/daily-routine");
+                // router.push("/member/daily-routine");
+                router.push("/member/message"); // for debugging
             }
         } catch (err) {
             setErrorMessage("서버 오류가 발생했습니다.");

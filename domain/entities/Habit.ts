@@ -1,5 +1,5 @@
 
-export class Habit{
+export class Habit {
     constructor(
         public id: number,
         public categoryId: number,
@@ -8,7 +8,7 @@ export class Habit{
         public description: string,
         public createdAt: Date,
         public finishedAt: Date,
-        public stoppedAt: Date,
+        public stoppedAt: Date | null,
         public status: number
-    ) {}
+    ) { }
 }

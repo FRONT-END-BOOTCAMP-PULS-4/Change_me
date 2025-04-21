@@ -32,7 +32,7 @@ export class GetMessageListUsecase {
             const currentPage: number =
                 getMessageListDto.queryString.currentPage || 1;
             const mine: boolean = getMessageListDto.queryString.mine || false; // default to false
-            const memberId = mine ? getMessageListDto.memberId : null; // if mine is true, set memberId to the filter
+            const memberId = getMessageListDto.memberId;
             const offset: number = (currentPage - 1) * pageSize;
             const limit: number = pageSize;
 
@@ -68,8 +68,9 @@ export class GetMessageListUsecase {
 
                     return {
                         id: message.id,
-                        writer: writer?.name || "Unknown",
-                        profileUrl:
+                        memberId: writer?.id || "Unknown",
+                        writer: writer?.nickname || "Unknown",
+                        imageUrl:
                             writer?.imageUrl ||
                             "@/public/images/ProfileCircle.png",
                         content: message.content,
@@ -91,9 +92,9 @@ export class GetMessageListUsecase {
 
             const messageListDto: MessageListDto = {
                 messages: messageDtos,
-                totalCount,
-                endPage,
+                currentPage,
                 pages,
+                endPage,
             };
 
             return messageListDto;

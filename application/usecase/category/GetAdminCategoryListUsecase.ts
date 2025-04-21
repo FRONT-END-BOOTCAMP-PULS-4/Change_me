@@ -34,7 +34,6 @@ export class GetAdminCategoryListUsecase {
 
             const adminCategoryListDto: AdminCategoryListDto = {
                 categories: categories,
-                totalCount: totalCount,
                 endPage: endPage,
                 pages: pages,
             };

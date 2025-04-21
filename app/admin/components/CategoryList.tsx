@@ -1,16 +1,20 @@
 "use client";
-import Pager from "@/app/components/Pager";
 import React from "react";
 import styles from "./CategoryList.module.scss";
 import CategoryItem from "./CategoryItem";
+import { AdminCategory } from "@/hooks/useAdminCategories";
 
-const categories = [
-    { id: 1, name: "운동", habitCount: 0 },
-    { id: 2, name: "공부", habitCount: 10000000 },
-    { id: 3, name: "생활습관", habitCount: 532 },
-];
+type CategoryListProps = {
+    categories: AdminCategory[];
+    deleteCategory: (id: number) => void;
+    updateCategory: (id: number, name: string) => void;
+};
 
-export default function CategoryList() {
+export default function CategoryList({
+    categories,
+    deleteCategory,
+    updateCategory,
+}: CategoryListProps) {
     return (
         <div className={styles.wrapper}>
             <div className={styles.index}>
@@ -20,20 +24,17 @@ export default function CategoryList() {
             </div>
 
             <ul className={styles.list}>
-                {categories.map((category) => (
+                {categories?.map((category) => (
                     <CategoryItem
                         key={category.id}
+                        id={category.id}
                         name={category.name}
                         habitCount={category.habitCount}
+                        handleDelete={deleteCategory}
+                        handleUpdate={updateCategory}
                     />
                 ))}
             </ul>
-            <Pager
-                currentPage={1}
-                pages={[1, 2, 3, 4, 5]}
-                endPage={10}
-                onPageChange={(page: number) => {}}
-            />
         </div>
     );
 }
