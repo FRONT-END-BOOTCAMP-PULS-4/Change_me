@@ -18,12 +18,16 @@ type Habit = {
 
 export default function HabitList() {
     const [habits, setHabits] = useState<Habit[]>([]);
+    const [checkedHabits, setCheckedHabits] = useState<{ [habitId: number]: boolean }>({});
+
+    const token = useAuthStore.getState().token;
+
+    // 오늘 날짜 (YYYY-MM-DD)
+    const today = new Date().toISOString().slice(0, 10);
 
     useEffect(() => {
         const fetchHabits = async () => {
             try {
-                const token = useAuthStore.getState().token;
-
                 const res = await fetch("/api/test-habits/", {
                     method: "GET",
                     headers: {
@@ -35,20 +39,53 @@ export default function HabitList() {
                 const habits = Array.isArray(data) ? data : data.habits;
                 setHabits(habits);
             } catch (error) {
-                console.error("습관 불러오기 실패:", error);
+                console.error("불러오기 실패:", error);
             }
         };
 
         fetchHabits();
     }, []);
 
-    if (habits.length === 0) return <p>진행 중인 습관이 없습니다.</p>;
+    const toggleCheckbox = async (habitId: number) => {
+        const isChecked = !!checkedHabits[habitId];
+
+        try {
+            const res = await fetch("/api/test-habit-records", {
+                method: isChecked ? "DELETE" : "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    habitId,
+                    date: today,
+                }),
+            });
+
+            if (res.ok) {
+                setCheckedHabits((prev) => ({
+                    ...prev,
+                    [habitId]: !isChecked,
+                }));
+            } else {
+                const data = await res.json();
+                alert(data.error || "처리 실패");
+            }
+        } catch (error) {
+            console.error("체크 처리 실패:", error);
+        }
+    };
 
     return (
         <div>
             {habits.map((habit) => (
                 <div key={habit.id}>
-                    <p>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={checkedHabits[habit.id] || false}
+                            onChange={() => toggleCheckbox(habit.id)}
+                        />
                         {habit.categoryName} &nbsp;|&nbsp;
                         {habit.name} &nbsp;|&nbsp;
                         {habit.description} &nbsp;|&nbsp;
@@ -56,7 +93,7 @@ export default function HabitList() {
                         {habit.finishedAt} &nbsp;|&nbsp;
                         {habit.daysPassed}일차 &nbsp;|&nbsp;
                         {habit.rate}
-                    </p>
+                    </label>
                 </div>
             ))}
         </div>

@@ -7,4 +7,8 @@ export interface HabitRecordRepository {
     save(habitRecord: HabitRecord): Promise<HabitRecord>;
     update(habitRecord: HabitRecord): Promise<HabitRecord>;
     deleteById(id: number): Promise<void>;
+
+    TestExists(record: HabitRecord): Promise<boolean>;
+    TestSave(record: HabitRecord): Promise<void>;
+    TestDelete(record: HabitRecord): Promise<void>;
 }
