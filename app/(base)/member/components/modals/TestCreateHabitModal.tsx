@@ -6,7 +6,9 @@ import useModalStore from "@/stores/modalStore";
 import { useAuthStore } from "@/stores/authStore";
 
 export default function TestCreateHabitModal() {
-    const { isOpen, closeModal } = useModalStore();
+    const { isOpen, closeModal, modalType, modalProps } = useModalStore();
+    const isEdit = modalType === "editHabit";
+    const token = useAuthStore.getState().token;
 
     const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
     const [categoryId, setCategoryId] = useState<number | null>(null);
@@ -14,7 +16,8 @@ export default function TestCreateHabitModal() {
     const [description, setDescription] = useState("");
     const [finishedAt, setFinishedAt] = useState("");
 
-    const token = useAuthStore.getState().token;
+    const isEditMode = modalProps && modalProps.habit;
+    const refetchHabits = modalProps?.refetchHabits;
 
     // 카테고리 목록 가져오기
     useEffect(() => {
@@ -22,11 +25,8 @@ export default function TestCreateHabitModal() {
             try {
                 const res = await fetch("/api/categories");
                 const data = await res.json();
-
                 if (Array.isArray(data.categories)) {
                     setCategories(data.categories);
-                } else {
-                    console.error("카테고리 배열이 존재하지 않습니다:", data);
                 }
             } catch (error) {
                 console.error("카테고리 불러오기 실패:", error);
@@ -35,26 +35,37 @@ export default function TestCreateHabitModal() {
         fetchCategories();
     }, []);
 
-    // 모달이 열릴 때 입력값 초기화
+    // 모달이 열릴 때 초기값 설정 (등록/수정 모드 구분)
     useEffect(() => {
         if (isOpen) {
-            setCategoryId(null)
-            setName("");
-            setDescription("");
-            setFinishedAt("");
+            if (modalType === "editHabit" && modalProps) {
+                setCategoryId(Number(modalProps.habit.categoryId));
+                setName(modalProps.habit.name);
+                setDescription(modalProps.habit.description);
+                setFinishedAt(modalProps.habit.finishedAt);
+            } else {
+                setCategoryId(null);
+                setName("");
+                setDescription("");
+                setFinishedAt("");
+            }
         }
-    }, [isOpen]);
+    }, [isOpen, modalType, modalProps]);
 
-    // 등록
     const handleSubmit = async () => {
         if (categoryId === null || !name.trim() || !finishedAt.trim()) {
             alert("필수 항목을 모두 입력해주세요.");
             return;
         }
 
+        const method = isEdit ? "PATCH" : "POST";
+        const url = isEdit
+            ? `/api/test-habits/${modalProps.habit.id}`
+            : `/api/test-habits`;
+
         try {
-            const res = await fetch("/api/test-habits", {
-                method: "POST",
+            const res = await fetch(url, {
+                method,
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`,
@@ -69,28 +80,29 @@ export default function TestCreateHabitModal() {
 
             const data = await res.json();
             if (res.ok) {
-                alert("습관이 성공적으로 등록되었습니다.");
+                alert(isEdit ? "습관이 수정되었습니다." : "습관이 등록되었습니다.");
                 closeModal();
+                refetchHabits?.();
             } else {
-                alert(data.error || "습관 등록 실패");
+                alert(data.error || (isEdit ? "습관 수정 실패" : "습관 등록 실패"));
             }
         } catch (error) {
-            console.error(error);
+            console.error("요청 실패:", error);
             alert("서버 오류가 발생했습니다.");
         }
     };
 
     return (
         <ModalWrapper isOpen={isOpen} onClose={closeModal}>
-            <h3>습관 등록</h3>
+            <h3>{isEditMode ? "습관 수정" : "습관 등록"}</h3>
             <div>
                 <label>카테고리</label>
                 <select
                     value={categoryId ?? ""}
-                    onChange={(e) => {
-                        const selected = e.target.value;
-                        setCategoryId(selected === "" ? null : Number(selected));
-                    }}
+                    onChange={(e) =>
+                        setCategoryId(e.target.value === "" ? null : Number(e.target.value))
+                    }
+                    disabled={isEditMode}
                 >
                     <option value="">카테고리를 선택하세요</option>
                     {categories.map((cat) => (
@@ -107,6 +119,7 @@ export default function TestCreateHabitModal() {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                    disabled={isEditMode}
                 />
             </div>
 
@@ -127,7 +140,7 @@ export default function TestCreateHabitModal() {
                 />
             </div>
 
-            <button onClick={handleSubmit}>등록</button>
+            <button onClick={handleSubmit}>{isEditMode ? "수정" : "등록"}</button>
         </ModalWrapper>
     );
 }
