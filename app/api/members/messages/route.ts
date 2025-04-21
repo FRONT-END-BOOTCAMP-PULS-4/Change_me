@@ -10,20 +10,34 @@ import { GetMessageListDto } from "@/application/usecase/message/dto/GetMessageL
 import { getMemberIdFromToken } from "@/utils/auth";
 import { CreateMessageDto } from "@/application/usecase/message/dto/CreateMessageDto";
 import { CreateMessageUsecase } from "@/application/usecase/message/CreateMessageUsecase";
+import { MessageLikeRepository } from "@/domain/repositories/MessageLikeRepository";
+import { SbMessageLikeRepository } from "@/infra/repositories/supabase/SbMessageLikeRepository";
 
 export async function GET(request: Request) {
     try {
+        const memberId = await getMemberIdFromToken(
+            request.headers.get("Authorization")!,
+        );
+
+        if (!memberId) {
+            return NextResponse.json(
+                {
+                    error: "멤버 아이디를 찾을 수 없습니다.",
+                },
+                { status: 400 },
+            );
+        }
+
         // get query parameters from URL
         const url = new URL(request.url);
-        const currentPageParam =
-            url.searchParams.get("currentPage") || undefined;
-        const mineParam = url.searchParams.get("mine") || undefined;
+        const currentPageParam = url.searchParams.get("currentPage") || "1";
+        const mineParam = url.searchParams.get("mine");
 
         // set up usecase
         const messageRepository: MessageRepository = new SbMessageRepository();
         const memberRepository: MemberRepository = new SbMemberRepository();
-        const messageLikeRepository: MessageRepository =
-            new SbMessageRepository();
+        const messageLikeRepository: MessageLikeRepository =
+            new SbMessageLikeRepository();
 
         const getMessageListUsecase = new GetMessageListUsecase(
             messageRepository,
@@ -32,15 +46,18 @@ export async function GET(request: Request) {
         );
 
         // set up query Dto
-        const queryDto = new GetMessageListDto(
-            Number(currentPageParam),
-            mineParam === "true",
+        const getMessageListDto = new GetMessageListDto(
+            {
+                currentPage: Number(currentPageParam),
+                mine: Boolean(mineParam),
+            },
+            memberId,
         );
 
-        const messages: MessageListDto =
-            await getMessageListUsecase.execute(queryDto);
+        const messageListDto: MessageListDto =
+            await getMessageListUsecase.execute(getMessageListDto);
 
-        return NextResponse.json(messages);
+        return NextResponse.json(messageListDto);
     } catch (error) {
         console.error("Error fetching messages:", error);
         return NextResponse.json(
