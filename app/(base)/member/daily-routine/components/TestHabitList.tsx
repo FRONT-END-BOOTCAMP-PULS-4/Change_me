@@ -45,21 +45,18 @@ export default function HabitList() {
     if (habits.length === 0) return <p>진행 중인 습관이 없습니다.</p>;
 
     return (
-        <div style={{ marginTop: "2rem" }}>
+        <div>
             {habits.map((habit) => (
-                <div key={habit.id} style={{ border: "1px solid #ccc", padding: "1rem", marginBottom: "1rem" }}>
-                    <h3 style={{ marginBottom: "0.5rem" }}>
-                        {habit.name}{" "}
-                        <span style={{ fontSize: "0.9rem", color: "gray" }}>({habit.categoryName})</span>
-                    </h3>
-                    <p>{habit.description}</p>
-
-                    <div style={{ lineHeight: "1.8" }}>
-                        <p><strong>시작일:</strong> {habit.startAt}</p>
-                        <p><strong>종료일:</strong> {habit.finishedAt}</p>
-                        <p><strong>진행일:</strong> {habit.daysPassed}일차</p>
-                        <p><strong>달성률:</strong> {habit.rate}</p>
-                    </div>
+                <div key={habit.id}>
+                    <p>
+                        {habit.categoryName} &nbsp;|&nbsp;
+                        {habit.name} &nbsp;|&nbsp;
+                        {habit.description} &nbsp;|&nbsp;
+                        {habit.startAt} &nbsp;|&nbsp;
+                        {habit.finishedAt} &nbsp;|&nbsp;
+                        {habit.daysPassed}일차 &nbsp;|&nbsp;
+                        {habit.rate}
+                    </p>
                 </div>
             ))}
         </div>
