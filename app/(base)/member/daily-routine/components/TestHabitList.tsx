@@ -55,7 +55,7 @@ export default function HabitList() {
             const data = await res.json();
             if (Array.isArray(data.checkedIds)) {
                 const state: { [id: number]: boolean } = {};
-                data.checkedIds.forEach((id) => (state[id] = true));
+                data.checkedIds.forEach((id: number) => (state[id] = true));
                 setCheckedHabits(state);
             }
         };

@@ -6,7 +6,6 @@ import { TestGetTodayCheckedHabitIdsUsecase } from "@/application/usecase/habit/
 
 export async function GET(req: NextRequest) {
     try {
-        console.log("GET /api/test-habit-records/checked 시작");
         const authHeader = req.headers.get("authorization");
         const memberId = await getMemberIdFromToken(authHeader!);
         const today = new Date();
