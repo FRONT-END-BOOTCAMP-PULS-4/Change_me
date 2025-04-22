@@ -36,6 +36,7 @@ export class LoginUsecase {
                 email: member.email,
                 nickname: member.nickname,
                 role: member.role,
+                imageUrl: member.imageUrl,
             },
         };
     }

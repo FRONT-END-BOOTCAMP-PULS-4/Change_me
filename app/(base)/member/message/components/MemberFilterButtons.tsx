@@ -1,19 +1,29 @@
 "use client";
 
-export default function MemberFilterButtons() {
-    const toggleOption = async () => {
-        try {
-        } catch (error) {}
-    };
+import { useState } from "react";
+import styles from "./MemberFilterButtons.module.scss";
 
+type MemberFilterButtonsProps = {
+    mine: boolean;
+    onMineChange: (newMine: boolean) => void;
+};
+
+export default function MemberFilterButtons(props: MemberFilterButtonsProps) {
+    // TODO: styling two buttons based on 'mine' option
     return (
-        <ol>
-            <li>
-                <button>전체</button>
-            </li>
-            <li>
-                <button>내 메시지</button>
-            </li>
-        </ol>
+        <nav className={styles.nav}>
+            <button
+                className={styles[String(props.mine)]}
+                onClick={() => props.onMineChange(false)}
+            >
+                전체
+            </button>
+            <button
+                className={styles[String(props.mine)]}
+                onClick={() => props.onMineChange(true)}
+            >
+                내 메시지
+            </button>
+        </nav>
     );
 }

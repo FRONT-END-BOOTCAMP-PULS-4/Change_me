@@ -49,6 +49,7 @@ export class GetAnonHabitListUsecase {
             const habits = habitData.map((habit) => ({
                 id: habit.id!,
                 userNickname: habit.userNickname!,
+                imageUrl: habit.imageUrl,
                 habitName: habit.name!,
                 description: habit.description!,
             }));
@@ -66,7 +67,7 @@ export class GetAnonHabitListUsecase {
             if (error instanceof Error) {
                 throw new Error(`${error.message}`);
             } else {
-                throw new Error("카테고리 조회 실패 : 알 수 없는 오류");
+                throw new Error("모두의 습관 조회 실패 : 알 수 없는 오류");
             }
         }
     }

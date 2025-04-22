@@ -3,7 +3,7 @@ export class MessageDto {
         public id: number,
         public memberId: string,
         public writer: string,
-        public imageUrl: string,
+        public imageUrl: string | null,
         public content: string,
         public createdAt: Date,
         public likeCount: number,

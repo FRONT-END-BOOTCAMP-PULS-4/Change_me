@@ -3,6 +3,7 @@
 import { useAuthStore } from "@/stores/authStore";
 import useModalStore from "@/stores/modalStore";
 import { useEffect, useState, useCallback } from "react";
+import styles from "./TestHabitList.module.scss";
 
 type Habit = {
     id: number;
@@ -12,15 +13,18 @@ type Habit = {
     description: string;
     startAt: string;
     finishedAt: string;
-    daysPassed: number;
+    checkedDays: number;
     totalDays: number;
     rate: string;
     canGiveUp: boolean;
+    daysPassed: number;
 };
 
 export default function HabitList() {
     const [habits, setHabits] = useState<Habit[]>([]);
     const [checkedHabits, setCheckedHabits] = useState<{ [habitId: number]: boolean }>({});
+    const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
     const token = useAuthStore.getState().token;
 
@@ -42,6 +46,21 @@ export default function HabitList() {
             console.error("불러오기 실패:", error);
         }
     }, [token]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await fetch("/api/categories");
+                const data = await res.json();
+                if (Array.isArray(data.categories)) {
+                    setCategories(data.categories);
+                }
+            } catch (error) {
+                console.error("카테고리 불러오기 실패:", error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     useEffect(() => {
         fetchHabits();
@@ -85,6 +104,13 @@ export default function HabitList() {
                     ...prev,
                     [habitId]: !isChecked,
                 }));
+
+                await fetch("/api/test-habits/" + habitId + "/auto-status", {
+                    method: "POST",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                await fetchHabits();
             } else {
                 const data = await res.json();
                 alert(data.error || "처리 실패");
@@ -143,61 +169,101 @@ export default function HabitList() {
     };
 
     return (
-        <div>
-            <button
-                onClick={() =>
-                    useModalStore.getState().openModal("createHabit", {
-                        refetchHabits: fetchHabits,
-                    })
-                }
-                style={{ marginBottom: "16px" }}
-            >
-                습관 추가하기
-            </button>
-            {habits.map((habit) => (
-                <div key={habit.id}>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={checkedHabits[habit.id] || false}
-                            onChange={() => toggleCheckbox(habit.id)}
-                        />
-                        {habit.categoryName} &nbsp;|&nbsp;
-                        {habit.name} &nbsp;|&nbsp;
-                        {habit.description} &nbsp;|&nbsp;
-                        {habit.startAt} &nbsp;|&nbsp;
-                        {habit.finishedAt} &nbsp;|&nbsp;
-                        {habit.daysPassed}일차 &nbsp;|&nbsp;
-                        {habit.rate}
-                        {habit.startAt === today && (
-                            <button onClick={() => handleDelete(habit.id)} style={{ marginLeft: "10px" }}>
-                                삭제
-                            </button>
-                        )}
-                        {habit.canGiveUp === true && habit.startAt !== today && (
-                            <button
-                                onClick={() => handleGiveUp(habit.id)}
-                                style={{ marginLeft: "10px", color: "red" }}
-                            >
-                                포기
-                            </button>
-                        )}
-                        {habit.canGiveUp === true && (
-                            <button
-                                onClick={() =>
-                                    useModalStore.getState().openModal("editHabit", {
-                                        habit,
-                                        refetchHabits: fetchHabits,
-                                    })
-                                }
-                                style={{ marginLeft: "10px", color: "green" }}
-                            >
-                                수정
-                            </button>
-                        )}
-                    </label>
-                </div>
-            ))}
+        <div className={styles.container}>
+            <div className={styles.topControls}>
+                <select
+                    value={selectedCategoryId ?? ""}
+                    onChange={(e) =>
+                        setSelectedCategoryId(e.target.value === "" ? null : Number(e.target.value))
+                    }
+                >
+                    <option value="">전체</option>
+                    {categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                            {cat.name}
+                        </option>
+                    ))}
+                </select>
+
+                <div className={styles.today}>{today}</div>
+            </div>
+
+            <div className={styles.habitList}>
+                {habits
+                    .filter(
+                        (habit) => selectedCategoryId === null || Number(habit.categoryId) === selectedCategoryId
+                    )
+                    .map((habit) => (
+                        <div className={styles.habitCard} key={habit.id}>
+                            <div className={styles.category}>{habit.categoryName}</div>
+                            <input
+                                className={styles.checkbox}
+                                type="checkbox"
+                                checked={checkedHabits[habit.id] || false}
+                                onChange={() => toggleCheckbox(habit.id)}
+                            />
+                            <div className={styles.info}>
+                                <div className={styles.title}>{habit.name}</div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.desc}>{habit.description}</div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.progress}>
+                                    {habit.daysPassed}일차
+                                </div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.progress}>
+                                    {habit.rate}
+                                </div>
+                            </div>
+                            <div className={styles.actions}>
+                                {habit.canGiveUp && (
+                                    <button
+                                        className={styles.edit}
+                                        onClick={() =>
+                                            useModalStore.getState().openModal("editHabit", {
+                                                habit,
+                                                refetchHabits: fetchHabits,
+                                            })
+                                        }
+                                    >
+                                        수정
+                                    </button>
+                                )}
+                                {habit.startAt === today && (
+                                    <button
+                                        className={styles.delete}
+                                        onClick={() => handleDelete(habit.id)}
+                                    >
+                                        삭제
+                                    </button>
+                                )}
+                                {habit.canGiveUp && habit.startAt !== today && (
+                                    <button
+                                        className={styles.giveup}
+                                        onClick={() => handleGiveUp(habit.id)}
+                                    >
+                                        포기
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+            </div>
+            <div className={styles.bottomControls}>
+                <button
+                    className={styles.createButton}
+                    onClick={() =>
+                        useModalStore.getState().openModal("createHabit", {
+                            refetchHabits: fetchHabits,
+                        })
+                    }
+                >
+                    + 새로운 습관 생성
+                </button>
+            </div>
         </div>
     );
 }

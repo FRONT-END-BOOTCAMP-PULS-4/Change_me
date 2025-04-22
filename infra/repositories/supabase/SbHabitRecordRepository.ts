@@ -30,7 +30,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         let query = supabase
             .from('habit_record')
             .select('*');
-        
+
         // 기본 정렬이 없는 경우 날짜 기준으로 정렬
         if (!filter?.sortField) {
             query = query.order('date', { ascending: false });
@@ -173,7 +173,8 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .eq("date", record.date.toISOString().split("T")[0]);
         if (error) throw new Error("습관 기록 삭제 실패: " + error.message);
     }
-async TestGetTodayCheckedHabitIds(memberId: string, date: Date): Promise<number[]> {
+
+    async TestGetTodayCheckedHabitIds(memberId: string, date: Date): Promise<number[]> {
         const supabase = await createClient();
 
         // member의 habit id들 먼저 가져오기

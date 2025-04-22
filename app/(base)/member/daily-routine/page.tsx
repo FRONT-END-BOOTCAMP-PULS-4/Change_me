@@ -11,12 +11,10 @@ export default function page() {
         openModal("createHabit");
     };
     return (
-        <div>
-            <h1>오늘의 루틴</h1>
-
+        <>
             <TestHabitList />
 
             <TestCreateHabitModal />
-        </div>
+        </>
     );
 }

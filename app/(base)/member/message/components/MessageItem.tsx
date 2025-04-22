@@ -1,34 +1,39 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import Image from "next/image";
 import styles from "./MessageItem.module.scss";
-import EditMessageButton from "./EditMessageButton";
-import DeleteMessageButton from "./DeleteMessageButton";
+import MessageButton from "./MessageButton";
 import LikeButton from "./LikeButton";
 import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
+import { useAuthStore } from "@/stores/authStore";
 
 type MessageItemProps = {
-    messageDto: MessageDto;
+    messageDto: MessageDto; // TODO: divide Dto and props
 };
 
 export default function MessageItem(props: MessageItemProps) {
-    const messageDto = props.messageDto;
-    const memberId = useMemberId();
+    const { user } = useAuthStore();
+    const memberId: string = user?.id || "";
 
-    const isAuthor = memberId === messageDto.memberId; // TODO: set the flag
-    const kst = new Date(messageDto.createdAt.getTime() + 9 * 60 * 60 * 1000);
+    const messageDto = props.messageDto;
+    const isAuthor = memberId === messageDto.memberId;
+    const createdAt = new Date(messageDto.createdAt);
+    const kst = new Date(createdAt.getTime() + 9 * 60 * 60 * 1000);
     const pad = (str: String) => str.toString().padStart(2, "0");
     const formattedDate = `${kst.getFullYear()}-${pad(String(kst.getMonth() + 1))}-${pad(String(kst.getDate()))} ${pad(String(kst.getHours()))}:${pad(String(kst.getMinutes()))}`;
 
     const messageLikeDto = { messageId: messageDto.id, memberId: memberId };
 
     return (
-        <div className="border rounded-md p-4 mb-2 bg-white shadow-sm">
+        <div className={styles.wrapper}>
             <div className="flex justify-between items-start">
-                <div className="flex items-center space-x-2">
-                    <img
-                        src={messageDto.imageUrl}
+                <nav className="flex items-center space-x-2">
+                    <Image
+                        src={messageDto.imageUrl || "/images/ProfileCircle.png"}
                         alt="프로필 이미지"
+                        width={40}
+                        height={40}
                         className="w-8 h-8 rounded-full"
                     />
                     <div>
@@ -39,11 +44,11 @@ export default function MessageItem(props: MessageItemProps) {
                             {formattedDate}
                         </div>
                     </div>
-                </div>
+                </nav>
                 {isAuthor && (
                     <div className="flex space-x-2 text-sm text-gray-500">
-                        <EditMessageButton />
-                        <DeleteMessageButton />
+                        <MessageButton type="Edit" />
+                        <MessageButton type="Delete" />
                     </div>
                 )}
             </div>
