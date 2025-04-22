@@ -115,19 +115,29 @@ export default function TestCreateHabitModal() {
 
             <div>
                 <label>습관명</label>
+                <small>{name.length}/10</small>
                 <input
                     type="text"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                        if (e.target.value.length <= 10) {
+                            setName(e.target.value);
+                        }
+                    }}
                     disabled={isEditMode}
                 />
             </div>
 
             <div>
                 <label>설명</label>
+                <small>{description.length}/100</small>
                 <textarea
                     value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e) => {
+                        if (e.target.value.length <= 100) {
+                            setDescription(e.target.value);
+                        }
+                    }}
                 />
             </div>
 
