@@ -22,6 +22,8 @@ type Habit = {
 export default function HabitList() {
     const [habits, setHabits] = useState<Habit[]>([]);
     const [checkedHabits, setCheckedHabits] = useState<{ [habitId: number]: boolean }>({});
+    const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
 
     const token = useAuthStore.getState().token;
 
@@ -43,6 +45,21 @@ export default function HabitList() {
             console.error("불러오기 실패:", error);
         }
     }, [token]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const res = await fetch("/api/categories");
+                const data = await res.json();
+                if (Array.isArray(data.categories)) {
+                    setCategories(data.categories);
+                }
+            } catch (error) {
+                console.error("카테고리 불러오기 실패:", error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     useEffect(() => {
         fetchHabits();
@@ -152,6 +169,21 @@ export default function HabitList() {
 
     return (
         <div>
+            <div style={{ marginBottom: "16px" }}>
+                <select
+                    value={selectedCategoryId ?? ""}
+                    onChange={(e) =>
+                        setSelectedCategoryId(e.target.value === "" ? null : Number(e.target.value))
+                    }
+                >
+                    <option value="">전체</option>
+                    {categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                            {cat.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
             <button
                 onClick={() =>
                     useModalStore.getState().openModal("createHabit", {
@@ -162,50 +194,52 @@ export default function HabitList() {
             >
                 습관 추가하기
             </button>
-            {habits.map((habit) => (
-                <div key={habit.id}>
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={checkedHabits[habit.id] || false}
-                            onChange={() => toggleCheckbox(habit.id)}
-                        />
-                        {habit.categoryName} &nbsp;|&nbsp;
-                        {habit.name} &nbsp;|&nbsp;
-                        {habit.description} &nbsp;|&nbsp;
-                        {habit.startAt} &nbsp;|&nbsp;
-                        {habit.finishedAt} &nbsp;|&nbsp;
-                        {habit.daysPassed}일차 &nbsp;|&nbsp;
-                        {habit.rate}
-                        {habit.startAt === today && (
-                            <button onClick={() => handleDelete(habit.id)} style={{ marginLeft: "10px" }}>
-                                삭제
-                            </button>
-                        )}
-                        {habit.canGiveUp === true && habit.startAt !== today && (
-                            <button
-                                onClick={() => handleGiveUp(habit.id)}
-                                style={{ marginLeft: "10px", color: "red" }}
-                            >
-                                포기
-                            </button>
-                        )}
-                        {habit.canGiveUp === true && (
-                            <button
-                                onClick={() =>
-                                    useModalStore.getState().openModal("editHabit", {
-                                        habit,
-                                        refetchHabits: fetchHabits,
-                                    })
-                                }
-                                style={{ marginLeft: "10px", color: "green" }}
-                            >
-                                수정
-                            </button>
-                        )}
-                    </label>
-                </div>
-            ))}
+            {habits
+                .filter(habit => selectedCategoryId === null || Number(habit.categoryId) === selectedCategoryId)
+                .map((habit) => (
+                    <div key={habit.id}>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={checkedHabits[habit.id] || false}
+                                onChange={() => toggleCheckbox(habit.id)}
+                            />
+                            {habit.categoryName} &nbsp;|&nbsp;
+                            {habit.name} &nbsp;|&nbsp;
+                            {habit.description} &nbsp;|&nbsp;
+                            {habit.startAt} &nbsp;|&nbsp;
+                            {habit.finishedAt} &nbsp;|&nbsp;
+                            {habit.daysPassed}일차 &nbsp;|&nbsp;
+                            {habit.rate}
+                            {habit.startAt === today && (
+                                <button onClick={() => handleDelete(habit.id)} style={{ marginLeft: "10px" }}>
+                                    삭제
+                                </button>
+                            )}
+                            {habit.canGiveUp === true && habit.startAt !== today && (
+                                <button
+                                    onClick={() => handleGiveUp(habit.id)}
+                                    style={{ marginLeft: "10px", color: "red" }}
+                                >
+                                    포기
+                                </button>
+                            )}
+                            {habit.canGiveUp === true && (
+                                <button
+                                    onClick={() =>
+                                        useModalStore.getState().openModal("editHabit", {
+                                            habit,
+                                            refetchHabits: fetchHabits,
+                                        })
+                                    }
+                                    style={{ marginLeft: "10px", color: "green" }}
+                                >
+                                    수정
+                                </button>
+                            )}
+                        </label>
+                    </div>
+                ))}
         </div>
     );
 }
