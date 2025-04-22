@@ -182,17 +182,19 @@ export default function HabitList() {
                                 포기
                             </button>
                         )}
-                        <button
-                            onClick={() =>
-                                useModalStore.getState().openModal("editHabit", {
-                                    habit,
-                                    refetchHabits: fetchHabits,
-                                })
-                            }
-                            style={{ marginLeft: "10px", color: "green" }}
-                        >
-                            수정
-                        </button>
+                        {habit.canGiveUp === true && (
+                            <button
+                                onClick={() =>
+                                    useModalStore.getState().openModal("editHabit", {
+                                        habit,
+                                        refetchHabits: fetchHabits,
+                                    })
+                                }
+                                style={{ marginLeft: "10px", color: "green" }}
+                            >
+                                수정
+                            </button>
+                        )}
                     </label>
                 </div>
             ))}
