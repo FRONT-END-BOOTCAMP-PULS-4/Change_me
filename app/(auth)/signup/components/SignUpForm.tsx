@@ -143,13 +143,17 @@ export function SignUpForm() {
 
             <form onSubmit={handleSubmit}>
                 <div className={styles.inputGroup}>
-                    <label htmlFor="name">이름</label>
+                    <label htmlFor="name">이름&nbsp;<small>{name.length}/20</small></label>
                     <input
                         id="name"
                         type="text"
-                        placeholder="성을 입력해주세요."
+                        placeholder="이름을 입력해주세요."
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        onChange={(e) => {
+                            if (e.target.value.length <= 20) {
+                                setName(e.target.value);
+                            }
+                        }}
                     />
                 </div>
 
@@ -210,13 +214,17 @@ export function SignUpForm() {
                 </div>
 
                 <div className={styles.inputGroup}>
-                    <label htmlFor="nickname">닉네임</label>
+                    <label htmlFor="nickname">닉네임&nbsp;<small>{nickname.length}/20</small></label>
                     <input
                         id="nickname"
                         type="text"
                         placeholder="닉네임을 입력해주세요."
                         value={nickname}
-                        onChange={(e) => setNickname(e.target.value)}
+                        onChange={(e) => {
+                            if (e.target.value.length <= 20) {
+                                setNickname(e.target.value);
+                            }
+                        }}
                     />
                 </div>
 
