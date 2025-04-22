@@ -16,9 +16,16 @@ export class TestGetOngoingHabitsUsecase {
             habits.map(async (habit) => {
                 const start = new Date(habit.createdAt);
                 const end = new Date(habit.finishedAt);
+                const getMidnight = (date: Date) => {
+                    const d = new Date(date);
+                    d.setHours(0, 0, 0, 0); // 자정으로 초기화
+                    return d;
+                };
 
                 const totalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-                const dayPassed = Math.ceil((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+                const dayPassed = Math.ceil(
+                    (getMidnight(today).getTime() - getMidnight(start).getTime()) / (1000 * 60 * 60 * 24) + 1
+                );
 
                 const checkedDays = await this.recordRepo.TestCountByHabitId(habit.id);
                 const rate = Math.round((checkedDays / totalDays) * 100);
