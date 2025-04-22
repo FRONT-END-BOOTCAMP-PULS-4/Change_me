@@ -16,7 +16,7 @@ export default function WriteMessageForm(props: WriteMessageFormProps) {
     const handleChange = async () => {}; // TODO: word count limit
 
     return (
-        <div className={styles.wraper}>
+        <div className={styles.wrapper}>
             <nav className={styles.nav}>
                 <Image
                     src={user?.imageUrl || "/images/ProfileCircle.png"}
@@ -25,7 +25,6 @@ export default function WriteMessageForm(props: WriteMessageFormProps) {
                     height={40}
                     className="w-8 h-8 rounded-full"
                 />
-
                 <div className="text-sm font-semibold">{user?.nickname}</div>
             </nav>
             <input
@@ -37,7 +36,7 @@ export default function WriteMessageForm(props: WriteMessageFormProps) {
                 placeholder="메시지를 입력하세요."
             />
 
-            <button onClick={() => props.handleSubmit(content)}></button>
+            <button onClick={() => props.handleSubmit(content)}>등록</button>
         </div>
     );
 }

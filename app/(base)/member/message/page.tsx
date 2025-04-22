@@ -13,7 +13,8 @@ import { useMessages } from "@/hooks/useMessages";
 export default function MessageListPage() {
     const searchParams = useSearchParams();
     const currentPage = Number(searchParams.get("page")) || 1;
-    const mine = Boolean(searchParams.get("mine")) || false;
+    const mine = searchParams.get("mine") === "true" ? true : false;
+
     const router = useRouter();
 
     const {

@@ -55,6 +55,13 @@ export async function GET(request: Request) {
             memberId,
         );
 
+        console.log(
+            `currentPageParam: ${currentPageParam}, currentPage @GET api calling: ${Number(currentPageParam)}`,
+        );
+        console.log(
+            `mineParam: ${mineParam}, mine @GET api calling: ${Boolean(mineParam)}`,
+        );
+
         const messageListDto: MessageListDto =
             await getMessageListUsecase.execute(getMessageListDto);
 
