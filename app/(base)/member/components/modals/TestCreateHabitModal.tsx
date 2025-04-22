@@ -8,7 +8,7 @@ import styles from "./TestCreateHabitModal.module.scss";
 
 export default function TestCreateHabitModal() {
     const { isOpen, closeModal, modalType, modalProps } = useModalStore();
-    const isEdit = modalType === "editHabit";
+    const isEdit = modalType === "habit";
     const token = useAuthStore.getState().token;
 
     const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
@@ -39,7 +39,7 @@ export default function TestCreateHabitModal() {
     // 모달이 열릴 때 초기값 설정 (등록/수정 모드 구분)
     useEffect(() => {
         if (isOpen) {
-            if (modalType === "editHabit" && modalProps) {
+            if (modalType === "habit" && modalProps) {
                 setCategoryId(Number(modalProps.habit.categoryId));
                 setName(modalProps.habit.name);
                 setDescription(modalProps.habit.description);

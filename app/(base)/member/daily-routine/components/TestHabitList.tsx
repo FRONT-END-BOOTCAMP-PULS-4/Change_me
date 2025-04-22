@@ -223,7 +223,7 @@ export default function HabitList() {
                                     <button
                                         className={styles.edit}
                                         onClick={() =>
-                                            useModalStore.getState().openModal("editHabit", {
+                                            useModalStore.getState().openModal("habit", {
                                                 habit,
                                                 refetchHabits: fetchHabits,
                                             })
@@ -256,7 +256,7 @@ export default function HabitList() {
                 <button
                     className={styles.createButton}
                     onClick={() =>
-                        useModalStore.getState().openModal("createHabit", {
+                        useModalStore.getState().openModal("habit", {
                             refetchHabits: fetchHabits,
                         })
                     }

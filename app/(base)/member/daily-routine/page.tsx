@@ -8,7 +8,7 @@ export default function page() {
     const { openModal } = useModalStore();
 
     const handleOpenModal = () => {
-        openModal("createHabit");
+        openModal("habit");
     };
     return (
         <>
