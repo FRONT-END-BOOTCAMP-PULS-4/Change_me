@@ -30,7 +30,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         let query = supabase
             .from('habit_record')
             .select('*');
-        
+
         // 기본 정렬이 없는 경우 날짜 기준으로 정렬
         if (!filter?.sortField) {
             query = query.order('date', { ascending: false });
@@ -143,7 +143,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             );
         }
     }
-  
+
     async TestExists(record: HabitRecord): Promise<boolean> {
         const supabase = await createClient();
         const { data } = await supabase
@@ -153,16 +153,19 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .eq("date", record.date.toISOString().split("T")[0])
             .maybeSingle();
 
+        return !!data;
+    }
+
     async TestSave(record: HabitRecord): Promise<void> {
         const supabase = await createClient();
-        
+
         const { error } = await supabase
             .from('habit_record')
             .insert({
                 habit_id: record.habitId,
                 date: record.date
             });
-            
+
         if (error) {
             throw new Error(`Failed to save test habit record: ${error.message}`);
         }
@@ -170,13 +173,13 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
 
     async TestDelete(record: HabitRecord): Promise<void> {
         const supabase = await createClient();
-        
+
         const { error } = await supabase
             .from('habit_record')
             .delete()
             .eq('habit_id', record.habitId)
             .eq('date', record.date);
-            
+
         if (error) {
             throw new Error(`Failed to delete test habit record: ${error.message}`);
         }
@@ -184,10 +187,10 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
 
     async TestGetTodayCheckedHabitIds(memberId: string, date: Date): Promise<number[]> {
         const supabase = await createClient();
-        
+
         // 오늘 날짜에 기록된 습관 ID 목록을 가져옵니다
         const dateStr = date.toISOString();
-        
+
         // habit_record와 habit 테이블을 조인하는 쿼리
         const { data, error } = await supabase
             .from('habit_record')
@@ -200,11 +203,11 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .eq('habit.member_id', memberId)
             .gte('date', new Date(dateStr).setHours(0, 0, 0, 0))
             .lt('date', new Date(dateStr).setHours(23, 59, 59, 999));
-            
+
         if (error) {
             throw new Error(`Failed to get today's checked habit IDs: ${error.message}`);
         }
-        
+
         // 결과에서 habit_id만 추출
         return data.map((item: any) => item.habit_id);
     }
