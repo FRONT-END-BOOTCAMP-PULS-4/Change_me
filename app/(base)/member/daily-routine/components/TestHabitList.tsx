@@ -12,10 +12,11 @@ type Habit = {
     description: string;
     startAt: string;
     finishedAt: string;
-    daysPassed: number;
+    checkedDays: number;
     totalDays: number;
     rate: string;
     canGiveUp: boolean;
+    daysPassed: number;
 };
 
 export default function HabitList() {
@@ -85,6 +86,7 @@ export default function HabitList() {
                     ...prev,
                     [habitId]: !isChecked,
                 }));
+                await fetchHabits();
             } else {
                 const data = await res.json();
                 alert(data.error || "처리 실패");

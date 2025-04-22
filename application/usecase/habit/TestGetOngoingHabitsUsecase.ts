@@ -18,9 +18,10 @@ export class TestGetOngoingHabitsUsecase {
                 const end = new Date(habit.finishedAt);
 
                 const totalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+                const dayPassed = Math.ceil((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
 
-                const checkedCount = await this.recordRepo.TestCountByHabitId(habit.id);
-                const rate = Math.round((checkedCount / totalDays) * 100);
+                const checkedDays = await this.recordRepo.TestCountByHabitId(habit.id);
+                const rate = Math.round((checkedDays / totalDays) * 100);
 
                 return new TestHabitProgressDto(
                     habit.id,
@@ -30,10 +31,11 @@ export class TestGetOngoingHabitsUsecase {
                     habit.description,
                     start.toISOString().slice(0, 10),
                     end.toISOString().slice(0, 10),
-                    checkedCount,
+                    checkedDays,
                     totalDays,
-                    `${rate}% (${checkedCount}일 / ${totalDays}일)`,
-                    rate < 80
+                    `${rate}% (${checkedDays}일 / ${totalDays}일)`,
+                    rate < 80,
+                    dayPassed
                 );
             })
         );
