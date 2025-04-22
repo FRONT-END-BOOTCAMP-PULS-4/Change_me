@@ -158,58 +158,52 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
 
     async TestSave(record: HabitRecord): Promise<void> {
         const supabase = await createClient();
-
-        const { error } = await supabase
-            .from('habit_record')
-            .insert({
-                habit_id: record.habitId,
-                date: record.date
-            });
-
-        if (error) {
-            throw new Error(`Failed to save test habit record: ${error.message}`);
-        }
+        const { error } = await supabase.from("habit_record").insert({
+            habit_id: record.habitId,
+            date: record.date.toISOString().split("T")[0],
+        });
+        if (error) throw new Error("습관 기록 저장 실패: " + error.message);
     }
 
     async TestDelete(record: HabitRecord): Promise<void> {
         const supabase = await createClient();
-
         const { error } = await supabase
-            .from('habit_record')
+            .from("habit_record")
             .delete()
-            .eq('habit_id', record.habitId)
-            .eq('date', record.date);
-
-        if (error) {
-            throw new Error(`Failed to delete test habit record: ${error.message}`);
-        }
+            .eq("habit_id", record.habitId)
+            .eq("date", record.date.toISOString().split("T")[0]);
+        if (error) throw new Error("습관 기록 삭제 실패: " + error.message);
     }
 
     async TestGetTodayCheckedHabitIds(memberId: string, date: Date): Promise<number[]> {
         const supabase = await createClient();
 
-        // 오늘 날짜에 기록된 습관 ID 목록을 가져옵니다
-        const dateStr = date.toISOString();
+        // member의 habit id들 먼저 가져오기
+        const { data: habitList, error: habitError } = await supabase
+            .from("habit")
+            .select("id")
+            .eq("member_id", memberId);
 
-        // habit_record와 habit 테이블을 조인하는 쿼리
-        const { data, error } = await supabase
-            .from('habit_record')
-            .select(`
-                habit_id,
-                habit!inner (
-                    id, member_id
-                )
-            `)
-            .eq('habit.member_id', memberId)
-            .gte('date', new Date(dateStr).setHours(0, 0, 0, 0))
-            .lt('date', new Date(dateStr).setHours(23, 59, 59, 999));
-
-        if (error) {
-            throw new Error(`Failed to get today's checked habit IDs: ${error.message}`);
+        if (habitError) {
+            throw new Error("습관 ID 조회 실패: " + habitError.message);
         }
 
-        // 결과에서 habit_id만 추출
-        return data.map((item: any) => item.habit_id);
+        const habitIds = (habitList ?? []).map((habit) => habit.id);
+
+        if (habitIds.length === 0) return [];
+
+        // 해당 habit_id 중 오늘 날짜와 일치하는 record 조회
+        const { data: recordList, error: recordError } = await supabase
+            .from("habit_record")
+            .select("habit_id")
+            .eq("date", date.toISOString().split("T")[0])
+            .in("habit_id", habitIds);
+
+        if (recordError) {
+            throw new Error("체크된 습관 목록 조회 실패: " + recordError.message);
+        }
+
+        return (recordList ?? []).map((record) => record.habit_id);
     }
 
     // 달성률을 계산하기 위해 habit_record 테이블에서 체크된 기록 수를 가져오는 메서드
