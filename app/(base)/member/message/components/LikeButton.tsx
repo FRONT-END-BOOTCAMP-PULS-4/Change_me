@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/authStore";
 import { MessageLikeDto } from "@/application/usecase/message-like/dto/MessageLikeDto";
+import { useMessageLikes } from "@/hooks/useMessageLikes";
 
 type LikeButtonProps = {
     isLiked: Boolean;
@@ -10,41 +11,22 @@ type LikeButtonProps = {
 };
 
 export default function LikeButton(props: LikeButtonProps) {
+    const messageLikes = useMessageLikes();
     const toggleLike = async () => {
         try {
             if (!props.isLiked) {
-                const res = await fetch("/api/members/like", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        messageId: props.messageLikeDto.messageId,
-                    }),
-                });
-
-                const data = await res.json();
-
-                // update values
-            } else {
-                const res = await fetch(
-                    `/api/members/like/${props.messageLikeDto.messageId}`,
-                    {
-                        method: "DELETE",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${token}`,
-                        },
-                    },
+                const res = messageLikes.createMessageLike(
+                    props.messageLikeDto.messageId,
                 );
-
-                const data = await res.json();
+                // update values: instead of using setIsLiked, apply the change by editing local variables..?
+            } else {
+                const res = messageLikes.deleteMessageLike(
+                    props.messageLikeDto.messageId,
+                );
+                // update values
             }
         } catch (error) {}
     };
 
-    return (
-        <button
-            onClick={toggleLike}
-            style={{ marginTop: "2rem", color: "red" }}
-        ></button>
-    );
+    return <button onClick={toggleLike}></button>;
 }

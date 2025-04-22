@@ -61,18 +61,19 @@ export class GetMessageListUsecase {
                             memberId: null,
                         });
                     let isLiked: boolean =
-                        (await this.messageLikeRepository.findAll({
-                            memberId: getMessageListDto.memberId,
-                            messageId: message.id,
-                        })) !== null;
+                        (
+                            await this.messageLikeRepository.findAll({
+                                memberId: getMessageListDto.memberId,
+                                messageId: message.id,
+                            })
+                        ).length !== 0;
 
                     return {
                         id: message.id,
                         memberId: writer?.id || "Unknown",
                         writer: writer?.nickname || "Unknown",
                         imageUrl:
-                            writer?.imageUrl ||
-                            "@/public/images/ProfileCircle.png",
+                            writer?.imageUrl || "/images/ProfileCircle.png",
                         content: message.content,
                         createdAt: message.createdAt,
                         likeCount,

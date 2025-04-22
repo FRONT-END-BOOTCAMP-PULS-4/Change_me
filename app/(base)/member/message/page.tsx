@@ -1,51 +1,56 @@
 "use client";
 
-import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
-import { MessageListDto } from "@/application/usecase/message/dto/MessageListDto";
-import { useAuthStore } from "@/stores/authStore";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
 
 import MessageList from "./components/MessageList";
 import WriteMessageForm from "./components/WriteMessageForm";
 import MemberFilterButtons from "./components/MemberFilterButtons";
 import Pager from "@/app/components/Pager";
+import styles from "./page.module.scss";
+import Loading from "@/app/components/Loading";
+import { useMessages } from "@/hooks/useMessages";
 
 export default function MessageListPage() {
-    // search params initialization
     const searchParams = useSearchParams();
-    const currentPageParam = searchParams.get("currentPage");
-    const mineParam = searchParams.get("mine");
+    const currentPage = Number(searchParams.get("page")) || 1;
+    const mine = Boolean(searchParams.get("mine")) || false;
     const router = useRouter();
 
-    const [mine, setMine] = useState<boolean>(false);
-    // page state initialization
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [pages, setPages] = useState<number[]>([]);
-    const [endPage, setEndPages] = useState<number>(1);
+    const {
+        messages,
+        pages,
+        endPage,
+        isLoading,
+        createMessage,
+        updateMessage,
+        deleteMessage,
+    } = useMessages(currentPage, mine);
 
-    // query params initialization
-    if (currentPageParam) setCurrentPage(Number(currentPageParam));
-    if (mineParam) setMine(mineParam === "true");
-
-    const handlePageChange = (page: number) => {
-        router.push(`?currentPage=${currentPage}&mine=${mine}`);
+    const handleQueryStringChange = (newPage: number, newMine: boolean) => {
+        router.push(`?currentPage=${newPage}&mine=${newMine}`);
     };
 
+    if (isLoading) return <Loading />;
+
     return (
-        <main>
-            <header>
-                <h1>Daily Message</h1>
-                <MemberFilterButtons />
-            </header>
-            <WriteMessageForm />
-            <MessageList />
+        <section className={styles.message}>
+            <h2>Daily Message</h2>
+            <MemberFilterButtons
+                onMineChange={(newMine: boolean) =>
+                    handleQueryStringChange(currentPage, newMine)
+                }
+                mine={mine}
+            />
+            <WriteMessageForm handleSubmit={createMessage} />
+            <MessageList messages={messages} />
             <Pager
                 currentPage={1}
                 pages={pages}
                 endPage={endPage}
-                onPageChange={(newPage: number) => handlePageChange(newPage)}
+                onPageChange={(newPage: number) =>
+                    handleQueryStringChange(newPage, mine)
+                }
             />
-        </main>
+        </section>
     );
 }
