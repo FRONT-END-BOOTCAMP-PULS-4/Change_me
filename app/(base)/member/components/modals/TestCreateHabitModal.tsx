@@ -146,6 +146,14 @@ export default function TestCreateHabitModal() {
                 <input
                     type="date"
                     value={finishedAt}
+                    min={(() => {
+                        const baseDate = isEditMode
+                            ? new Date(modalProps.habit.startAt) // 수정 시: 시작일 기준
+                            : new Date();                       // 등록 시: 오늘 기준                        
+
+                        baseDate.setDate(baseDate.getDate() + 14); // 14일 이후부터
+                        return baseDate.toISOString().split("T")[0]; // YYYY-MM-DD 형식
+                    })()}
                     onChange={(e) => setFinishedAt(e.target.value)}
                 />
             </div>
