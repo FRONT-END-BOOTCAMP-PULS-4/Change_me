@@ -30,7 +30,7 @@ export default function MessageItem(props: MessageItemProps) {
             <div className="flex justify-between items-start">
                 <nav className="flex items-center space-x-2">
                     <Image
-                        src={messageDto.imageUrl}
+                        src={messageDto.imageUrl || "/images/ProfileCircle.png"}
                         alt="프로필 이미지"
                         width={40}
                         height={40}
