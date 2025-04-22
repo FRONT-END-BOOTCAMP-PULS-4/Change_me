@@ -31,13 +31,13 @@ export class SbHabitRepository implements HabitRepository {
     async count(filter?: HabitFilter): Promise<number> {
         const supabase = await createClient();
 
-        let query = supabase.from("habits").select("*", { count: "exact" });
+        let query = supabase.from("habit").select("*", { count: "exact" });
         query = this.queryFilter(filter, query);
 
         const { count, error } = await query;
 
         if (error) {
-            throw new Error(`달성한 습관 개수 조회 실패: ${error.message}`);
+            throw new Error(`습관 개수 조회 실패: ${error.message}`);
         }
 
         return count || 0;
@@ -47,7 +47,7 @@ export class SbHabitRepository implements HabitRepository {
         const supabase = await createClient();
 
         let query = supabase
-            .from("habits")
+            .from("habit")
             .select("*, member(nickname)")
             .order("created_at", { ascending: false });
 
@@ -55,9 +55,8 @@ export class SbHabitRepository implements HabitRepository {
 
         const { data } = await query;
 
-        console.log("Fetched habits:", data);
 
-      const habits =
+        const habits =
             data?.map((habit) => ({
                 // Q : data.map은 어떤 역할을 하나요?
                 // A : data.map은 데이터베이스에서 가져온 각 habit 객체를 Habit 객체로 변환하는 역할을 합니다.
@@ -82,7 +81,7 @@ export class SbHabitRepository implements HabitRepository {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from("habits")
+            .from("habit")
             .select("*")
             .eq("id", id)
             .single();
@@ -109,7 +108,7 @@ export class SbHabitRepository implements HabitRepository {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from("habits")
+            .from("habit")
             .insert({
                 category_id: habit.categoryId,
                 member_id: habit.memberId,
@@ -140,7 +139,7 @@ export class SbHabitRepository implements HabitRepository {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from("habits")
+            .from("habit")
             .update({
                 member_id: habit.memberId,
                 description: habit.description,
@@ -264,7 +263,7 @@ export class SbHabitRepository implements HabitRepository {
         categoryId: number,
         name: string,
         description: string,
-        finishedAt: string
+        finishedAt: string,
     ): Promise<void> {
         const supabase = await createClient();
 
