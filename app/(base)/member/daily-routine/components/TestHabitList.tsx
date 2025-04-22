@@ -86,6 +86,12 @@ export default function HabitList() {
                     ...prev,
                     [habitId]: !isChecked,
                 }));
+
+                await fetch("/api/test-habits/" + habitId + "/auto-status", {
+                    method: "POST",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
                 await fetchHabits();
             } else {
                 const data = await res.json();

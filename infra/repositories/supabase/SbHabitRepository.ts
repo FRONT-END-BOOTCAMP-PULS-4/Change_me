@@ -266,4 +266,44 @@ export class SbHabitRepository implements HabitRepository {
             throw new Error("습관 수정 실패: " + error.message);
         }
     }
+
+    // 습관ID로 습관 조회
+    async TestFindById(habitId: number): Promise<Habit> {
+        const supabase = await createClient();
+
+        const { data, error } = await supabase
+            .from("habit")
+            .select("*")
+            .eq("id", habitId)
+            .single();
+
+        if (error) {
+            throw new Error(`습관 조회 실패: ${error.message}`);
+        }
+
+        return new Habit(
+            data.id,
+            data.category_id,
+            data.member_id,
+            data.name,
+            data.description,
+            new Date(data.created_at),
+            new Date(data.finished_at),
+            data.stopped_at,
+            data.status
+        );
+    }
+
+    // 습관 상태 업데이트
+    async TestUpdateStatus(habitId: number, status: number): Promise<void> {
+        const supabase = await createClient();
+        const { error } = await supabase
+            .from("habit")
+            .update({ status })
+            .eq("id", habitId);
+
+        if (error) {
+            throw new Error("습관 상태 변경 실패: " + error.message);
+        }
+    }
 }

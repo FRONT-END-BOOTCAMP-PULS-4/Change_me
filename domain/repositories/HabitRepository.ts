@@ -21,4 +21,6 @@ export interface HabitRepository {
         description: string,
         finishedAt: string
     ): Promise<void>;
+    TestFindById(id: number): Promise<Habit>;
+    TestUpdateStatus(habitId: number, status: number): Promise<void>;
 }
