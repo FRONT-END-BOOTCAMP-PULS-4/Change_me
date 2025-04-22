@@ -256,4 +256,31 @@ export class SbHabitRepository implements HabitRepository {
             throw new Error("습관 포기 처리 실패: " + error.message);
         }
     }
+
+    // 습관 수정
+    async TestUpdate(
+        id: number,
+        memberId: string,
+        categoryId: number,
+        name: string,
+        description: string,
+        finishedAt: string
+    ): Promise<void> {
+        const supabase = await createClient();
+
+        const { error } = await supabase
+            .from("habit")
+            .update({
+                category_id: categoryId,
+                name,
+                description,
+                finished_at: new Date(finishedAt).toISOString(),
+            })
+            .eq("id", id)
+            .eq("member_id", memberId);
+
+        if (error) {
+            throw new Error("습관 수정 실패: " + error.message);
+        }
+    }
 }

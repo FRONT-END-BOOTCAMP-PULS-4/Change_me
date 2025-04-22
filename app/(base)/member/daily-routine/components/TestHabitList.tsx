@@ -1,7 +1,8 @@
 "use client";
 
 import { useAuthStore } from "@/stores/authStore";
-import { useEffect, useState } from "react";
+import useModalStore from "@/stores/modalStore";
+import { useEffect, useState, useCallback } from "react";
 
 type Habit = {
     id: number;
@@ -26,26 +27,25 @@ export default function HabitList() {
     // 오늘 날짜 (YYYY-MM-DD)
     const today = new Date().toISOString().slice(0, 10);
 
+    const fetchHabits = useCallback(async () => {
+        try {
+            const res = await fetch("/api/test-habits/", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const data = await res.json();
+            const habits = Array.isArray(data) ? data : data.habits;
+            setHabits(habits);
+        } catch (error) {
+            console.error("불러오기 실패:", error);
+        }
+    }, [token]);
+
     useEffect(() => {
-        const fetchHabits = async () => {
-            try {
-                const res = await fetch("/api/test-habits/", {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                const data = await res.json();
-                const habits = Array.isArray(data) ? data : data.habits;
-                setHabits(habits);
-            } catch (error) {
-                console.error("불러오기 실패:", error);
-            }
-        };
-
         fetchHabits();
-    }, []);
+    }, [fetchHabits]);
 
     useEffect(() => {
         const fetchCheckedHabits = async () => {
@@ -144,6 +144,16 @@ export default function HabitList() {
 
     return (
         <div>
+            <button
+                onClick={() =>
+                    useModalStore.getState().openModal("createHabit", {
+                        refetchHabits: fetchHabits,
+                    })
+                }
+                style={{ marginBottom: "16px" }}
+            >
+                습관 추가하기
+            </button>
             {habits.map((habit) => (
                 <div key={habit.id}>
                     <label>
@@ -170,6 +180,19 @@ export default function HabitList() {
                                 style={{ marginLeft: "10px", color: "red" }}
                             >
                                 포기
+                            </button>
+                        )}
+                        {habit.canGiveUp === true && (
+                            <button
+                                onClick={() =>
+                                    useModalStore.getState().openModal("editHabit", {
+                                        habit,
+                                        refetchHabits: fetchHabits,
+                                    })
+                                }
+                                style={{ marginLeft: "10px", color: "green" }}
+                            >
+                                수정
                             </button>
                         )}
                     </label>
