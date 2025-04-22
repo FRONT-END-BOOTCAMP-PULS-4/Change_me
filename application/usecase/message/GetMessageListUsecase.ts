@@ -38,7 +38,7 @@ export class GetMessageListUsecase {
 
             // data query
             const filter = new MessageFilter(
-                memberId,
+                mine ? memberId : null,
                 "createdAt",
                 false, // default sorting order: latest first
                 offset,
