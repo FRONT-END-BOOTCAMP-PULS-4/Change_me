@@ -54,7 +54,7 @@
         font-weight: var(--fontWeight-bold);
         text-align: center;
         padding: 8px;
-        background-color: var(--color-main3);
+        background-color: var(--color-main2);
     }
 
     .checkbox {
@@ -89,11 +89,12 @@
         justify-content: flex-end;
 
         button {
-            padding: 4px 10px;
+            padding: 4px 12px;
             font-size: var(--fontSize-sm);
-            border-radius: 8px;
+            border-radius: 20px;
             cursor: pointer;
             font-weight: var(--fontWeight-regular);
+            transition: all 200ms ease;
         }
 
         .edit {
@@ -116,12 +117,17 @@
     margin-top: 15px;
 
     .createButton {
-        background-color: var(--color-main3);
-        padding: 8px 16px;
-        border-radius: 12px;
+        background-color: var(--color-main2);
+        padding: 10px 20px;
+        border-radius: 8px;
         border: none;
         cursor: pointer;
         font-weight: var(--fontWeight-bold);
+        transition: background-color 200ms ease-in-out;
+    }
+
+    .createButton:hover {
+        background-color: var(--color-main3);
     }
 }
 
