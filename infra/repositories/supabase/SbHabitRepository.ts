@@ -48,20 +48,15 @@ export class SbHabitRepository implements HabitRepository {
 
         let query = supabase
             .from("habit")
-            .select("*, member(nickname)")
+            .select("*, member(nickname, image_url)")
             .order("created_at", { ascending: false });
 
         query = this.queryFilter(filter, query);
 
         const { data } = await query;
 
-
         const habits =
             data?.map((habit) => ({
-                // Q : data.map은 어떤 역할을 하나요?
-                // A : data.map은 데이터베이스에서 가져온 각 habit 객체를 Habit 객체로 변환하는 역할을 합니다.
-                // Habit 객체는 도메인 모델로, 비즈니스 로직에서 사용됩니다.
-                // data.map은 각 habit 객체를 반복하면서 새로운 배열을 생성합니다.
                 id: habit.id,
                 categoryId: habit.category_id,
                 memberId: habit.member_id,
@@ -72,6 +67,7 @@ export class SbHabitRepository implements HabitRepository {
                 stoppedAt: habit.stopped_at,
                 status: habit.status,
                 userNickname: habit.member.nickname,
+                imageUrl: habit.member.image_url,
             })) || [];
 
         return habits;
@@ -86,7 +82,7 @@ export class SbHabitRepository implements HabitRepository {
             .eq("id", id)
             .single();
         if (error) {
-            throw new Error("Failed to find habit by ID: ${error.habit}");
+            throw new Error("Failed to find habit by ID: ${error.message}");
         }
         if (!data) {
             return null;
@@ -185,8 +181,8 @@ export class SbHabitRepository implements HabitRepository {
             member_id: habit.memberId,
             name: habit.name,
             description: habit.description,
-            created_at: habit.createdAt.toISOString(),
-            finished_at: habit.finishedAt.toISOString(),
+            created_at: habit.createdAt?.toISOString(),
+            finished_at: habit.finishedAt?.toISOString(),
             status: habit.status,
         });
 

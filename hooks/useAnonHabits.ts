@@ -4,6 +4,7 @@ import useSWR from "swr";
 export type AnonHabit = {
     id: number;
     userNickname: string;
+    imageUrl: string | null;
     habitName: string;
     description: string;
 };
@@ -17,7 +18,7 @@ export type ResponseType = {
 };
 
 export const useAnonHabits = (categoryId?: number) => {
-    const getUrl = `/api/categories${categoryId && `?categoryId=${categoryId}`}`;
+    const getUrl = `/api/habits${categoryId && `?categoryId=${categoryId}`}`;
 
     const { data, isLoading, error } = useSWR<ResponseType>(getUrl, fetcher);
 
