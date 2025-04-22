@@ -57,7 +57,7 @@ export class SbHabitRepository implements HabitRepository {
 
         console.log("Fetched habits:", data);
 
-        const habits =
+      const habits =
             data?.map((habit) => ({
                 // Q : data.map은 어떤 역할을 하나요?
                 // A : data.map은 데이터베이스에서 가져온 각 habit 객체를 Habit 객체로 변환하는 역할을 합니다.
