@@ -183,11 +183,14 @@ export class SbHabitRepository implements HabitRepository {
     async TestFindOngoingByMemberId(memberId: string): Promise<TestHabit[]> {
         const supabase = await createClient();
 
+        const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식
+
         const { data, error } = await supabase
             .from("habit")
-            .select("*, category(name)") // ← category 테이블에서 name 조인
+            .select("*, category(name)")
             .eq("member_id", memberId)
-            .eq("status", 0);
+            .in("status", [0, 3])
+            .gte("finished_at", today);
 
         if (error) {
             throw new Error(`진행 중인 습관 조회 실패: ${error.message}`);
