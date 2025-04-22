@@ -12,21 +12,21 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             if (filter.habitId) {
                 query = query.eq('habit_id', filter.habitId);
             }
-            
+
             // 정렬 필드가 있는 경우 정렬 적용
             if (filter.sortField) {
-                query = query.order(filter.sortField, { 
-                    ascending: filter.ascending ?? false 
+                query = query.order(filter.sortField, {
+                    ascending: filter.ascending ?? false
                 });
             }
         }
 
         return query;
     }
-    
+
     async findAll(filter?: HabitRecordFilter): Promise<HabitRecord[]> {
         const supabase = await createClient();
-        
+
         let query = supabase
             .from('habit_record')
             .select('*');
@@ -35,7 +35,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         if (!filter?.sortField) {
             query = query.order('date', { ascending: false });
         }
-        
+
         // 페이지네이션 처리
         query = query.range(
             filter?.offset || 0,
@@ -57,7 +57,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             record.habit_id,
             new Date(record.date)
         )) || [];
-        
+
         return habitRecords;
     }
 
@@ -69,15 +69,15 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .select('*')
             .eq('habitId', HabitId)
             .single();
-            
+
         if (error) {
             throw new Error(`Failed to find habit record by ID: ${error.message}`);
         }
-        
+
         if (!data) {
             return null;
         }
-        
+
         return new HabitRecord(
             data.habit_id,
             new Date(data.date)
@@ -118,11 +118,11 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .eq('habitId', habitRecord.habitId)
             .select("*")
             .single();
-            
+
         if (error) {
             throw new Error(`Failed to update habit record: ${error.message}`);
         }
-        
+
         return new HabitRecord(
 
             data.habit_id,
@@ -130,37 +130,28 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         );
     }
 
-    async deleteById(HabitId: number): Promise<void> {
+    async deleteById(id: number): Promise<void> {
         const supabase = await createClient();
 
         const { error } = await supabase
             .from("habit_record")
             .delete()
-            .eq("habitid", HabitId);
-            
+            .eq("id", id);
         if (error) {
             throw new Error(
                 `Failed to delete habit record with id ${HabitId}: ${error.message}`
             );
         }
     }
-
-    // 테스트 메서드 구현
+  
     async TestExists(record: HabitRecord): Promise<boolean> {
         const supabase = await createClient();
-        
-        const { data, error, count } = await supabase
-            .from('habit_record')
-            .select('*', { count: 'exact' })
-            .eq('habit_id', record.habitId)
-            .eq('date', record.date);
-            
-        if (error) {
-            throw new Error(`Failed to check if habit record exists: ${error.message}`);
-        }
-        
-        return count !== null && count > 0;
-    }
+        const { data } = await supabase
+            .from("habit_record")
+            .select("*")
+            .eq("habit_id", record.habitId)
+            .eq("date", record.date.toISOString().split("T")[0])
+            .maybeSingle();
 
     async TestSave(record: HabitRecord): Promise<void> {
         const supabase = await createClient();
@@ -216,5 +207,21 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         
         // 결과에서 habit_id만 추출
         return data.map((item: any) => item.habit_id);
+    }
+
+    // 달성률을 계산하기 위해 habit_record 테이블에서 체크된 기록 수를 가져오는 메서드
+    async TestCountByHabitId(habitId: number): Promise<number> {
+        const supabase = await createClient();
+
+        const { count, error } = await supabase
+            .from("habit_record")
+            .select("*", { count: "exact", head: true })
+            .eq("habit_id", habitId);
+
+        if (error) {
+            throw new Error("체크된 기록 수 조회 실패: " + error.message);
+        }
+
+        return count || 0;
     }
 }

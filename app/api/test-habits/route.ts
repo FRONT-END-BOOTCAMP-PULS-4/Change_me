@@ -4,12 +4,15 @@ import { TestCreateHabitUsecase } from "@/application/usecase/habit/TestCreateHa
 import { SbHabitRepository } from "@/infra/repositories/supabase/SbHabitRepository";
 import { getMemberIdFromToken } from "@/utils/auth";
 import { TestGetOngoingHabitsUsecase } from "@/application/usecase/habit/TestGetOngoingHabitsUsecase";
+import { SbHabitRecordRepository } from "@/infra/repositories/supabase/SbHabitRecordRepository";
 
 export async function GET(req: NextRequest) {
     try {
         const authHeader = req.headers.get("authorization");
         const memberId = await getMemberIdFromToken(authHeader!);
-        const usecase = new TestGetOngoingHabitsUsecase(new SbHabitRepository());
+        const habitRepo = new SbHabitRepository();
+        const recordRepo = new SbHabitRecordRepository();
+        const usecase = new TestGetOngoingHabitsUsecase(habitRepo, recordRepo);
         const habits = await usecase.execute(memberId!);
 
         return NextResponse.json({ habits });

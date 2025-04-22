@@ -24,7 +24,7 @@ export class GetHabitListUsecase {
             const memberId: string | undefined = queryDto.memberId;
             const categoryId: number | undefined = queryDto.categoryId;
             const status: number | undefined = queryDto.status;
-            
+
             const offset: number = (currentPage - 1) * pageSize; // Q : offset은 왜 QueryDto에 포함되지 않나요?
             // offset은 페이지네이션을 위해 계산된 값으로, 쿼리 파라미터로 전달할 필요가 없습니다.
             // 페이지네이션을 위해 쿼리 파라미터로 전달되는 currentPage를 사용하여 offset을 계산합니다.
@@ -33,7 +33,7 @@ export class GetHabitListUsecase {
             // 그러면 왜 페이지네이션은 QueryDto에 포함되지 않나요?
             // A : 페이지네이션은 클라이언트에서 요청할 때 사용자가 지정하는 값입니다.
             const limit: number = pageSize;
-            
+
             // HabitFilter를 사용하여 필터링 조건 설정
             const filter = new HabitFilter(
                 memberId,
@@ -42,22 +42,21 @@ export class GetHabitListUsecase {
                 undefined, // sortField
                 undefined, // ascending
                 offset,
-                limit
+                limit,
             );
-            
+
             // 데이터 조회
             const habits = await this.habitRepository.findAll(filter);
-            
+
             // 전체 개수 계산 (count 메소드가 있다면 사용)
             const totalCount = habits.length; // 실제로는 전체 개수에 대한 쿼리가 필요할 수 있음
             const totalPages = Math.ceil(totalCount / pageSize);
-            
-            // 응답 데이터 변환 - 습관 상태에 따른 로직 처리
+
+            // 응답 데이터 변환
             const habitDtos: HabitDto[] = await Promise.all(
                 habits.map(async (habit) => {
                     // 카테고리 이름 가져오기 (여기서는 임시로 카테고리 ID를 사용)
-                    const categoryName = `카테고리 ${habit.categoryId}`;
-                    
+                    const categoryName = `카테고리 ${habit.categoryId}`;                   
                     /*
                      * 습관 상태(status)별 기간(duration) 계산 경우의 수:
                      * ------------------------------------------------
@@ -134,29 +133,27 @@ export class GetHabitListUsecase {
                             // 오류 발생 시 기본값 사용
                             rate = '0%';
                         }
-                    }
-                    
+                    }                  
                     return new HabitDto(
-                        habit.id,
+                        habit.id!,
                         categoryName,
-                        habit.name,
-                        habit.description,
-                        habit.createdAt.toISOString(),
-                        habit.finishedAt.toISOString(),
-                        habit.stoppedAt?.toISOString() || '',
+                        habit.name!,
+                        habit.description!,
+                        habit.createdAt!.toISOString(),
+                        habit.finishedAt!.toISOString(),
+                        habit.stoppedAt?.toISOString() || "",
                         duration,
-                        rate
+                        rate,
                     );
-                })
+                }),
             );
-            
+
             return new HabitListDto(
                 habitDtos,
                 totalCount,
                 currentPage,
-                totalPages
+                totalPages,
             );
-            
         } catch (error) {
             console.error("습관 목록 조회 중 오류 발생:", error);
             throw new Error("습관 목록 조회에 실패했습니다.");
