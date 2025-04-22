@@ -115,19 +115,29 @@ export default function TestCreateHabitModal() {
 
             <div>
                 <label>습관명</label>
+                <small>{name.length}/10</small>
                 <input
                     type="text"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                        if (e.target.value.length <= 10) {
+                            setName(e.target.value);
+                        }
+                    }}
                     disabled={isEditMode}
                 />
             </div>
 
             <div>
                 <label>설명</label>
+                <small>{description.length}/100</small>
                 <textarea
                     value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e) => {
+                        if (e.target.value.length <= 100) {
+                            setDescription(e.target.value);
+                        }
+                    }}
                 />
             </div>
 
@@ -136,6 +146,22 @@ export default function TestCreateHabitModal() {
                 <input
                     type="date"
                     value={finishedAt}
+                    min={(() => {
+                        const today = new Date();
+
+                        const startAt = isEditMode && modalProps?.habit?.startAt
+                            ? new Date(modalProps.habit.startAt)
+                            : new Date();
+
+                        // 시작일 + 14일
+                        const startLimit = new Date(startAt);
+                        startLimit.setDate(startLimit.getDate() + 14);
+
+                        // 오늘보다 미래여야 한다는 조건도 포함
+                        const finalMin = startLimit > today ? startLimit : today;
+
+                        return finalMin.toISOString().split("T")[0];
+                    })()}
                     onChange={(e) => setFinishedAt(e.target.value)}
                 />
             </div>
