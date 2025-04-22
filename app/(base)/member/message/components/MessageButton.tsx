@@ -8,11 +8,10 @@ type MessageButtonProps = {
 };
 
 export default function MessageButton(props: MessageButtonProps) {
-    const updateIsSelected = true; // TODO: manage state of "selected menu" (update, delete)
     const handleOnClick = () => {
-        if (updateIsSelected) {
+        if (props.type === "Edit") {
             // TODO: update messagelike, change UI locally
-        } else {
+        } else if (props.type === "Delete") {
             // TODO: delete messagelike, change UI locally
         }
     };
@@ -22,7 +21,7 @@ export default function MessageButton(props: MessageButtonProps) {
             onClick={handleOnClick}
             style={{ marginTop: "2rem", color: "red" }}
         >
-            {updateIsSelected ? "수정" : "삭제"}
+            {props.type === "Edit" ? "수정" : "삭제"}
         </button>
     );
 }

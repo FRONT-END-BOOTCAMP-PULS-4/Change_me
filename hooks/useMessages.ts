@@ -53,7 +53,6 @@ export const useMessages = (currentPage: number, mine: boolean) => {
 
     return {
         messages: data?.messages || [],
-        currentPage: data?.currentPage || 1,
         pages: data?.pages || [],
         endPage: data?.endPage || 1,
         isLoading,
