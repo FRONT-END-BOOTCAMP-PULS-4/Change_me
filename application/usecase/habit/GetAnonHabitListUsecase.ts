@@ -8,7 +8,7 @@ export class GetAnonHabitListUsecase {
 
     async execute(queryDto: AnonHabitListQueryDto): Promise<AnonHabitListDto> {
         try {
-            const categoryId = queryDto.categoryId || undefined;
+            const categoryId = queryDto.categoryId ?? undefined;
 
             const filterAll = new HabitFilter(
                 undefined,

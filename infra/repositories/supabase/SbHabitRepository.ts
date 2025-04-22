@@ -11,7 +11,7 @@ export class SbHabitRepository implements HabitRepository {
             if (filter.memberId) {
                 query = query.eq("member_id", filter.memberId);
             }
-            if (filter.categoryId) {
+            if (filter.categoryId !== undefined) {
                 query = query.eq("category_id", filter.categoryId);
             }
             if (filter.status !== undefined) {

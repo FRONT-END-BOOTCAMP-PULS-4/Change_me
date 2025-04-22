@@ -9,7 +9,7 @@ export type ResponseType = {
     categories: Category[];
 };
 
-export const useCategories = (popular?: string) => {
+export const useCategories = (popular?: boolean) => {
     const getUrl = `/api/categories${popular && `?popular=${popular}`}`;
 
     const { data, error, isLoading } = useSWR<ResponseType>(getUrl, fetcher);

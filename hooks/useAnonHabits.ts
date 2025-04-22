@@ -19,15 +19,17 @@ export type ResponseType = {
 };
 
 export const useAnonHabits = (categoryId?: number) => {
-    const getUrl = `/api/habits${categoryId && `?categoryId=${categoryId}`}`;
-
+    const getUrl = `/api/habits${categoryId === -1 ? "" : `?categoryId=${categoryId}`}`;
+    console.log(getUrl);
     const { data, isLoading, error } = useSWR<ResponseType>(getUrl, fetcher);
 
     return {
-        totalCount: data?.totalCount || 0,
-        ongoingCount: data?.ongoingCount || 0,
-        successCount: data?.successCount || 0,
-        failureCount: data?.failureCount || 0,
+        countInfo: {
+            totalCount: data?.totalCount || 0,
+            ongoingCount: data?.ongoingCount || 0,
+            successCount: data?.successCount || 0,
+            failureCount: data?.failureCount || 0,
+        },
         habits: data?.habits || [],
         isLoading,
         error,

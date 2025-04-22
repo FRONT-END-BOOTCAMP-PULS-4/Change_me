@@ -1,0 +1,29 @@
+.filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: var(--fontSize-lg);
+
+    > .item {
+        background-color: var(--color-main2);
+        width: 90px;
+        padding: 8px 0;
+        text-align: center;
+        cursor: pointer;
+        transition: all 200ms ease-in-out;
+    }
+
+    > .item:hover {
+        background-color: var(--color-main1);
+        color: var(--color-lightGray);
+        font-weight: var(--fontWeight-semiBold);
+    }
+
+    > .selected {
+        background-color: var(--color-main1);
+        color: var(--color-lightGray);
+        font-weight: var(--fontWeight-semiBold);
+    }
+}
