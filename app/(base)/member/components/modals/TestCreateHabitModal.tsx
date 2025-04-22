@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ModalWrapper from "@/app/components/ModalWrapper";
 import useModalStore from "@/stores/modalStore";
 import { useAuthStore } from "@/stores/authStore";
+import styles from "./TestCreateHabitModal.module.scss";
 
 export default function TestCreateHabitModal() {
     const { isOpen, closeModal, modalType, modalProps } = useModalStore();
@@ -94,79 +95,96 @@ export default function TestCreateHabitModal() {
 
     return (
         <ModalWrapper isOpen={isOpen} onClose={closeModal}>
-            <h3>{isEditMode ? "습관 수정" : "습관 등록"}</h3>
-            <div>
-                <label>카테고리</label>
-                <select
-                    value={categoryId ?? ""}
-                    onChange={(e) =>
-                        setCategoryId(e.target.value === "" ? null : Number(e.target.value))
-                    }
-                    disabled={isEditMode}
-                >
-                    <option value="">카테고리를 선택하세요</option>
-                    {categories.map((cat) => (
-                        <option key={cat.id} value={cat.id}>
-                            {cat.name}
-                        </option>
-                    ))}
-                </select>
+            <div className={styles.container}>
+                <h2 className={styles.title}>{isEditMode ? "습관 수정" : "습관 추가"}</h2>
+                <form className={styles.form} onSubmit={(e) => {
+                    e.preventDefault();
+                    handleSubmit();
+                }}>
+                    {/* 카테고리 선택 */}
+                    <div className={styles.field}>
+                        <label>카테고리</label>
+                        <select
+                            value={categoryId ?? ""}
+                            onChange={(e) =>
+                                setCategoryId(e.target.value === "" ? null : Number(e.target.value))
+                            }
+                            disabled={isEditMode}
+                        >
+                            <option value="">카테고리를 선택하세요.</option>
+                            {categories.map((cat) => (
+                                <option key={cat.id} value={cat.id}>
+                                    {cat.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* 습관명 */}
+                    <div className={styles.field}>
+                        <label>
+                            습관명 <span className={styles.count}>{name.length}/10</span>
+                        </label>
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => {
+                                if (e.target.value.length <= 10) {
+                                    setName(e.target.value);
+                                }
+                            }}
+                            disabled={isEditMode}
+                            placeholder="어떤 습관을 추가하실 건가요?"
+                        />
+                    </div>
+
+                    {/* 설명 */}
+                    <div className={styles.field}>
+                        <label>
+                            설명 <span className={styles.count}>{description.length}/100</span>
+                        </label>
+                        <textarea
+                            value={description}
+                            onChange={(e) => {
+                                if (e.target.value.length <= 100) {
+                                    setDescription(e.target.value);
+                                }
+                            }}
+                            placeholder="실천 방법을 구체적으로 작성해보세요."
+                        />
+                    </div>
+
+                    {/* 종료일 */}
+                    <div className={styles.field}>
+                        <label>종료일</label>
+                        <input
+                            type="date"
+                            value={finishedAt}
+                            min={(() => {
+                                const today = new Date();
+
+                                const startAt = isEditMode && modalProps?.habit?.startAt
+                                    ? new Date(modalProps.habit.startAt)
+                                    : new Date();
+
+                                const startLimit = new Date(startAt);
+                                startLimit.setDate(startLimit.getDate() + 14);
+
+                                const finalMin = startLimit > today ? startLimit : today;
+
+                                return finalMin.toISOString().split("T")[0];
+                            })()}
+                            onChange={(e) => setFinishedAt(e.target.value)}
+                            placeholder="종료일을 입력하세요."
+                        />
+                    </div>
+
+                    {/* 버튼 */}
+                    <button type="submit">
+                        {isEditMode ? "수정" : "추가"}
+                    </button>
+                </form>
             </div>
-
-            <div>
-                <label>습관명</label>
-                <small>{name.length}/10</small>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => {
-                        if (e.target.value.length <= 10) {
-                            setName(e.target.value);
-                        }
-                    }}
-                    disabled={isEditMode}
-                />
-            </div>
-
-            <div>
-                <label>설명</label>
-                <small>{description.length}/100</small>
-                <textarea
-                    value={description}
-                    onChange={(e) => {
-                        if (e.target.value.length <= 100) {
-                            setDescription(e.target.value);
-                        }
-                    }}
-                />
-            </div>
-
-            <div>
-                <label>종료일</label>
-                <input
-                    type="date"
-                    value={finishedAt}
-                    min={(() => {
-                        const today = new Date();
-
-                        const startAt = isEditMode && modalProps?.habit?.startAt
-                            ? new Date(modalProps.habit.startAt)
-                            : new Date();
-
-                        // 시작일 + 14일
-                        const startLimit = new Date(startAt);
-                        startLimit.setDate(startLimit.getDate() + 14);
-
-                        // 오늘보다 미래여야 한다는 조건도 포함
-                        const finalMin = startLimit > today ? startLimit : today;
-
-                        return finalMin.toISOString().split("T")[0];
-                    })()}
-                    onChange={(e) => setFinishedAt(e.target.value)}
-                />
-            </div>
-
-            <button onClick={handleSubmit}>{isEditMode ? "수정" : "등록"}</button>
         </ModalWrapper>
     );
 }
