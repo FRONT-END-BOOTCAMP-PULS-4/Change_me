@@ -48,13 +48,12 @@ export class SbHabitRepository implements HabitRepository {
 
         let query = supabase
             .from("habit")
-            .select("*, member(nickname, image_url)")
+            .select("*, member(nickname, image_url, deleted_at)")
             .order("created_at", { ascending: false });
 
         query = this.queryFilter(filter, query);
 
         const { data } = await query;
-
         const habits =
             data?.map((habit) => ({
                 id: habit.id,
@@ -68,6 +67,7 @@ export class SbHabitRepository implements HabitRepository {
                 status: habit.status,
                 userNickname: habit.member.nickname,
                 imageUrl: habit.member.image_url,
+                isActive: !habit.member.deleted_at,
             })) || [];
 
         return habits;
@@ -305,7 +305,7 @@ export class SbHabitRepository implements HabitRepository {
             new Date(data.created_at),
             new Date(data.finished_at),
             data.stopped_at,
-            data.status
+            data.status,
         );
     }
 

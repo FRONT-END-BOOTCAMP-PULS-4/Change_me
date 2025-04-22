@@ -52,6 +52,7 @@ export class GetAnonHabitListUsecase {
                 imageUrl: habit.imageUrl,
                 habitName: habit.name!,
                 description: habit.description!,
+                isActive: habit.isActive,
             }));
 
             const anonHabitListDto: AnonHabitListDto = {

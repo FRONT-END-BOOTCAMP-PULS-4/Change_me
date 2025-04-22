@@ -5,6 +5,7 @@ export type AnonHabit = {
     id: number;
     userNickname: string;
     imageUrl: string | null;
+    isActive: boolean;
     habitName: string;
     description: string;
 };
