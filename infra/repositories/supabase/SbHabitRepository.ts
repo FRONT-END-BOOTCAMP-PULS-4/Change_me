@@ -3,38 +3,53 @@ import { Habit } from "../../../domain/entities/Habit";
 import { HabitRepository } from "@/domain/repositories/HabitRepository";
 import { HabitFilter } from "@/domain/repositories/filters/HabitFilter";
 import { createClient } from "@/utils/supabase/Server";
+import { HabitMember } from "@/domain/entities/HabitMember";
 
 export class SbHabitRepository implements HabitRepository {
-    private queryFilter(
-        filter: HabitFilter | undefined,
-        query: any
-    ) {
+    private queryFilter(filter: HabitFilter | undefined, query: any) {
         if (filter) {
             if (filter.memberId) {
-                query = query.eq('member_id', filter.memberId);
+                query = query.eq("member_id", filter.memberId);
             }
             if (filter.categoryId) {
-                query = query.eq('category_id', filter.categoryId);
+                query = query.eq("category_id", filter.categoryId);
             }
             if (filter.status !== undefined) {
-                query = query.eq('status', filter.status);
+                query = query.eq("status", filter.status);
+            }
+            if (filter.offset !== undefined) {
+                query.range(
+                    filter.offset,
+                    filter.offset + (filter.limit || 0) - 1,
+                );
             }
         }
 
         return query;
     }
 
-    async findAll(filter?: HabitFilter): Promise<Habit[]> {
+    async count(filter?: HabitFilter): Promise<number> {
+        const supabase = await createClient();
+
+        let query = supabase.from("habits").select("*", { count: "exact" });
+        query = this.queryFilter(filter, query);
+
+        const { count, error } = await query;
+
+        if (error) {
+            throw new Error(`달성한 습관 개수 조회 실패: ${error.message}`);
+        }
+
+        return count || 0;
+    }
+
+    async findAll(filter?: HabitFilter): Promise<HabitMember[]> {
         const supabase = await createClient();
 
         let query = supabase
-            .from('habits')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .range(
-                filter?.offset || 0,
-                (filter?.offset || 0) + (filter?.limit || 10) - 1
-            );
+            .from("habits")
+            .select("*, member(nickname)")
+            .order("created_at", { ascending: false });
 
         query = this.queryFilter(filter, query);
 
@@ -42,8 +57,9 @@ export class SbHabitRepository implements HabitRepository {
 
         console.log("Fetched habits:", data);
 
-        const habits: Habit[] =
-            data.map((habit: any) => ({ // Q : data.map은 어떤 역할을 하나요?
+        const habits =
+            data?.map((habit) => ({
+                // Q : data.map은 어떤 역할을 하나요?
                 // A : data.map은 데이터베이스에서 가져온 각 habit 객체를 Habit 객체로 변환하는 역할을 합니다.
                 // Habit 객체는 도메인 모델로, 비즈니스 로직에서 사용됩니다.
                 // data.map은 각 habit 객체를 반복하면서 새로운 배열을 생성합니다.
@@ -56,6 +72,7 @@ export class SbHabitRepository implements HabitRepository {
                 finishedAt: new Date(habit.finished_at),
                 stoppedAt: habit.stopped_at,
                 status: habit.status,
+                userNickname: habit.member.nickname,
             })) || [];
 
         return habits;
@@ -65,12 +82,12 @@ export class SbHabitRepository implements HabitRepository {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from('habits')
-            .select('*')
-            .eq('id', id)
+            .from("habits")
+            .select("*")
+            .eq("id", id)
             .single();
         if (error) {
-            throw new Error('Failed to find habit by ID: ${error.habit}');
+            throw new Error("Failed to find habit by ID: ${error.habit}");
         }
         if (!data) {
             return null;
@@ -84,7 +101,7 @@ export class SbHabitRepository implements HabitRepository {
             new Date(data.created_at),
             new Date(data.finished_at),
             data.stopped_at,
-            data.status
+            data.status,
         );
     }
 
@@ -92,14 +109,14 @@ export class SbHabitRepository implements HabitRepository {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from('habits')
+            .from("habits")
             .insert({
                 category_id: habit.categoryId,
                 member_id: habit.memberId,
                 name: habit.name,
                 description: habit.description,
             })
-            .select('*')
+            .select("*")
             .single();
 
         if (error) {
@@ -115,7 +132,7 @@ export class SbHabitRepository implements HabitRepository {
             new Date(data.created_at),
             new Date(data.finished_at),
             data.stopped_at,
-            data.status
+            data.status,
         );
     }
 
@@ -123,7 +140,7 @@ export class SbHabitRepository implements HabitRepository {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from('habits')
+            .from("habits")
             .update({
                 member_id: habit.memberId,
                 description: habit.description,
@@ -131,11 +148,11 @@ export class SbHabitRepository implements HabitRepository {
                 finished_at: habit.finishedAt,
                 stopped_at: habit.stoppedAt,
             })
-            .eq('id', habit.id)
+            .eq("id", habit.id)
             .select("*")
-            .single()
+            .single();
         if (error) {
-            throw new Error('Failed to update habit: ${error.message}');
+            throw new Error("Failed to update habit: ${error.message}");
         }
         return new Habit(
             data.id,
@@ -146,7 +163,7 @@ export class SbHabitRepository implements HabitRepository {
             new Date(data.created_at),
             new Date(data.finished_at),
             data.stopped_at,
-            data.status
+            data.status,
         );
     }
 
@@ -156,7 +173,7 @@ export class SbHabitRepository implements HabitRepository {
         const { error } = await supabase.from("habit").delete().eq("id", id);
         if (error) {
             throw new Error(
-                `failed to delete message with id ${id}: ${error.message}`
+                `failed to delete message with id ${id}: ${error.message}`,
             );
         }
     }
@@ -205,8 +222,8 @@ export class SbHabitRepository implements HabitRepository {
                     new Date(item.finished_at),
                     item.stopped_at ? new Date(item.stopped_at) : null,
                     item.status,
-                    item.category.name
-                )
+                    item.category.name,
+                ),
         );
     }
 
