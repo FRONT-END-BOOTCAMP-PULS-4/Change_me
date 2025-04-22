@@ -1,8 +1,6 @@
 "use client";
 
-import { useAuthStore } from "@/stores/authStore";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
 
 import MessageList from "./components/MessageList";
 import WriteMessageForm from "./components/WriteMessageForm";
@@ -43,7 +41,7 @@ export default function MessageListPage() {
                 }
                 mine={mine}
             />
-            <WriteMessageForm />
+            <WriteMessageForm handleSubmit={createMessage} />
             <MessageList messages={messages} />
             <Pager
                 currentPage={1}
