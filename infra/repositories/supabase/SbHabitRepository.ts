@@ -55,6 +55,7 @@ export class SbHabitRepository implements HabitRepository {
 
         const { data } = await query;
 
+
         const habits =
             data?.map((habit) => ({
                 // Q : data.map은 어떤 역할을 하나요?
