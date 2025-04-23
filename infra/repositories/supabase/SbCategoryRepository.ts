@@ -38,7 +38,7 @@ export class SbCategoryRepository implements CategoryRepository {
             }
 
             if (filter.popular) {
-                query.range(0, 9);
+                query.range(0, 7);
             }
         }
 

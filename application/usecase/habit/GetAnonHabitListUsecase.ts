@@ -8,7 +8,7 @@ export class GetAnonHabitListUsecase {
 
     async execute(queryDto: AnonHabitListQueryDto): Promise<AnonHabitListDto> {
         try {
-            const categoryId = queryDto.categoryId || undefined;
+            const categoryId = queryDto.categoryId ?? undefined;
 
             const filterAll = new HabitFilter(
                 undefined,
@@ -52,6 +52,7 @@ export class GetAnonHabitListUsecase {
                 imageUrl: habit.imageUrl,
                 habitName: habit.name!,
                 description: habit.description!,
+                isActive: habit.isActive,
             }));
 
             const anonHabitListDto: AnonHabitListDto = {
