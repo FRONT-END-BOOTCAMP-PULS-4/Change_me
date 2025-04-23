@@ -42,7 +42,7 @@ export default function page() {
                 handleCategoryChange={handleCategoryChange}
             />
             <TopSection countInfo={countInfo} category={selectedCategory!} />
-            <BottomSection />
+            <BottomSection habits={habits} />
         </div>
     );
 }
