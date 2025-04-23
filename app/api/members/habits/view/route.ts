@@ -1,54 +1,35 @@
-import { NextResponse } from "next/server";
-import { getMemberIdFromToken } from "@/utils/auth";
-import { GetHabitListUsecase } from "@/application/usecase/habit/GetHabitListUsecase";
-import { ViewQueryDto } from "@/application/usecase/habit/dto/ViewQueryDto";
+import { AnonHabitListQueryDto } from "@/application/usecase/habit/dto/AnonHabitListQueryDto";
+import { GetAnonHabitListUsecase } from "@/application/usecase/habit/GetAnonHabitListUsecase";
+import { HabitRepository } from "@/domain/repositories/HabitRepository";
 import { SbHabitRepository } from "@/infra/repositories/supabase/SbHabitRepository";
-import { HabitFilter } from "@/domain/repositories/filters/HabitFilter";
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
     try {
-        // 요청의 URL에서 쿼리 파라미터 추출
         const url = new URL(request.url);
-        const currentPage = url.searchParams.get("page")
-            ? parseInt(url.searchParams.get("page")!)
-            : 1;
-        const categoryId = url.searchParams.get("categoryId")
-            ? parseInt(url.searchParams.get("categoryId")!)
-            : undefined;
-        const status = url.searchParams.get("status")
-            ? parseInt(url.searchParams.get("status")!)
-            : undefined;
+        const categoryId = url.searchParams.get("categoryId") || undefined;
 
-        // 인증 토큰에서 사용자 ID 추출
-        const authHeader = request.headers.get("Authorization") || "";
-        const memberId = await getMemberIdFromToken(authHeader);
-
-        if (!memberId) {
-            return NextResponse.json(
-                { error: "인증되지 않은 사용자입니다." },
-                { status: 401 },
-            );
-        }
-
-        // 비즈니스 로직 실행을 위한 DTO 생성
-        const viewQueryDto = new ViewQueryDto(
-            currentPage,
-            memberId,
-            categoryId,
-            status,
+        const habitRepository: HabitRepository = new SbHabitRepository();
+        const getAnonHabitListUsecase = new GetAnonHabitListUsecase(
+            habitRepository,
         );
 
-        // 리포지토리와 유스케이스 인스턴스 생성
-        const sbHabitRepository = new SbHabitRepository();
-        const getHabitListUsecase = new GetHabitListUsecase(sbHabitRepository);
+        const queryDto = new AnonHabitListQueryDto(
+            categoryId ? Number(categoryId) : undefined,
+        );
 
-        // 유스케이스 실행 및 결과 반환
-        const result = await getHabitListUsecase.execute(viewQueryDto);
+        const result = await getAnonHabitListUsecase.execute(queryDto);
+
         return NextResponse.json(result);
     } catch (error) {
-        console.error("습관 목록 조회 중 오류 발생:", error);
+        if (error instanceof Error) {
+            return NextResponse.json(
+                { message: error.message || "모두의 습관 조회 실패" },
+                { status: 400 },
+            );
+        }
         return NextResponse.json(
-            { error: "습관 목록 조회에 실패했습니다." },
+            { message: "알 수 없는 오류 발생" },
             { status: 500 },
         );
     }

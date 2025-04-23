@@ -72,27 +72,9 @@ export class GetHabitListUsecase {
                         habit.categoryId!,
                     );
                     const categoryName = category?.name;
-                    /*
-                     * 습관 상태(status)별 기간(duration) 계산 경우의 수:
-                     * ------------------------------------------------
-                     * status = 0 (진행중): createdAt ~ 현재날짜
-                     * status = 1 (실패): createdAt ~ finishedAt
-                     * status = 2 (포기): createdAt ~ stoppedAt (없으면 현재날짜)
-                     * status = 3 (달성): createdAt ~ finishedAt
-                     */
-                    let endDate = new Date();
+                    let endDate = habit.finishedAt;
 
                     try {
-                        if (habit.status === 1 || habit.status === 3) {
-                            // 실패 또는 달성
-                            endDate = habit.finishedAt || new Date();
-                        } else if (habit.status === 2) {
-                            // 포기
-                            endDate = habit.stoppedAt || new Date();
-                        } else {
-                            endDate = new Date();
-                        } // 진행중인 경우 현재 날짜
-
                         // 습관의 총 기간(일수) 계산
                         const getDateDiff = (d1: Date, d2: Date): number => {
                             const date1 = new Date(d1);
@@ -104,7 +86,7 @@ export class GetHabitListUsecase {
                         };
 
                         const totalDays =
-                            getDateDiff(habit.createdAt!, endDate) + 1; // +1은 시작일도 포함
+                            getDateDiff(habit.createdAt!, endDate!) + 1; // +1은 시작일도 포함
 
                         duration = `${totalDays}일`;
 
@@ -122,8 +104,8 @@ export class GetHabitListUsecase {
                             await this.habitRecordRepository.findById(
                                 habit.id!,
                             );
-                        const records: HabitRecord[] = record ? [record] : [];
-                        const checknum: number = records.length;
+
+                        const checknum: number = record!.length;
                         if (habit.status === 3 || 1) {
                             // 달성 완료된 습관
                             rate = (checknum / totalDays) * 100;
