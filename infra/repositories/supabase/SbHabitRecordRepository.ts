@@ -4,19 +4,16 @@ import { HabitRecordFilter } from "@/domain/repositories/filters/HabitRecordFilt
 import { createClient } from "@/utils/supabase/Server";
 
 export class SbHabitRecordRepository implements HabitRecordRepository {
-    private queryFilter(
-        filter: HabitRecordFilter | undefined,
-        query: any
-    ) {
+    private queryFilter(filter: HabitRecordFilter | undefined, query: any) {
         if (filter) {
             if (filter.habitId) {
-                query = query.eq('habit_id', filter.habitId);
+                query = query.eq("habit_id", filter.habitId);
             }
 
             // 정렬 필드가 있는 경우 정렬 적용
             if (filter.sortField) {
                 query = query.order(filter.sortField, {
-                    ascending: filter.ascending ?? false
+                    ascending: filter.ascending ?? false,
                 });
             }
         }
@@ -33,13 +30,13 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
 
         // 기본 정렬이 없는 경우 날짜 기준으로 정렬
         if (!filter?.sortField) {
-            query = query.order('date', { ascending: false });
+            query = query.order("date", { ascending: false });
         }
 
         // 페이지네이션 처리
         query = query.range(
             filter?.offset || 0,
-            (filter?.offset || 0) + (filter?.limit || 10) - 1
+            (filter?.offset || 0) + (filter?.limit || 10) - 1,
         );
 
         // 필터 적용
@@ -53,69 +50,61 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
 
         console.log("Fetched habit records:", data);
 
-        const habitRecords: HabitRecord[] = data.map((record: any) => new HabitRecord(
-            record.habit_id,
-            new Date(record.date)
-        )) || [];
+        const habitRecords: HabitRecord[] =
+            data.map(
+                (record: any) =>
+                    new HabitRecord(record.habit_id, new Date(record.date)),
+            ) || [];
 
         return habitRecords;
     }
 
-    async findById(HabitId: number): Promise<HabitRecord | null> {
+    async findById(HabitId: number): Promise<HabitRecord[] | null> {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from('habit_record')
-            .select('*')
-            .eq('habitId', HabitId)
-            .single();
+            .from("habit_record")
+            .select("*")
+            .eq("habitId", HabitId);
 
         if (error) {
-            throw new Error(`Failed to find habit record by ID: ${error.message}`);
+            throw new Error(
+                `Failed to find habit record by ID: ${error.message}`,
+            );
         }
 
-        if (!data) {
-            return null;
-        }
-
-        return new HabitRecord(
-            data.habit_id,
-            new Date(data.date)
-        );
+        return data || [];
     }
 
     async save(habitRecord: HabitRecord): Promise<HabitRecord> {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from('habit_record')
+            .from("habit_record")
             .insert({
                 habit_id: habitRecord.habitId,
-                date: habitRecord.date
+                date: habitRecord.date,
             })
-            .select('*')
+            .select("*")
             .single();
 
         if (error) {
             throw new Error(`Failed to save habit record: ${error.message}`);
         }
 
-        return new HabitRecord(
-            data.habit_id,
-            new Date(data.date)
-        );
+        return new HabitRecord(data.habit_id, new Date(data.date));
     }
 
     async update(habitRecord: HabitRecord): Promise<HabitRecord> {
         const supabase = await createClient();
 
         const { data, error } = await supabase
-            .from('habit_record')
+            .from("habit_record")
             .update({
                 habit_id: habitRecord.habitId,
-                date: habitRecord.date
+                date: habitRecord.date,
             })
-            .eq('habitId', habitRecord.habitId)
+            .eq("habitId", habitRecord.habitId)
             .select("*")
             .single();
 
@@ -123,11 +112,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             throw new Error(`Failed to update habit record: ${error.message}`);
         }
 
-        return new HabitRecord(
-
-            data.habit_id,
-            new Date(data.date)
-        );
+        return new HabitRecord(data.habit_id, new Date(data.date));
     }
 
     async deleteById(id: number): Promise<void> {
@@ -139,7 +124,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .eq("id", id);
         if (error) {
             throw new Error(
-                `Failed to delete habit record with id ${HabitId}: ${error.message}`
+                `Failed to delete habit record with id : ${error.message}`,
             );
         }
     }
@@ -174,8 +159,10 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .eq("date", record.date.toISOString().split("T")[0]);
         if (error) throw new Error("습관 기록 삭제 실패: " + error.message);
     }
-
-    async TestGetTodayCheckedHabitIds(memberId: string, date: Date): Promise<number[]> {
+    async TestGetTodayCheckedHabitIds(
+        memberId: string,
+        date: Date,
+    ): Promise<number[]> {
         const supabase = await createClient();
 
         // member의 habit id들 먼저 가져오기
@@ -200,7 +187,9 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .in("habit_id", habitIds);
 
         if (recordError) {
-            throw new Error("체크된 습관 목록 조회 실패: " + recordError.message);
+            throw new Error(
+                "체크된 습관 목록 조회 실패: " + recordError.message,
+            );
         }
 
         return (recordList ?? []).map((record) => record.habit_id);

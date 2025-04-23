@@ -2,8 +2,11 @@ import { NextResponse } from "next/server";
 import { getMemberIdFromToken } from "@/utils/auth";
 import { GetHabitListUsecase } from "@/application/usecase/habit/GetHabitListUsecase";
 import { ViewQueryDto } from "@/application/usecase/habit/dto/ViewQueryDto";
+import { HabitRecordDto } from "@/application/usecase/habit/dto/HabitRecordDto";
 import { SbHabitRepository } from "@/infra/repositories/supabase/SbHabitRepository";
-import { HabitFilter } from "@/domain/repositories/filters/HabitFilter";
+import { SbHabitRecordRepository } from "@/infra/repositories/supabase/SbHabitRecordRepository";
+import { SbCategoryRepository } from "@/infra/repositories/supabase/SbCategoryRepository";
+import { Habit } from "@/domain/entities/Habit";
 
 export async function GET(request: Request) {
     try {
@@ -40,7 +43,13 @@ export async function GET(request: Request) {
 
         // 리포지토리와 유스케이스 인스턴스 생성
         const sbHabitRepository = new SbHabitRepository();
-        const getHabitListUsecase = new GetHabitListUsecase(sbHabitRepository);
+        const sbHabitRecordRepository = new SbHabitRecordRepository();
+        const sbCategoryRepository = new SbCategoryRepository();
+        const getHabitListUsecase = new GetHabitListUsecase(
+            sbHabitRepository,
+            sbHabitRecordRepository,
+            sbCategoryRepository,
+        );
 
         // 유스케이스 실행 및 결과 반환
         const result = await getHabitListUsecase.execute(viewQueryDto);
