@@ -5,6 +5,7 @@ import WithdrawButton from "./components/WithdrawButton";
 import ChangePasswordButton from "./components/ChangePasswordButton";
 import styles from "./page.module.scss";
 import { useAuthStore } from "@/stores/authStore";
+import Loading from "@/app/components/Loading";
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState<any>(null);
@@ -31,7 +32,7 @@ export default function ProfilePage() {
         fetchProfile();
     }, []);
 
-    if (!profile) return <p>로딩 중...</p>;
+    if (!profile) return <Loading />;
 
     return (
         <div className={styles.pageWrapper}>
