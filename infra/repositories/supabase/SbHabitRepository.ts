@@ -321,4 +321,105 @@ export class SbHabitRepository implements HabitRepository {
             throw new Error("습관 상태 변경 실패: " + error.message);
         }
     }
+
+    // 습관 조회 (달성한 습관)
+    async TestFindSuccessByMemberId(memberId: string): Promise<TestHabit[]> {
+        const supabase = await createClient();
+
+        const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식
+
+        const { data, error } = await supabase
+            .from("habit")
+            .select("*, category(name)")
+            .eq("member_id", memberId)
+            .in("status", [3])
+            .lt("finished_at", today);
+
+        if (error) {
+            throw new Error(`달성한 습관 조회 실패: ${error.message}`);
+        }
+
+        return data.map(
+            (item) =>
+                new TestHabit(
+                    item.id,
+                    item.category_id,
+                    item.member_id,
+                    item.name,
+                    item.description,
+                    new Date(item.created_at),
+                    new Date(item.finished_at),
+                    item.stopped_at ? new Date(item.stopped_at) : null,
+                    item.status,
+                    item.category.name,
+                ),
+        );
+    }
+
+    // 습관 조회 (포기한 습관)
+    async TestFindGiveupByMemberId(memberId: string): Promise<TestHabit[]> {
+        const supabase = await createClient();
+
+        const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식
+
+        const { data, error } = await supabase
+            .from("habit")
+            .select("*, category(name)")
+            .eq("member_id", memberId)
+            .in("status", [2])
+
+        if (error) {
+            throw new Error(`포기한 습관 조회 실패: ${error.message}`);
+        }
+
+        return data.map(
+            (item) =>
+                new TestHabit(
+                    item.id,
+                    item.category_id,
+                    item.member_id,
+                    item.name,
+                    item.description,
+                    new Date(item.created_at),
+                    new Date(item.finished_at),
+                    item.stopped_at ? new Date(item.stopped_at) : null,
+                    item.status,
+                    item.category.name,
+                ),
+        );
+    }
+
+    // 습관 조회 (실패한 습관)
+    async TestFindFailByMemberId(memberId: string): Promise<TestHabit[]> {
+        const supabase = await createClient();
+
+        const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식
+
+        const { data, error } = await supabase
+            .from("habit")
+            .select("*, category(name)")
+            .eq("member_id", memberId)
+            .in("status", [0])
+            .lt("finished_at", today);
+
+        if (error) {
+            throw new Error(`실패한 습관 조회 실패: ${error.message}`);
+        }
+
+        return data.map(
+            (item) =>
+                new TestHabit(
+                    item.id,
+                    item.category_id,
+                    item.member_id,
+                    item.name,
+                    item.description,
+                    new Date(item.created_at),
+                    new Date(item.finished_at),
+                    item.stopped_at ? new Date(item.stopped_at) : null,
+                    item.status,
+                    item.category.name,
+                ),
+        );
+    }
 }
