@@ -25,4 +25,7 @@ export interface HabitRepository {
     ): Promise<void>;
     TestFindById(id: number): Promise<Habit>;
     TestUpdateStatus(habitId: number, status: number): Promise<void>;
+    TestFindSuccessByMemberId(memberId: string): Promise<TestHabit[]>;
+    TestFindGiveupByMemberId(memberId: string): Promise<TestHabit[]>;
+    TestFindFailByMemberId(memberId: string): Promise<TestHabit[]>;
 }
