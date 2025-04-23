@@ -24,7 +24,9 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
     async findAll(filter?: HabitRecordFilter): Promise<HabitRecord[]> {
         const supabase = await createClient();
 
-        let query = supabase.from("habit_record").select("*");
+        let query = supabase
+            .from('habit_record')
+            .select('*');
 
         // 기본 정렬이 없는 경우 날짜 기준으로 정렬
         if (!filter?.sortField) {
@@ -126,6 +128,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             );
         }
     }
+
     async TestExists(record: HabitRecord): Promise<boolean> {
         const supabase = await createClient();
         const { data } = await supabase

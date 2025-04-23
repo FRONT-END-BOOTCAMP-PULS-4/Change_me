@@ -7,6 +7,7 @@ type User = {
     email: string;
     nickname: string;
     role: number;
+    imageUrl: string;
 };
 
 interface AuthState {

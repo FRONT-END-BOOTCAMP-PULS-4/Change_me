@@ -1,44 +1,43 @@
 "use client";
-import { useRef, useState } from "react";
+// import { useRef, useState } from "react";
 import Image from "next/image";
 import styles from "./WriteMessageForm.module.scss";
 import { useAuthStore } from "@/stores/authStore";
 
-export default function WriteMessageForm() {
-    const [content, setContent] = useState("");
+type WriteMessageFormProps = {
+    handleSubmit: (content: string) => Promise<void>;
+};
 
-    const handleChange = async () => {};
+export default function WriteMessageForm(props: WriteMessageFormProps) {
+    const { user } = useAuthStore();
 
-    const handleSubmit = async () => {
-        const token = useAuthStore.getState().token;
-
-        const res = await fetch("/api/members/messages", {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ content: content }),
-        });
-
-        const data = await res.json();
-        setContent(content);
-    };
+    let content: string = "";
+    let wordCount: number;
+    const handleChange = async () => {}; // TODO: word count limit
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div className={styles.inputGroup}>
-                <input
-                    type="text"
-                    id="message"
-                    name="message"
-                    value={content}
-                    onChange={handleChange}
-                    placeholder="메시지를 입력하세요."
+        <div className={styles.wraper}>
+            <nav className={styles.nav}>
+                <Image
+                    src={user?.imageUrl || "/images/ProfileCircle.png"}
+                    alt="프로필 이미지"
+                    width={40}
+                    height={40}
+                    className="w-8 h-8 rounded-full"
                 />
-                {/* {errors.email && (
-                    <div className={styles.error}>{errors.email}</div>
-                )} */}
-            </div>
-        </form>
+
+                <div className="text-sm font-semibold">{user?.nickname}</div>
+            </nav>
+            <input
+                type="text"
+                id="message"
+                name="message"
+                value={content}
+                onChange={handleChange}
+                placeholder="메시지를 입력하세요."
+            />
+
+            <button onClick={() => props.handleSubmit(content)}></button>
+        </div>
     );
 }

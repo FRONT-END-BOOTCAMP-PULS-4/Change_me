@@ -7,6 +7,7 @@ export class LoggedInDto {
             email: string;
             nickname: string;
             role: number;
+            imageUrl: string | null;
         },
     ) {}
 }

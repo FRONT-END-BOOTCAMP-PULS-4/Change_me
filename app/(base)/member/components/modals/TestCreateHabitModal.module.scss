@@ -1,0 +1,79 @@
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 16px;
+
+    >.title {
+        font-size: var(--fontSize-2xl);
+        font-weight: var(--fontWeight-bold);
+        text-align: center;
+    }
+
+    >.form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+
+        >.field {
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            >label {
+                font-size: var(--fontSize-lg);
+                font-weight: var(--fontWeight-semiBold);
+                display: flex;
+                align-items: center;
+                gap: 6px;
+
+                .count {
+                    font-size: var(--fontSize-sm);
+                    color: var(--color-darkGray);
+                }
+            }
+
+            >input,
+            >select,
+            >textarea {
+                width: 100%;
+                padding: 10px 12px;
+                font-size: var(--fontSize-md);
+                border: 1px solid var(--color-gray);
+                border-radius: 8px;
+
+                &:focus {
+                    outline: none;
+                    border-color: var(--color-main1);
+                    box-shadow: 0 0 0 2px rgba(64, 183, 223, 0.3);
+                }
+            }
+
+            >textarea {
+                resize: none;
+                min-height: 80px;
+            }
+        }
+
+        >button {
+            background-color: var(--color-main1);
+            color: white;
+            font-weight: var(--fontWeight-bold);
+            font-size: var(--fontSize-md);
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+
+            &:hover {
+                background-color: var(--color-main3);
+                color: var(--color-black);
+            }
+        }
+    }
+}
