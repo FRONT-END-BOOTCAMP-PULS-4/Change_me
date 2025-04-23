@@ -39,7 +39,9 @@ export default function TestCreateHabitModal() {
     // 모달이 열릴 때 초기값 설정 (등록/수정 모드 구분)
     useEffect(() => {
         if (isOpen) {
-            if (modalType === "habit" && modalProps) {
+            const isEditMode = modalProps?.habit;
+
+            if (isEditMode) {
                 setCategoryId(Number(modalProps.habit.categoryId));
                 setName(modalProps.habit.name);
                 setDescription(modalProps.habit.description);
@@ -59,8 +61,8 @@ export default function TestCreateHabitModal() {
             return;
         }
 
-        const method = isEdit ? "PATCH" : "POST";
-        const url = isEdit
+        const method = isEditMode ? "PATCH" : "POST";
+        const url = isEditMode
             ? `/api/test-habits/${modalProps.habit.id}`
             : `/api/test-habits`;
 
@@ -81,11 +83,11 @@ export default function TestCreateHabitModal() {
 
             const data = await res.json();
             if (res.ok) {
-                alert(isEdit ? "습관이 수정되었습니다." : "습관이 등록되었습니다.");
+                alert(isEditMode ? "습관이 수정되었습니다." : "습관이 등록되었습니다.");
                 closeModal();
                 refetchHabits?.();
             } else {
-                alert(data.error || (isEdit ? "습관 수정 실패" : "습관 등록 실패"));
+                alert(data.error || (isEditMode ? "습관 수정 실패" : "습관 등록 실패"));
             }
         } catch (error) {
             console.error("요청 실패:", error);
