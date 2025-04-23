@@ -1,0 +1,36 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-lightGray);
+    text-align: center;
+    padding: 2rem;
+}
+
+.image {
+    width: 140px;
+    height: 140px;
+    margin-bottom: 1.5rem;
+}
+
+.title {
+    font-size: var(--fontSize-2xl);
+    font-weight: var(--fontWeight-bold);
+    margin-bottom: 1rem;
+}
+
+.message {
+    font-size: var(--fontSize-lg);
+    font-weight: var(--fontWeight-regular);
+    margin-bottom: 2rem;
+}
+
+.link {
+    font-size: var(--fontSize-md);
+    font-weight: var(--fontWeight-semiBold);
+    color: var(--color-main1);
+    text-decoration: underline;
+}
