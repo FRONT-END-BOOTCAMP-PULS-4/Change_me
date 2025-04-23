@@ -1,0 +1,21 @@
+.container {
+    width: 80vw;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.image {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+}
+
+.text {
+    margin-top: 1rem;
+    font-size: var(--fontSize-xl);
+    font-weight: var(--fontWeight-semiBold);
+    color: var(--color-darkGray);
+}

@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/authStore";
 import useModalStore from "@/stores/modalStore";
 import { useEffect, useState, useCallback } from "react";
 import styles from "./TestHabitList.module.scss";
+import Loading from "@/app/components/Loading";
 
 type Habit = {
     id: number;
@@ -25,6 +26,7 @@ export default function HabitList() {
     const [checkedHabits, setCheckedHabits] = useState<{ [habitId: number]: boolean }>({});
     const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const token = useAuthStore.getState().token;
 
@@ -33,6 +35,7 @@ export default function HabitList() {
 
     const fetchHabits = useCallback(async () => {
         try {
+            setIsLoading(true);
             const res = await fetch("/api/test-habits/", {
                 method: "GET",
                 headers: {
@@ -44,6 +47,8 @@ export default function HabitList() {
             setHabits(habits);
         } catch (error) {
             console.error("불러오기 실패:", error);
+        } finally {
+            setIsLoading(false);
         }
     }, [token]);
 
@@ -161,6 +166,10 @@ export default function HabitList() {
             console.error("포기 요청 실패:", error);
         }
     };
+
+    if (isLoading) {
+        return <Loading />;
+    }
 
     return (
         <div className={styles.container}>
