@@ -1,0 +1,46 @@
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -10px);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -10px);
+    }
+}
+
+.wrapper {
+    width: 100%;
+    position: relative;
+
+    .warning {
+        position: fixed;
+        left: 50%;
+        top: 20%;
+        z-index: 9999;
+
+        background-color: var(--color-beige);
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+        font-size: var(--fontSize-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        max-width: 450px;
+        width: 90%;
+
+        animation: fadeInOut 3s ease-in-out forwards;
+    }
+}

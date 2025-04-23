@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Modals from "./components/Modals";
+import Toast from "./components/Toast";
 
 const NotoSans = localFont({
     src: [
@@ -36,6 +37,7 @@ export default function RootLayout({
     return (
         <html lang="ko" className={NotoSans.className}>
             <body>
+                <Toast />
                 <Modals />
                 {children}
             </body>
