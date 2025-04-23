@@ -50,16 +50,9 @@ export async function GET(request: Request) {
         const getMessageListDto = new GetMessageListDto(
             {
                 currentPage: Number(currentPageParam),
-                mine: Boolean(mineParam),
+                mine: Boolean(mineParam === "true"),
             },
             memberId,
-        );
-
-        console.log(
-            `currentPageParam: ${currentPageParam}, currentPage @GET api calling: ${Number(currentPageParam)}`,
-        );
-        console.log(
-            `mineParam: ${mineParam}, mine @GET api calling: ${Boolean(mineParam)}`,
         );
 
         const messageListDto: MessageListDto =

@@ -13,13 +13,14 @@ export default function WriteMessageForm(props: WriteMessageFormProps) {
 
     let content: string = "";
     let wordCount: number;
+    const defaultProfileImageUrl: string = "/images/ProfileCircle.png";
     const handleChange = async () => {}; // TODO: word count limit
 
     return (
         <div className={styles.wrapper}>
             <nav className={styles.nav}>
                 <Image
-                    src={user?.imageUrl || "/images/ProfileCircle.png"}
+                    src={user?.imageUrl || defaultProfileImageUrl}
                     alt="프로필 이미지"
                     width={40}
                     height={40}

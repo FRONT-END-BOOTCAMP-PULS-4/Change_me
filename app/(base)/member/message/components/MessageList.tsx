@@ -1,11 +1,8 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "./MessageList.module.scss";
 import MessageItem from "./MessageItem";
-import { MessageListDto } from "@/application/usecase/message/dto/MessageListDto";
 import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
-import { useSearchParams } from "next/navigation";
-import { useAuthStore } from "@/stores/authStore";
 
 type MessageListProps = {
     messages: MessageDto[];

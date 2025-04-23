@@ -9,11 +9,13 @@ type MemberFilterButtonsProps = {
 };
 
 export default function MemberFilterButtons(props: MemberFilterButtonsProps) {
+    console.log(`mine@MemberFilterButtons: ${props.mine}`);
+
     // TODO: styling two buttons based on 'mine' option
     return (
         <nav className={styles.nav}>
             <button
-                className={styles[String(props.mine)]}
+                className={styles[String(!props.mine)]}
                 onClick={() => props.onMineChange(false)}
             >
                 전체
