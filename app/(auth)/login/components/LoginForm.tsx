@@ -4,6 +4,7 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/authStore";
 import styles from "./LoginForm.module.scss";
+import { useToastStore } from "@/stores/toastStore";
 
 export default function LoginForm() {
     const router = useRouter();
@@ -57,6 +58,7 @@ export default function LoginForm() {
 
             if (!res.ok) {
                 setErrorMessage(data.errorMessage || "로그인 실패");
+                useToastStore.getState().show("로그인 실패");
                 return;
             }
 
@@ -77,10 +79,6 @@ export default function LoginForm() {
 
     return (
         <div className={styles.container}>
-            {errorMessage && (
-                <div className={styles.warningMessage}>⚠️ {errorMessage}</div>
-            )}
-
             <h2>로그인</h2>
             <form onSubmit={handleSubmit}>
                 <div className={styles.inputGroup}>
