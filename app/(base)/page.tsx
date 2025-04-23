@@ -12,19 +12,21 @@ import styles from "./page.module.scss";
 export default function page() {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const test = searchParams.get("categoryId");
-    console.log(test);
+
     const categoryId =
         searchParams.get("categoryId") !== null
             ? Number(searchParams.get("categoryId"))
             : -1;
-
     const { categories, isLoading: isCategoryLoading } = useCategories(true);
     const {
         countInfo,
         habits,
         isLoading: isHabitLoading,
     } = useAnonHabits(categoryId);
+
+    const selectedCategory =
+        categories.find((category) => category.id === categoryId)?.name ||
+        "전체";
 
     const handleCategoryChange = (id: number) => {
         router.push(`?categoryId=${id}`);
@@ -39,7 +41,7 @@ export default function page() {
                 categories={categories}
                 handleCategoryChange={handleCategoryChange}
             />
-            <TopSection />
+            <TopSection countInfo={countInfo} category={selectedCategory!} />
             <BottomSection />
         </div>
     );

@@ -10,7 +10,7 @@ export type AnonHabit = {
     description: string;
 };
 
-export type ResponseType = {
+export type AnonHabitResponseType = {
     totalCount: number;
     ongoingCount: number;
     successCount: number;
@@ -20,8 +20,10 @@ export type ResponseType = {
 
 export const useAnonHabits = (categoryId?: number) => {
     const getUrl = `/api/habits${categoryId === -1 ? "" : `?categoryId=${categoryId}`}`;
-    console.log(getUrl);
-    const { data, isLoading, error } = useSWR<ResponseType>(getUrl, fetcher);
+    const { data, isLoading, error } = useSWR<AnonHabitResponseType>(
+        getUrl,
+        fetcher,
+    );
 
     return {
         countInfo: {

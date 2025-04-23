@@ -1,0 +1,27 @@
+.section {
+    padding: 36px 0;
+    font-size: var(--fontSize-xl);
+    width: 100%;
+    margin: auto;
+
+    @media (max-width: 768px) {
+        font-size: var(--fontSize-md);
+        padding: 8px 0;
+    }
+
+    .records {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 36px;
+
+        span {
+            font-weight: var(--fontWeight-semiBold);
+        }
+
+        .category {
+            color: var(--color-main1);
+        }
+    }
+}
