@@ -3,7 +3,6 @@ import { TestHabitRecordDto } from "@/application/usecase/habit/dto/TestHabitRec
 import { TestHabitRecordUsecase } from "@/application/usecase/habit/TestHabitRecordUsecase";
 import { SbHabitRecordRepository } from "@/infra/repositories/supabase/SbHabitRecordRepository";
 import { SbHabitRepository } from "@/infra/repositories/supabase/SbHabitRepository";
-import { TestAutoUpdateHabitStatusUsecase } from "@/application/usecase/habit/TestAutoUpdateHabitStatusUsecase";
 
 export async function POST(req: NextRequest) {
     try {
@@ -12,11 +11,8 @@ export async function POST(req: NextRequest) {
         const dto = new TestHabitRecordDto(habitId, new Date(date));
         const recordRepo = new SbHabitRecordRepository();
         const habitRepo = new SbHabitRepository();
-        const usecase = new TestHabitRecordUsecase(new SbHabitRecordRepository());
+        const usecase = new TestHabitRecordUsecase(recordRepo, habitRepo);
         const result = await usecase.execute(dto);
-
-        const statusUsecase = new TestAutoUpdateHabitStatusUsecase(habitRepo, recordRepo);
-        await statusUsecase.execute(habitId);
 
         return NextResponse.json({ status: result.status });
     } catch (error: any) {
@@ -31,11 +27,8 @@ export async function DELETE(req: NextRequest) {
         const dto = new TestHabitRecordDto(habitId, new Date(date));
         const recordRepo = new SbHabitRecordRepository();
         const habitRepo = new SbHabitRepository();
-        const usecase = new TestHabitRecordUsecase(new SbHabitRecordRepository());
+        const usecase = new TestHabitRecordUsecase(recordRepo, habitRepo);
         const result = await usecase.execute(dto);
-
-        const statusUsecase = new TestAutoUpdateHabitStatusUsecase(habitRepo, recordRepo);
-        await statusUsecase.execute(habitId);
 
         return NextResponse.json({ status: result.status });
     } catch (error: any) {
