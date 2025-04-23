@@ -1,24 +1,23 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/stores/authStore";
-
 type MessageButtonProps = {
     type: string;
+    id: number;
+    content: string;
+    handleUpdate: (id: number, content: string) => Promise<void>;
+    handleDelete: (id: number) => Promise<void>;
 };
 
 export default function MessageButton(props: MessageButtonProps) {
-    const handleOnClick = () => {
-        if (props.type === "Edit") {
-            // TODO: update messagelike, change UI locally
-        } else if (props.type === "Delete") {
-            // TODO: delete messagelike, change UI locally
-        }
+    const handleOnClick = async (id: number, content: string) => {
+        props.type === "Edit"
+            ? props.handleUpdate(id, content)
+            : props.handleDelete(id);
     };
 
     return (
         <button
-            onClick={handleOnClick}
+            onClick={() => handleOnClick(props.id, props.content)}
             style={{ marginTop: "2rem", color: "red" }}
         >
             {props.type === "Edit" ? "수정" : "삭제"}

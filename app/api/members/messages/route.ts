@@ -50,7 +50,7 @@ export async function GET(request: Request) {
         const getMessageListDto = new GetMessageListDto(
             {
                 currentPage: Number(currentPageParam),
-                mine: Boolean(mineParam),
+                mine: Boolean(mineParam === "true"),
             },
             memberId,
         );

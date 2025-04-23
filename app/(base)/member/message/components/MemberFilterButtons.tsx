@@ -13,7 +13,7 @@ export default function MemberFilterButtons(props: MemberFilterButtonsProps) {
     return (
         <nav className={styles.nav}>
             <button
-                className={styles[String(props.mine)]}
+                className={styles[String(!props.mine)]}
                 onClick={() => props.onMineChange(false)}
             >
                 전체

@@ -24,7 +24,7 @@ export const useMessages = (currentPage: number, mine: boolean) => {
     const getUrl = `/api/members/messages?currentPage=${currentPage}&mine=${mine}`;
 
     const { data, error, isLoading } = useSWR<MessageResponseType>(
-        "api/members/messages",
+        getUrl,
         fetcher,
     );
 

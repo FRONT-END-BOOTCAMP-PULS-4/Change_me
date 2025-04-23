@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 
 import MessageList from "./components/MessageList";
-import WriteMessageForm from "./components/WriteMessageForm";
+import MessageForm from "./components/MessageForm";
 import MemberFilterButtons from "./components/MemberFilterButtons";
 import Pager from "@/app/components/Pager";
 import styles from "./page.module.scss";
@@ -12,8 +12,9 @@ import { useMessages } from "@/hooks/useMessages";
 
 export default function MessageListPage() {
     const searchParams = useSearchParams();
-    const currentPage = Number(searchParams.get("page")) || 1;
-    const mine = Boolean(searchParams.get("mine")) || false;
+    const currentPage: number = Number(searchParams.get("page")) || 1;
+    const mine: boolean = searchParams.get("mine") === "true" ? true : false;
+
     const router = useRouter();
 
     const {
@@ -41,8 +42,12 @@ export default function MessageListPage() {
                 }
                 mine={mine}
             />
-            <WriteMessageForm handleSubmit={createMessage} />
-            <MessageList messages={messages} />
+            <MessageForm messageDto={null} handleSubmit={createMessage} />
+            <MessageList
+                messages={messages}
+                handleUpdate={updateMessage}
+                handleDelete={deleteMessage}
+            />
             <Pager
                 currentPage={1}
                 pages={pages}
