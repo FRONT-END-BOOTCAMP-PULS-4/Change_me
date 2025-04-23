@@ -5,7 +5,7 @@ import { HabitFilter } from "@/domain/repositories/filters/HabitFilter";
 import { HabitDto } from "./dto/HabitDto";
 import { Habit } from "@/domain/entities/Habit";
 import { HabitRecordRepository } from "@/domain/repositories/HabitRecordRepository";
-import { TestHabitRecordDto } from "./dto/TestHabitRecordDto";
+import { HabitRecordDto } from "./dto/HabitRecordDto";
 import { CategoryRepository } from "@/domain/repositories/CategoryRepository";
 import { HabitRecord } from "@/domain/entities/HabitRecord";
 
@@ -24,10 +24,7 @@ export class GetHabitListUsecase {
         this.categoryRepository = categoryRepository;
     }
 
-    async execute(
-        queryDto: ViewQueryDto,
-        testHabitRecordDto: TestHabitRecordDto,
-    ): Promise<HabitListDto> {
+    async execute(queryDto: ViewQueryDto): Promise<HabitListDto> {
         try {
             const pageSize: number = 10;
             const currentPage: number = queryDto.currentPage || 1;
