@@ -186,6 +186,17 @@ export default function HabitList() {
                 </select>
 
                 <div className={styles.today}>{today}</div>
+
+                <button
+                    className={styles.createButton}
+                    onClick={() =>
+                        useModalStore.getState().openModal("habit", {
+                            refetchHabits: fetchHabits,
+                        })
+                    }
+                >
+                    + 새로운 습관 생성
+                </button>
             </div>
 
             <div className={styles.habitList}>
@@ -251,18 +262,6 @@ export default function HabitList() {
                             </div>
                         </div>
                     ))}
-            </div>
-            <div className={styles.bottomControls}>
-                <button
-                    className={styles.createButton}
-                    onClick={() =>
-                        useModalStore.getState().openModal("habit", {
-                            refetchHabits: fetchHabits,
-                        })
-                    }
-                >
-                    + 새로운 습관 생성
-                </button>
             </div>
         </div>
     );

@@ -12,6 +12,7 @@
     align-items: center;
     margin-bottom: 24px;
     margin-left: 14px;
+    justify-content: space-between;
 
     select {
         min-width: 80px;
@@ -32,6 +33,21 @@
         font-size: var(--fontSize-xl);
         font-weight: var(--fontWeight-bold);
         color: var(--color-black);
+    }
+
+    .createButton {
+        background-color: var(--color-main2);
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: var(--fontSize-md);
+        font-weight: var(--fontWeight-semiBold);
+        transition: background-color 200ms ease-in-out;
+
+        &:hover {
+            background-color: var(--color-main3);
+        }
     }
 }
 
@@ -108,26 +124,6 @@
         .giveup {
             background-color: var(--color-lightRed);
         }
-    }
-}
-
-.bottomControls {
-    display: flex;
-    justify-content: right;
-    margin-top: 15px;
-
-    .createButton {
-        background-color: var(--color-main2);
-        padding: 10px 20px;
-        border-radius: 8px;
-        border: none;
-        cursor: pointer;
-        font-weight: var(--fontWeight-bold);
-        transition: background-color 200ms ease-in-out;
-    }
-
-    .createButton:hover {
-        background-color: var(--color-main3);
     }
 }
 
