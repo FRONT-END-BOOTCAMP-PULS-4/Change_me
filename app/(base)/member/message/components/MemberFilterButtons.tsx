@@ -9,8 +9,6 @@ type MemberFilterButtonsProps = {
 };
 
 export default function MemberFilterButtons(props: MemberFilterButtonsProps) {
-    console.log(`mine@MemberFilterButtons: ${props.mine}`);
-
     // TODO: styling two buttons based on 'mine' option
     return (
         <nav className={styles.nav}>

@@ -1,28 +1,41 @@
 "use client";
 // import { useRef, useState } from "react";
 import Image from "next/image";
-import styles from "./WriteMessageForm.module.scss";
+import styles from "./MessageForm.module.scss";
 import { useAuthStore } from "@/stores/authStore";
 import { ChangeEvent, useState } from "react";
+import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
 
-type WriteMessageFormProps = {
+type MessageFormProps = {
+    messageDto: MessageDto | null;
     handleSubmit: (content: string) => Promise<void>;
 };
 
-export default function WriteMessageForm(props: WriteMessageFormProps) {
+export default function MessageForm(props: MessageFormProps) {
+    const submitButtonName: string =
+        props.messageDto === null ? "등록" : "수정";
+    const defaultContent: string =
+        props.messageDto === null ? "" : props.messageDto.content;
+
     const { user } = useAuthStore();
-    const [content, setContent] = useState<string>("");
+    const [content, setContent] = useState<string>(defaultContent);
     const [wordCount, setWordCount] = useState<number>(0);
+
+    const contentMaxLength: number = 100;
     const defaultProfileImageUrl: string = "/images/ProfileCircle.png";
+
     const handleChange = async (element: ChangeEvent<HTMLInputElement>) => {
+        if (element.target.value.length > contentMaxLength) {
+            element.target.value = element.target.value.slice(
+                0,
+                contentMaxLength,
+            );
+        }
+
         const newContent = element.target.value;
         const newWordCount = newContent.length;
         setContent(newContent);
         setWordCount(newWordCount);
-
-        if (newWordCount > 100) {
-            // TODO: word count limit
-        }
     };
 
     return (
@@ -42,11 +55,16 @@ export default function WriteMessageForm(props: WriteMessageFormProps) {
                 id="message"
                 name="message"
                 value={content}
+                maxLength={contentMaxLength}
                 onChange={(e) => handleChange(e)}
                 placeholder="메시지를 입력하세요."
             />
-            <div>{wordCount}/100</div>
-            <button onClick={() => props.handleSubmit(content)}>등록</button>
+            <div>
+                {wordCount}/{contentMaxLength}
+            </div>
+            <button onClick={() => props.handleSubmit(content)}>
+                {submitButtonName}
+            </button>
         </div>
     );
 }

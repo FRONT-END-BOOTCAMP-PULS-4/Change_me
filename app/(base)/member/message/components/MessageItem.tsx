@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import styles from "./MessageItem.module.scss";
 import MessageButton from "./MessageButton";
@@ -10,56 +10,78 @@ import { useAuthStore } from "@/stores/authStore";
 
 type MessageItemProps = {
     messageDto: MessageDto; // TODO: divide Dto and props
+    handleUpdate: (id: number, content: string) => Promise<void>;
+    handleDelete: (id: number) => Promise<void>;
 };
 
 export default function MessageItem(props: MessageItemProps) {
+    const isUpdating: boolean = false; //
+
     const { user } = useAuthStore();
     const memberId: string = user?.id || "";
 
     const messageDto = props.messageDto;
     const isAuthor = memberId === messageDto.memberId;
     const createdAt = new Date(messageDto.createdAt);
-    const kst = new Date(createdAt.getTime() + 9 * 60 * 60 * 1000);
     const pad = (str: String) => str.toString().padStart(2, "0");
-    const formattedDate = `${kst.getFullYear()}-${pad(String(kst.getMonth() + 1))}-${pad(String(kst.getDate()))} ${pad(String(kst.getHours()))}:${pad(String(kst.getMinutes()))}`;
+    const formattedDate = `${createdAt.getFullYear()}-${pad(String(createdAt.getMonth() + 1))}-${pad(String(createdAt.getDate()))} ${pad(String(createdAt.getHours()))}:${pad(String(createdAt.getMinutes()))}`;
 
     const messageLikeDto = { messageId: messageDto.id, memberId: memberId };
 
-    return (
-        <div className={styles.wrapper}>
-            <div className="flex justify-between items-start">
-                <nav className="flex items-center space-x-2">
-                    <Image
-                        src={messageDto.imageUrl || "/images/ProfileCircle.png"}
-                        alt="프로필 이미지"
-                        width={40}
-                        height={40}
-                        className="w-8 h-8 rounded-full"
+    if (isUpdating) {
+        return;
+    } else {
+        return (
+            <div className={styles.wrapper}>
+                <div className="flex justify-between items-start">
+                    <nav className="flex items-center space-x-2">
+                        <Image
+                            src={
+                                messageDto.imageUrl ||
+                                "/images/ProfileCircle.png"
+                            }
+                            alt="프로필 이미지"
+                            width={40}
+                            height={40}
+                            className="w-8 h-8 rounded-full"
+                        />
+                        <div>
+                            <div className="text-sm font-semibold">
+                                {messageDto.writer}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                                {formattedDate}
+                            </div>
+                        </div>
+                    </nav>
+                    {isAuthor && (
+                        <div className="flex space-x-2 text-sm text-gray-500">
+                            <MessageButton
+                                type="Edit"
+                                id={messageDto.id}
+                                content={messageDto.content}
+                                handleUpdate={props.handleUpdate}
+                                handleDelete={props.handleDelete}
+                            />
+                            <MessageButton
+                                type="Delete"
+                                id={messageDto.id}
+                                content={messageDto.content}
+                                handleUpdate={props.handleUpdate}
+                                handleDelete={props.handleDelete}
+                            />
+                        </div>
+                    )}
+                </div>
+                <div className="mt-2 text-sm">{messageDto.content}</div>
+                <div className="flex justify-end items-center mt-2 text-sm text-gray-500 space-x-1">
+                    <LikeButton
+                        isLiked={messageDto.isLiked}
+                        messageLikeDto={messageLikeDto}
                     />
-                    <div>
-                        <div className="text-sm font-semibold">
-                            {messageDto.writer}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                            {formattedDate}
-                        </div>
-                    </div>
-                </nav>
-                {isAuthor && (
-                    <div className="flex space-x-2 text-sm text-gray-500">
-                        <MessageButton type="Edit" />
-                        <MessageButton type="Delete" />
-                    </div>
-                )}
+                    <span>{messageDto.likeCount}</span>
+                </div>
             </div>
-            <div className="mt-2 text-sm">{messageDto.content}</div>
-            <div className="flex justify-end items-center mt-2 text-sm text-gray-500 space-x-1">
-                <LikeButton
-                    isLiked={messageDto.isLiked}
-                    messageLikeDto={messageLikeDto}
-                />
-                <span>{messageDto.likeCount}</span>
-            </div>
-        </div>
-    );
+        );
+    }
 }

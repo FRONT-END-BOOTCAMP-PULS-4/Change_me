@@ -1,9 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/stores/authStore";
+import emptyHeartImage from "@/public/images/EmptyHeart.png";
+import fullHeartImage from "@/public/images/FullHeart.png";
+
 import { MessageLikeDto } from "@/application/usecase/message-like/dto/MessageLikeDto";
 import { useMessageLikes } from "@/hooks/useMessageLikes";
+import Image from "next/image";
 
 type LikeButtonProps = {
     isLiked: Boolean;
@@ -11,16 +13,17 @@ type LikeButtonProps = {
 };
 
 export default function LikeButton(props: LikeButtonProps) {
+    const iconImage = props.isLiked ? fullHeartImage : emptyHeartImage;
     const messageLikes = useMessageLikes();
     const toggleLike = async () => {
         try {
             if (!props.isLiked) {
-                const res = messageLikes.createMessageLike(
+                const res = await messageLikes.createMessageLike(
                     props.messageLikeDto.messageId,
                 );
                 // update values: instead of using setIsLiked, apply the change by editing local variables..?
             } else {
-                const res = messageLikes.deleteMessageLike(
+                const res = await messageLikes.deleteMessageLike(
                     props.messageLikeDto.messageId,
                 );
                 // update values
@@ -28,5 +31,9 @@ export default function LikeButton(props: LikeButtonProps) {
         } catch (error) {}
     };
 
-    return <button onClick={toggleLike}></button>;
+    return (
+        <button onClick={toggleLike}>
+            <Image src={iconImage} alt="하트 아이콘" width={20} height={20} />
+        </button>
+    );
 }
