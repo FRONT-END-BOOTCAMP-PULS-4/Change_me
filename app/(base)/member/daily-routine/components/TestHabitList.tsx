@@ -37,7 +37,7 @@ export default function HabitList() {
     const fetchHabits = useCallback(async () => {
         try {
             setIsLoading(true);
-            const res = await fetch("/api/test-habits/", {
+            const res = await fetch("/api/members/test-habits/", {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -74,7 +74,7 @@ export default function HabitList() {
 
     useEffect(() => {
         const fetchCheckedHabits = async () => {
-            const res = await fetch("/api/test-habit-records/checked", {
+            const res = await fetch("/api/members/test-habit-records/checked", {
                 method: "GET",
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -93,7 +93,7 @@ export default function HabitList() {
         const isChecked = !!checkedHabits[habitId];
 
         try {
-            const res = await fetch("/api/test-habit-records", {
+            const res = await fetch("/api/members/test-habit-records", {
                 method: isChecked ? "DELETE" : "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -125,7 +125,7 @@ export default function HabitList() {
         if (!confirmDelete) return;
 
         try {
-            const res = await fetch(`/api/test-habits/${habitId}`, {
+            const res = await fetch(`/api/members/test-habits/${habitId}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -149,7 +149,7 @@ export default function HabitList() {
         if (!confirm) return;
 
         try {
-            const res = await fetch(`/api/test-habits/${habitId}/giveup`, {
+            const res = await fetch(`/api/members/test-habits/${habitId}/giveup`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,

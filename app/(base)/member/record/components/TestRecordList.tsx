@@ -33,12 +33,12 @@ export default function TestRecordList() {
     const fetchHabits = useCallback(async () => {
         try {
             setIsLoading(true);
-            let url = "/api/test-habits/success/";
+            let url = "/api/members/test-habits/success/";
 
             if (statusTab === "giveup") {
-                url = "/api/test-habits/giveup/";
+                url = "/api/members/test-habits/giveup/";
             } else if (statusTab === "fail") {
-                url = "/api/test-habits/fail/";
+                url = "/api/members/test-habits/fail/";
             }
             const res = await fetch(url, {
                 method: "GET",
