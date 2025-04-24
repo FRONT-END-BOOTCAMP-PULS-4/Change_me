@@ -27,7 +27,7 @@ export async function GET(request: Request, { params }: RequestParams) {
             );
         }
 
-        const id = await params.habitId;
+        const { habitId } = await params;
 
         // set up usecase
         const habitRecordRepository: HabitRecordRepository =
@@ -36,8 +36,7 @@ export async function GET(request: Request, { params }: RequestParams) {
         const getRecordUsecase = new GetRecordUsecase(habitRecordRepository);
 
         // set up query Dto
-        const getRecordDto: GetRecordDto = new GetRecordDto(Number(id));
-        console.log("getRecordDto@route.ts", getRecordDto);
+        const getRecordDto: GetRecordDto = new GetRecordDto(Number(habitId));
 
         const recordDto: RecordDto =
             await getRecordUsecase.execute(getRecordDto);

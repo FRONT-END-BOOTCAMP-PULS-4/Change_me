@@ -9,9 +9,9 @@ import { useAuthStore } from "@/stores/authStore";
 import { formatDate } from "react-calendar/dist/cjs/shared/dateFormatter";
 
 type ViewHabitModalProps = {
-    habitId: number;
-    habitName: string;
-    habitDescrition: string;
+    id: number;
+    name: string;
+    description: string;
 };
 
 export default function ViewHabitModal(props: ViewHabitModalProps) {
@@ -24,15 +24,12 @@ export default function ViewHabitModal(props: ViewHabitModalProps) {
     useEffect(() => {
         const fetchDates = async () => {
             try {
-                const res = await fetch(
-                    `/api/members/records/${props.habitId}`,
-                    {
-                        method: "GET",
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
+                const res = await fetch(`/api/members/records/${props.id}`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
                     },
-                );
+                });
                 const data = await res.json();
                 if (Array.isArray(data.dates)) {
                     setDates(data.dates);
@@ -47,10 +44,8 @@ export default function ViewHabitModal(props: ViewHabitModalProps) {
     return (
         <ModalWrapper isOpen={isOpen} onClose={closeModal}>
             <div className={styles.wrapper}>
-                <h2>{props.habitName}</h2>
-                <div className={styles.description}>
-                    {props.habitDescrition}
-                </div>
+                <h2>{props.name}</h2>
+                <div className={styles.description}>{props.description}</div>
                 <Calendar
                     formatDay={(locale, date) => String(date.getDate())}
                     calendarType="gregory"

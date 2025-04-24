@@ -31,7 +31,6 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             query = query.order("date", { ascending: false });
         }
 
-        console.log("filter.habitId", filter?.habitId);
         // 필터 적용
         query = this.queryFilter(filter, query);
 
