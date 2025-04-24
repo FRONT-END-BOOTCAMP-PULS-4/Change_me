@@ -18,6 +18,13 @@ export class SbHabitRepository implements HabitRepository {
                 if (filter.status === 0) {
                     query = query
                         .eq("status", filter.status)
+                        .gt(
+                            "finished_at",
+                            new Date().toISOString().split("T")[0],
+                        );
+                } else if (filter.status === 1) {
+                    query = query
+                        .eq("status", 0)
                         .lte(
                             "finished_at",
                             new Date().toISOString().split("T")[0],
@@ -54,12 +61,11 @@ export class SbHabitRepository implements HabitRepository {
 
     async findAll(filter?: HabitFilter): Promise<HabitMember[]> {
         const supabase = await createClient();
-        const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식
+
         let query = supabase
             .from("habit")
             .select("*, member(nickname, image_url, deleted_at)")
-            .order("created_at", { ascending: false })
-            .lt("finished_at", today);
+            .order("created_at", { ascending: false });
         query = this.queryFilter(filter, query);
 
         const { data } = await query;
