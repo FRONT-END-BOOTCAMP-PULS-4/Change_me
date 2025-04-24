@@ -217,7 +217,8 @@ export class SbHabitRepository implements HabitRepository {
             .select("*, category(name)")
             .eq("member_id", memberId)
             .in("status", [0, 3])
-            .gte("finished_at", today);
+            .gte("finished_at", today)
+            .order("created_at", { ascending: true });
 
         if (error) {
             throw new Error(`진행 중인 습관 조회 실패: ${error.message}`);
