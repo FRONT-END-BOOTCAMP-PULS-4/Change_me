@@ -203,7 +203,14 @@ export default function HabitList() {
                         })
                     }
                 >
-                    + 새로운 습관 생성
+                    <Image
+                        src="/images/AddIcon.png"
+                        alt="추가"
+                        width={16}
+                        height={16}
+                        className={styles.plusIcon}
+                    />
+                    새로운 습관 생성
                 </button>
             </div>
 
@@ -211,7 +218,7 @@ export default function HabitList() {
                 {filteredHabits.length === 0 ? (
                     <div className={styles.empty}>
                         <Image
-                            src="/images/NotFound.png"
+                            src="/images/DailyRoutineCheck.png"
                             alt="조회된 습관 없음"
                             width={140}
                             height={140}

@@ -162,7 +162,8 @@
 
     p {
         margin-top: 1rem;
-        font-size: 1.2rem;
+        font-size: var(--fontSize-md);
+        color: var(--color-darkGray);
     }
 
     .emptyImage {
@@ -170,4 +171,11 @@
         margin: 0 auto;
         opacity: 0.6;
     }
+}
+
+.plusIcon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 3px;
+    margin-bottom: 3px;
 }
