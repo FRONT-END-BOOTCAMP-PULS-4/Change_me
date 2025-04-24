@@ -25,9 +25,15 @@ type Habit = {
 
 export default function HabitList() {
     const [habits, setHabits] = useState<Habit[]>([]);
-    const [checkedHabits, setCheckedHabits] = useState<{ [habitId: number]: boolean }>({});
-    const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
-    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+    const [checkedHabits, setCheckedHabits] = useState<{
+        [habitId: number]: boolean;
+    }>({});
+    const [categories, setCategories] = useState<
+        { id: number; name: string }[]
+    >([]);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+        null,
+    );
     const [isLoading, setIsLoading] = useState(true);
 
     const token = useAuthStore.getState().token;
@@ -114,9 +120,7 @@ export default function HabitList() {
                 await fetchHabits();
             } else {
                 const data = await res.json();
-                useToastStore.getState().show(
-                    data.error || "처리 실패"
-                );
+                useToastStore.getState().show(data.error || "처리 실패");
             }
         } catch (error) {
             console.error("체크 처리 실패:", error);
@@ -138,11 +142,11 @@ export default function HabitList() {
             const data = await res.json();
             if (res.ok) {
                 useToastStore.getState().show("삭제 완료");
-                setHabits((prev) => prev.filter((habit) => habit.id !== habitId));
-            } else {
-                useToastStore.getState().show(
-                    data.error || "삭제 실패"
+                setHabits((prev) =>
+                    prev.filter((habit) => habit.id !== habitId),
                 );
+            } else {
+                useToastStore.getState().show(data.error || "삭제 실패");
             }
         } catch (error) {
             console.error("삭제 요청 실패:", error);
@@ -154,21 +158,24 @@ export default function HabitList() {
         if (!confirm) return;
 
         try {
-            const res = await fetch(`/api/members/test-habits/${habitId}/giveup`, {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
+            const res = await fetch(
+                `/api/members/test-habits/${habitId}/giveup`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 },
-            });
+            );
 
             const data = await res.json();
             if (res.ok) {
                 useToastStore.getState().show("습관을 포기했습니다.");
-                setHabits((prev) => prev.filter((habit) => habit.id !== habitId));
-            } else {
-                useToastStore.getState().show(
-                    data.error || "포기 실패"
+                setHabits((prev) =>
+                    prev.filter((habit) => habit.id !== habitId),
                 );
+            } else {
+                useToastStore.getState().show(data.error || "포기 실패");
             }
         } catch (error) {
             console.error("포기 요청 실패:", error);
@@ -176,7 +183,9 @@ export default function HabitList() {
     };
 
     const filteredHabits = habits.filter(
-        (habit) => selectedCategoryId === null || Number(habit.categoryId) === selectedCategoryId
+        (habit) =>
+            selectedCategoryId === null ||
+            Number(habit.categoryId) === selectedCategoryId,
     );
 
     if (isLoading) {
@@ -189,7 +198,11 @@ export default function HabitList() {
                 <select
                     value={selectedCategoryId ?? ""}
                     onChange={(e) =>
-                        setSelectedCategoryId(e.target.value === "" ? null : Number(e.target.value))
+                        setSelectedCategoryId(
+                            e.target.value === ""
+                                ? null
+                                : Number(e.target.value),
+                        )
                     }
                 >
                     <option value="">전체</option>
@@ -236,7 +249,9 @@ export default function HabitList() {
                 ) : (
                     filteredHabits.map((habit) => (
                         <div className={styles.habitCard} key={habit.id}>
-                            <div className={styles.category}>{habit.categoryName}</div>
+                            <div className={styles.category}>
+                                {habit.categoryName}
+                            </div>
                             <input
                                 className={styles.checkbox}
                                 type="checkbox"
@@ -244,26 +259,52 @@ export default function HabitList() {
                                 onChange={() => toggleCheckbox(habit.id)}
                             />
                             <div className={styles.info}>
-                                <div className={styles.title} title={habit.name}>{habit.name}</div>
+                                <div
+                                    className={styles.title}
+                                    title={habit.name}
+                                    onClick={() =>
+                                        useModalStore
+                                            .getState()
+                                            .openModal("viewHabit", {
+                                                habitId: habit.id,
+                                                habitName: habit.name,
+                                                habitDescription:
+                                                    habit.description,
+                                            })
+                                    }
+                                >
+                                    {habit.name}
+                                </div>
                             </div>
                             <div className={styles.info}>
-                                <div className={styles.desc} title={habit.description}>{habit.description}</div>
+                                <div
+                                    className={styles.desc}
+                                    title={habit.description}
+                                >
+                                    {habit.description}
+                                </div>
                             </div>
                             <div className={styles.info}>
-                                <div className={styles.progress}>{habit.daysPassed}일차</div>
+                                <div className={styles.progress}>
+                                    {habit.daysPassed}일차
+                                </div>
                             </div>
                             <div className={styles.info}>
-                                <div className={styles.progress}>{habit.rate}</div>
+                                <div className={styles.progress}>
+                                    {habit.rate}
+                                </div>
                             </div>
                             <div className={styles.actions}>
                                 {habit.canGiveUp && (
                                     <button
                                         className={styles.edit}
                                         onClick={() =>
-                                            useModalStore.getState().openModal("habit", {
-                                                habit,
-                                                refetchHabits: fetchHabits,
-                                            })
+                                            useModalStore
+                                                .getState()
+                                                .openModal("habit", {
+                                                    habit,
+                                                    refetchHabits: fetchHabits,
+                                                })
                                         }
                                     >
                                         수정
