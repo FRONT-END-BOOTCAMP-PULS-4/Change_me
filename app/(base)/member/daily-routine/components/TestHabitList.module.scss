@@ -154,3 +154,20 @@
         transform: rotate(45deg);
     }
 }
+
+.empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+
+    p {
+        margin-top: 1rem;
+        font-size: 1.2rem;
+    }
+
+    .emptyImage {
+        max-width: 180px;
+        margin: 0 auto;
+        opacity: 0.6;
+    }
+}

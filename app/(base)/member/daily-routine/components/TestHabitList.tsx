@@ -5,6 +5,7 @@ import useModalStore from "@/stores/modalStore";
 import { useEffect, useState, useCallback } from "react";
 import styles from "./TestHabitList.module.scss";
 import Loading from "@/app/components/Loading";
+import Image from "next/image";
 
 type Habit = {
     id: number;
@@ -167,6 +168,10 @@ export default function HabitList() {
         }
     };
 
+    const filteredHabits = habits.filter(
+        (habit) => selectedCategoryId === null || Number(habit.categoryId) === selectedCategoryId
+    );
+
     if (isLoading) {
         return <Loading />;
     }
@@ -203,11 +208,19 @@ export default function HabitList() {
             </div>
 
             <div className={styles.habitList}>
-                {habits
-                    .filter(
-                        (habit) => selectedCategoryId === null || Number(habit.categoryId) === selectedCategoryId
-                    )
-                    .map((habit) => (
+                {filteredHabits.length === 0 ? (
+                    <div className={styles.empty}>
+                        <Image
+                            src="/images/NotFound.png"
+                            alt="조회된 습관 없음"
+                            width={140}
+                            height={140}
+                            className={styles.emptyImage}
+                        />
+                        <p>진행중인 습관이 없습니다.</p>
+                    </div>
+                ) : (
+                    filteredHabits.map((habit) => (
                         <div className={styles.habitCard} key={habit.id}>
                             <div className={styles.category}>{habit.categoryName}</div>
                             <input
@@ -223,14 +236,10 @@ export default function HabitList() {
                                 <div className={styles.desc}>{habit.description}</div>
                             </div>
                             <div className={styles.info}>
-                                <div className={styles.progress}>
-                                    {habit.daysPassed}일차
-                                </div>
+                                <div className={styles.progress}>{habit.daysPassed}일차</div>
                             </div>
                             <div className={styles.info}>
-                                <div className={styles.progress}>
-                                    {habit.rate}
-                                </div>
+                                <div className={styles.progress}>{habit.rate}</div>
                             </div>
                             <div className={styles.actions}>
                                 {habit.canGiveUp && (
@@ -264,7 +273,8 @@ export default function HabitList() {
                                 )}
                             </div>
                         </div>
-                    ))}
+                    ))
+                )}
             </div>
         </div>
     );
