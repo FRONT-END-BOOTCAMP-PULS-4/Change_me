@@ -29,18 +29,17 @@
         left: 50%;
         top: 20%;
         z-index: 9999;
-
         background-color: var(--color-beige);
-        padding: 0.8rem 1rem;
-        border-radius: 8px;
-        font-size: var(--fontSize-sm);
+        padding: 0.5rem;
+        border-radius: 20px;
+        font-size: var(--fontSize-md);
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
         max-width: 450px;
         width: 90%;
-
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         animation: fadeInOut 3s ease-in-out forwards;
     }
 }
