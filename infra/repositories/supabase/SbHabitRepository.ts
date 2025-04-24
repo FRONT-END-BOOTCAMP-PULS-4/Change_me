@@ -54,12 +54,12 @@ export class SbHabitRepository implements HabitRepository {
 
     async findAll(filter?: HabitFilter): Promise<HabitMember[]> {
         const supabase = await createClient();
-
+        const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식
         let query = supabase
             .from("habit")
             .select("*, member(nickname, image_url, deleted_at)")
-            .order("created_at", { ascending: false });
-
+            .order("created_at", { ascending: false })
+            .lt("finished_at", today);
         query = this.queryFilter(filter, query);
 
         const { data } = await query;
@@ -431,4 +431,7 @@ export class SbHabitRepository implements HabitRepository {
                 ),
         );
     }
+}
+function lt(arg0: string, today: string) {
+    throw new Error("Function not implemented.");
 }
