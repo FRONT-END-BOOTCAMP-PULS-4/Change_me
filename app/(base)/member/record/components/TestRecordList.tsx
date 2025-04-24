@@ -85,19 +85,28 @@ export default function TestRecordList() {
             <div className={styles.tabs}>
                 <button
                     className={statusTab === "success" ? styles.activeTab : ""}
-                    onClick={() => setStatusTab("success")}
+                    onClick={() => {
+                        setStatusTab("success");
+                        setSelectedCategoryId(null);
+                    }}
                 >
                     달성
                 </button>
                 <button
                     className={statusTab === "fail" ? styles.activeTab : ""}
-                    onClick={() => setStatusTab("fail")}
+                    onClick={() => {
+                        setStatusTab("fail");
+                        setSelectedCategoryId(null);
+                    }}
                 >
                     실패
                 </button>
                 <button
                     className={statusTab === "giveup" ? styles.activeTab : ""}
-                    onClick={() => setStatusTab("giveup")}
+                    onClick={() => {
+                        setStatusTab("giveup");
+                        setSelectedCategoryId(null);
+                    }}
                 >
                     포기
                 </button>
@@ -132,13 +141,41 @@ export default function TestRecordList() {
                 ).length === 0 ? (
                     <div className={styles.empty}>
                         <Image
-                            src="/images/DailyRoutineCheck.png"
-                            alt="조회된 습관 없음"
+                            src={
+                                statusTab === "success"
+                                    ? "/images/Facade.png"
+                                    : statusTab === "fail"
+                                        ? "/images/Praise.png"
+                                        : "/images/Praise.png"
+                            }
+                            alt={
+                                statusTab === "success"
+                                    ? "달성한 습관 없음"
+                                    : statusTab === "fail"
+                                        ? "실패한 습관 없음"
+                                        : "포기한 습관 없음"
+                            }
                             width={140}
                             height={140}
                             className={styles.emptyImage}
                         />
-                        <p>조회된 습관이 없습니다.</p>
+                        <p>
+                            {statusTab === "success" && "아직 달성한 습관이 없어요."}
+                            {statusTab === "fail" && (
+                                <>
+                                    실패한 습관이 아직 없어요!
+                                    <br />
+                                    잘하고 있어요 :)
+                                </>
+                            )}
+                            {statusTab === "giveup" && (
+                                <>
+                                    포기한 습관이 아직 없어요!
+                                    <br />
+                                    잘하고 있어요 :)
+                                </>
+                            )}
+                        </p>
                     </div>
                 ) : (
                     habits
