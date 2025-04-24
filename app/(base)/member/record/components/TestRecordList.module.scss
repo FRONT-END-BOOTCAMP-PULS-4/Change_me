@@ -125,3 +125,26 @@
         opacity: 0.6;
     }
 }
+
+.celebrate {
+    margin-top: 4rem;
+    text-align: center;
+
+    img {
+        display: block;
+        margin: 0 auto 1rem;
+        max-width: 180px;
+        opacity: 0.9;
+    }
+
+    p {
+        font-size: var(--fontSize-lg);
+        color: var(--color-black);
+        line-height: 1.6;
+
+        strong {
+            font-weight: var(--fontWeight-bold);
+            color: var(--color-main1);
+        }
+    }
+}
