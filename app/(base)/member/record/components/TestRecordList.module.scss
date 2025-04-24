@@ -107,3 +107,21 @@
         }
     }
 }
+
+.empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+
+    p {
+        margin-top: 1rem;
+        font-size: var(--fontSize-md);
+        color: var(--color-darkGray);
+    }
+
+    .emptyImage {
+        max-width: 180px;
+        margin: 0 auto;
+        opacity: 0.6;
+    }
+}
