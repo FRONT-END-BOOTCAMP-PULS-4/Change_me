@@ -237,10 +237,10 @@ export default function HabitList() {
                                 onChange={() => toggleCheckbox(habit.id)}
                             />
                             <div className={styles.info}>
-                                <div className={styles.title}>{habit.name}</div>
+                                <div className={styles.title} title={habit.name}>{habit.name}</div>
                             </div>
                             <div className={styles.info}>
-                                <div className={styles.desc}>{habit.description}</div>
+                                <div className={styles.desc} title={habit.description}>{habit.description}</div>
                             </div>
                             <div className={styles.info}>
                                 <div className={styles.progress}>{habit.daysPassed}일차</div>
