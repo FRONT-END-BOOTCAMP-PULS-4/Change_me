@@ -8,12 +8,12 @@ export interface HabitRecordRepository {
     update(habitRecord: HabitRecord): Promise<HabitRecord>;
     deleteById(id: number): Promise<void>;
 
-    TestExists(record: HabitRecord): Promise<boolean>;
-    TestSave(record: HabitRecord): Promise<void>;
-    TestDelete(record: HabitRecord): Promise<void>;
-    TestGetTodayCheckedHabitIds(
+    exists(record: HabitRecord): Promise<boolean>;
+    save2(record: HabitRecord): Promise<void>;
+    delete(record: HabitRecord): Promise<void>;
+    GetTodayCheckedHabitIds(
         memberId: string,
         date: Date,
     ): Promise<number[]>;
-    TestCountByHabitId(habitId: number): Promise<number>;
+    countByHabitId(habitId: number): Promise<number>;
 }

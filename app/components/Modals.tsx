@@ -3,7 +3,7 @@
 import useModalStore from "@/stores/modalStore";
 import ViewHabitModal from "../(base)/member/components/modals/ViewHabitModal";
 import CategoryModal from "../admin/components/CategoryModal";
-import TestCreateHabitModal from "../(base)/member/components/modals/TestCreateHabitModal";
+import HabitModal from "../(base)/member/components/modals/HabitModal";
 
 export default function Modals() {
     const { modalType, isOpen, modalProps } = useModalStore();
@@ -15,7 +15,7 @@ export default function Modals() {
             return <CategoryModal {...modalProps} />;
 
         case "habit":
-            return <TestCreateHabitModal {...modalProps} />;
+            return <HabitModal {...modalProps} />;
 
         case "viewHabit":
             return <ViewHabitModal {...modalProps} />;

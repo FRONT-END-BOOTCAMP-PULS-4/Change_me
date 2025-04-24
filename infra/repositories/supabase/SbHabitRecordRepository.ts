@@ -129,7 +129,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         }
     }
 
-    async TestExists(record: HabitRecord): Promise<boolean> {
+    async exists(record: HabitRecord): Promise<boolean> {
         const supabase = await createClient();
         const { data } = await supabase
             .from("habit_record")
@@ -141,7 +141,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         return !!data;
     }
 
-    async TestSave(record: HabitRecord): Promise<void> {
+    async save2(record: HabitRecord): Promise<void> {
         const supabase = await createClient();
         const { error } = await supabase.from("habit_record").insert({
             habit_id: record.habitId,
@@ -150,7 +150,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         if (error) throw new Error("습관 기록 저장 실패: " + error.message);
     }
 
-    async TestDelete(record: HabitRecord): Promise<void> {
+    async delete(record: HabitRecord): Promise<void> {
         const supabase = await createClient();
         const { error } = await supabase
             .from("habit_record")
@@ -159,7 +159,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .eq("date", record.date.toISOString().split("T")[0]);
         if (error) throw new Error("습관 기록 삭제 실패: " + error.message);
     }
-    async TestGetTodayCheckedHabitIds(
+    async GetTodayCheckedHabitIds(
         memberId: string,
         date: Date,
     ): Promise<number[]> {
@@ -196,7 +196,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
     }
 
     // 달성률을 계산하기 위해 habit_record 테이블에서 체크된 기록 수를 가져오는 메서드
-    async TestCountByHabitId(habitId: number): Promise<number> {
+    async countByHabitId(habitId: number): Promise<number> {
         const supabase = await createClient();
 
         const { count, error } = await supabase

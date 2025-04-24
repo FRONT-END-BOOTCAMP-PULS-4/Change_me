@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import TestHabitList from "./components/TestHabitList";
+import HabitList from "./components/HabitList";
 
 export default function page() {
     return (
         <>
-            <TestHabitList />
+            <HabitList />
         </>
     );
 }
