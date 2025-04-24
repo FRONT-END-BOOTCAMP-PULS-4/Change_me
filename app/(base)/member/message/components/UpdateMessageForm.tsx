@@ -1,24 +1,20 @@
 "use client";
 // import { useRef, useState } from "react";
 import Image from "next/image";
-import styles from "./MessageForm.module.scss";
+import styles from "./UpdateMessageForm.module.scss";
 import { useAuthStore } from "@/stores/authStore";
 import { ChangeEvent, useState } from "react";
 import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
 
-type MessageFormProps = {
-    messageDto: MessageDto | null;
-    handleSubmit: (content: string) => Promise<void>;
+type UpdateMessageFormProps = {
+    messageDto: MessageDto;
+    handleSubmit: (id: number, content: string) => Promise<void>;
 };
 
-export default function MessageForm(props: MessageFormProps) {
+export default function MessageForm(props: UpdateMessageFormProps) {
     const contentMaxLength: number = 100;
     const defaultProfileImageUrl: string = "/images/ProfileCircle.png";
-
-    const submitButtonName: string =
-        props.messageDto === null ? "등록" : "수정";
-    const defaultContent: string =
-        props.messageDto === null ? "" : props.messageDto.content;
+    const defaultContent: string = props.messageDto.content;
 
     const { token } = useAuthStore();
     const [nickname, setNickname] = useState<string>("");
@@ -43,7 +39,7 @@ export default function MessageForm(props: MessageFormProps) {
     getMemberInfo();
 
     const [content, setContent] = useState<string>(defaultContent);
-    const [wordCount, setWordCount] = useState<number>(0);
+    const [wordCount, setWordCount] = useState<number>(defaultContent.length);
 
     const handleChange = async (element: ChangeEvent<HTMLInputElement>) => {
         if (element.target.value.length > contentMaxLength) {
@@ -83,8 +79,10 @@ export default function MessageForm(props: MessageFormProps) {
             <div>
                 {wordCount}/{contentMaxLength}
             </div>
-            <button onClick={() => props.handleSubmit(content)}>
-                {submitButtonName}
+            <button
+                onClick={() => props.handleSubmit(props.messageDto.id, content)}
+            >
+                수정
             </button>
         </div>
     );

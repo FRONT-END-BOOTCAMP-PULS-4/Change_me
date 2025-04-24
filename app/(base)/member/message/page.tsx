@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 
 import MessageList from "./components/MessageList";
-import MessageForm from "./components/MessageForm";
+import CreateMessageForm from "./components/CreateMessageForm";
 import MemberFilterButtons from "./components/MemberFilterButtons";
 import Pager from "@/app/components/Pager";
 import styles from "./page.module.scss";
@@ -42,7 +42,7 @@ export default function MessageListPage() {
                 }
                 mine={mine}
             />
-            <MessageForm messageDto={null} handleSubmit={createMessage} />
+            <CreateMessageForm handleSubmit={createMessage} />
             <MessageList
                 messages={messages}
                 handleUpdate={updateMessage}
