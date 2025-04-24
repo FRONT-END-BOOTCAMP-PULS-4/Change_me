@@ -21,8 +21,9 @@
 
     .cards {
         width: 100%;
+        max-width: 900px;
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(49%, 1fr));
         gap: 8px;
         @media (max-width: 768px) {
             display: flex;
