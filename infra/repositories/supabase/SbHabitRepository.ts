@@ -189,7 +189,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // [테스트] 습관 등록
-    async TestCreate(habit: Habit): Promise<void> {
+    async create(habit: Habit): Promise<void> {
         const supabase = await createClient();
         const { error } = await supabase.from("habit").insert({
             category_id: habit.categoryId,
@@ -207,7 +207,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // [테스트] 습관 조회 (진행 중인 습관)
-    async TestFindOngoingByMemberId(memberId: string): Promise<TestHabit[]> {
+    async FindOngoingByMemberId(memberId: string): Promise<TestHabit[]> {
         const supabase = await createClient();
 
         const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식
@@ -241,7 +241,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // 습관 삭제
-    async TestDeleteById(habitId: number): Promise<void> {
+    async deleteById2(habitId: number): Promise<void> {
         const supabase = await createClient();
         const { error } = await supabase
             .from("habit")
@@ -254,7 +254,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // 습관 포기
-    async TestGiveUpById(habitId: number): Promise<void> {
+    async giveUpById(habitId: number): Promise<void> {
         const supabase = await createClient();
         const now = new Date().toISOString();
         const { error } = await supabase
@@ -271,7 +271,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // 습관 수정
-    async TestUpdate(
+    async update2(
         id: number,
         memberId: string,
         categoryId: number,
@@ -298,7 +298,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // 습관ID로 습관 조회
-    async TestFindById(habitId: number): Promise<Habit> {
+    async findById2(habitId: number): Promise<Habit> {
         const supabase = await createClient();
 
         const { data, error } = await supabase
@@ -325,7 +325,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // 습관 상태 업데이트
-    async TestUpdateStatus(habitId: number, status: number): Promise<void> {
+    async updateStatus(habitId: number, status: number): Promise<void> {
         const supabase = await createClient();
         const { error } = await supabase
             .from("habit")

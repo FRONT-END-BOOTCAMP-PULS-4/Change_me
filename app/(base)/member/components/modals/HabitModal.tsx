@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import ModalWrapper from "@/app/components/ModalWrapper";
 import useModalStore from "@/stores/modalStore";
 import { useAuthStore } from "@/stores/authStore";
-import styles from "./TestCreateHabitModal.module.scss";
+import styles from "./HabitModal.module.scss";
 
-export default function TestCreateHabitModal() {
+export default function HabitModal() {
     const { isOpen, closeModal, modalType, modalProps } = useModalStore();
     const isEdit = modalType === "habit";
     const token = useAuthStore.getState().token;

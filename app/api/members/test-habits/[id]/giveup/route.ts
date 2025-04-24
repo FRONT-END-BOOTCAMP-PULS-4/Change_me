@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { TestGiveUpHabitUsecase } from "@/application/usecase/habit/TestGiveUpHabitUsecase";
+import { GiveUpHabitUsecase } from "@/application/usecase/habit/GiveUpHabitUsecase";
 import { SbHabitRepository } from "@/infra/repositories/supabase/SbHabitRepository";
 
 export async function POST(
@@ -8,7 +8,7 @@ export async function POST(
 ) {
     try {
         const habitId = Number(params.id);
-        const usecase = new TestGiveUpHabitUsecase(new SbHabitRepository());
+        const usecase = new GiveUpHabitUsecase(new SbHabitRepository());
         await usecase.execute(habitId);
 
         return NextResponse.json({ message: "습관 포기 완료" });

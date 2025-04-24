@@ -3,7 +3,7 @@
 import { useAuthStore } from "@/stores/authStore";
 import useModalStore from "@/stores/modalStore";
 import { useEffect, useState, useCallback } from "react";
-import styles from "./TestHabitList.module.scss";
+import styles from "./HabitList.module.scss";
 import Loading from "@/app/components/Loading";
 import Image from "next/image";
 
