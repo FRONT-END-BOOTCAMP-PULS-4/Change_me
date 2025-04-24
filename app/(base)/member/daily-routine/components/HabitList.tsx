@@ -266,10 +266,9 @@ export default function HabitList() {
                                         useModalStore
                                             .getState()
                                             .openModal("viewHabit", {
-                                                habitId: habit.id,
-                                                habitName: habit.name,
-                                                habitDescription:
-                                                    habit.description,
+                                                id: habit.id,
+                                                name: habit.name,
+                                                description: habit.description,
                                             })
                                     }
                                 >
