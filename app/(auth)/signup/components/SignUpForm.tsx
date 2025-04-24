@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./SignUpForm.module.scss";
+import { useToastStore } from "@/stores/toastStore";
 
 export function SignUpForm() {
     const router = useRouter();
@@ -28,7 +29,7 @@ export function SignUpForm() {
     // 이메일 중복 검사
     const handleEmailCheck = async () => {
         if (!email) {
-            alert("이메일을 입력해주세요.");
+            useToastStore.getState().show("이메일을 입력해주세요.");
             return;
         }
 
@@ -49,7 +50,7 @@ export function SignUpForm() {
             setEmailError("이미 사용 중인 이메일입니다.");
             setIsEmailChecked(false);
         } else {
-            alert("사용 가능한 이메일입니다.");
+            useToastStore.getState().show("사용 가능한 이메일입니다.");
             setEmailError("");
             setIsEmailChecked(true);
         }
@@ -103,22 +104,22 @@ export function SignUpForm() {
         e.preventDefault();
 
         if (!name || !email || !password || !nickname) {
-            alert("모든 필드를 입력해주세요.");
+            useToastStore.getState().show("모든 필드를 입력해주세요.");
             return;
         }
 
         if (emailError || passwordError) {
-            alert("입력한 정보가 올바르지 않습니다.");
+            useToastStore.getState().show("입력한 정보가 올바르지 않습니다.");
             return;
         }
 
         if (!isEmailChecked) {
-            alert("이메일 중복 확인을 완료해주세요.");
+            useToastStore.getState().show("이메일 중복 확인을 완료해주세요.");
             return;
         }
 
         if (confirmPassword !== password) {
-            alert("비밀번호가 일치하지 않습니다.");
+            useToastStore.getState().show("비밀번호가 일치하지 않습니다.");
             return;
         }
 
