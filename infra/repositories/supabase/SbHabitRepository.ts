@@ -207,7 +207,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // [테스트] 습관 조회 (진행 중인 습관)
-    async FindOngoingByMemberId(memberId: string): Promise<TestHabit[]> {
+    async findOngoingByMemberId(memberId: string): Promise<TestHabit[]> {
         const supabase = await createClient();
 
         const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식

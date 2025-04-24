@@ -5,6 +5,6 @@ export class GetTodayCheckedHabitIdsUsecase {
     constructor(private readonly repo: HabitRecordRepository) { }
 
     async execute(dto: GetTodayHabitRecordDto): Promise<number[]> {
-        return await this.repo.GetTodayCheckedHabitIds(dto.memberId, dto.date);
+        return await this.repo.getTodayCheckedHabitIds(dto.memberId, dto.date);
     }
 }

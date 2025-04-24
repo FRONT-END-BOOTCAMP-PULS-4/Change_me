@@ -159,7 +159,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .eq("date", record.date.toISOString().split("T")[0]);
         if (error) throw new Error("습관 기록 삭제 실패: " + error.message);
     }
-    async GetTodayCheckedHabitIds(
+    async getTodayCheckedHabitIds(
         memberId: string,
         date: Date,
     ): Promise<number[]> {

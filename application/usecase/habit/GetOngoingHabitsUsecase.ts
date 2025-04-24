@@ -9,7 +9,7 @@ export class GetOngoingHabitsUsecase {
     ) { }
 
     async execute(memberId: string): Promise<HabitProgressDto[]> {
-        const habits = await this.habitRepo.FindOngoingByMemberId(memberId);
+        const habits = await this.habitRepo.findOngoingByMemberId(memberId);
         const today = new Date();
 
         return await Promise.all(
