@@ -224,7 +224,7 @@ export default function HabitList() {
                             height={140}
                             className={styles.emptyImage}
                         />
-                        <p>진행중인 습관이 없습니다.</p>
+                        <p>진행 중인 습관이 없습니다.</p>
                     </div>
                 ) : (
                     filteredHabits.map((habit) => (
