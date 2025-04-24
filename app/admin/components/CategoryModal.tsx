@@ -4,6 +4,7 @@ import ModalWrapper from "@/app/components/ModalWrapper";
 import useModalStore from "@/stores/modalStore";
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import styles from "./CategoryModal.module.scss";
+import { useToastStore } from "@/stores/toastStore";
 
 type CategoryModalProps = {
     type: "create" | "edit";
@@ -23,7 +24,7 @@ export default function CategoryModal({
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!input) {
-            alert("카테고리 이름을 입력해주세요."); // 추후 토스트로 처리
+            useToastStore.getState().show("카테고리 이름을 입력해주세요.");
             return;
         }
 

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/authStore";
 import styles from "./PasswordChangeForm.module.scss";
+import { useToastStore } from "@/stores/toastStore";
 
 export default function PasswordChangeForm() {
     const router = useRouter();
@@ -26,23 +27,23 @@ export default function PasswordChangeForm() {
 
     const handleSubmit = async () => {
         if (!currentPassword || !newPassword || !confirmPassword) {
-            alert("모든 비밀번호를 입력해주세요.");
+            useToastStore.getState().show("모든 비밀번호를 입력해주세요.");
             return;
         }
 
         if (passwordError) {
-            alert(passwordError);
+            useToastStore.getState().show(passwordError);
             return;
         }
 
         if (newPassword !== confirmPassword) {
-            alert("새 비밀번호가 일치하지 않습니다.");
+            useToastStore.getState().show("새 비밀번호가 일치하지 않습니다.");
             return;
         }
 
         const token = useAuthStore.getState().token;
         if (!token) {
-            alert("로그인이 필요합니다.");
+            useToastStore.getState().show("로그인이 필요합니다.");
             return;
         }
 
@@ -58,7 +59,7 @@ export default function PasswordChangeForm() {
 
         const verifyData = await verifyRes.json();
         if (!verifyRes.ok || !verifyData.valid) {
-            alert("비밀번호가 틀렸습니다. 다시 입력해주세요.");
+            useToastStore.getState().show("비밀번호가 틀렸습니다. 다시 입력해주세요.");
             return;
         }
 
@@ -73,11 +74,13 @@ export default function PasswordChangeForm() {
         });
 
         if (changeRes.ok) {
-            alert("비밀번호가 성공적으로 변경되었습니다.");
+            useToastStore.getState().show("비밀번호가 성공적으로 변경되었습니다.");
             router.push("/member/profile");
         } else {
             const data = await changeRes.json();
-            alert(data.error || "비밀번호 변경에 실패했습니다.");
+            useToastStore.getState().show(
+                data.error || "비밀번호 변경에 실패했습니다."
+            );
         }
     };
 
