@@ -15,7 +15,16 @@ export class SbHabitRepository implements HabitRepository {
                 query = query.eq("category_id", filter.categoryId);
             }
             if (filter.status !== undefined) {
-                query = query.eq("status", filter.status);
+                if (filter.status === 0) {
+                    query = query
+                        .eq("status", filter.status)
+                        .lte(
+                            "finished_at",
+                            new Date().toISOString().split("T")[0],
+                        );
+                } else {
+                    query = query.eq("status", filter.status);
+                }
             }
             if (filter.offset !== undefined) {
                 query.range(
@@ -366,7 +375,7 @@ export class SbHabitRepository implements HabitRepository {
             .from("habit")
             .select("*, category(name)")
             .eq("member_id", memberId)
-            .in("status", [2])
+            .in("status", [2]);
 
         if (error) {
             throw new Error(`포기한 습관 조회 실패: ${error.message}`);
