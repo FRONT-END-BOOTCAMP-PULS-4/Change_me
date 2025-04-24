@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import styles from "./MessageItem.module.scss";
 import LikeButton from "./LikeButton";
 import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
 import { useAuthStore } from "@/stores/authStore";
+import UpdateMessageForm from "./UpdateMessageForm";
 
 type MessageItemProps = {
     messageDto: MessageDto; // TODO: divide Dto and props
@@ -14,11 +15,10 @@ type MessageItemProps = {
 };
 
 export default function MessageItem(props: MessageItemProps) {
-    const isUpdating: boolean = false; //
-
     const { user } = useAuthStore();
     const memberId: string = user?.id || "";
 
+    const [isUpdating, setIsUpdating] = useState<boolean>(false);
     const messageDto = props.messageDto;
     const isAuthor = memberId === messageDto.memberId;
     const createdAt = new Date(messageDto.createdAt);
@@ -26,9 +26,18 @@ export default function MessageItem(props: MessageItemProps) {
     const formattedDate = `${createdAt.getFullYear()}-${pad(String(createdAt.getMonth() + 1))}-${pad(String(createdAt.getDate()))} ${pad(String(createdAt.getHours()))}:${pad(String(createdAt.getMinutes()))}`;
 
     const messageLikeDto = { messageId: messageDto.id, memberId: memberId };
+    const handleUpdate = async (id: number, content: string) => {
+        props.handleUpdate(id, content);
+        setIsUpdating(false);
+    };
 
     if (isUpdating) {
-        return;
+        return (
+            <UpdateMessageForm
+                messageDto={messageDto}
+                handleSubmit={handleUpdate}
+            />
+        );
     } else {
         return (
             <div className={styles.wrapper}>
@@ -57,12 +66,7 @@ export default function MessageItem(props: MessageItemProps) {
                         <div className="flex space-x-2 text-sm text-gray-500">
                             <button
                                 className={styles.button}
-                                onClick={() =>
-                                    props.handleUpdate(
-                                        messageDto.id,
-                                        messageDto.content,
-                                    )
-                                }
+                                onClick={() => setIsUpdating(true)}
                             >
                                 수정
                             </button>
