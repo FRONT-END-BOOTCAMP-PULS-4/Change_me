@@ -2,6 +2,7 @@
     padding: 36px 0;
     font-size: var(--fontSize-xl);
     width: 100%;
+
     margin: auto;
 
     @media (max-width: 768px) {
@@ -18,6 +19,7 @@
 
         span {
             font-weight: var(--fontWeight-semiBold);
+            text-shadow: var(--color-main3) 2px 0 10px;
         }
 
         .category {
