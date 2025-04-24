@@ -5,6 +5,7 @@ import ModalWrapper from "@/app/components/ModalWrapper";
 import useModalStore from "@/stores/modalStore";
 import { useAuthStore } from "@/stores/authStore";
 import styles from "./HabitModal.module.scss";
+import { useToastStore } from "@/stores/toastStore";
 
 export default function HabitModal() {
     const { isOpen, closeModal, modalType, modalProps } = useModalStore();
@@ -57,7 +58,7 @@ export default function HabitModal() {
 
     const handleSubmit = async () => {
         if (categoryId === null || !name.trim() || !finishedAt.trim()) {
-            alert("필수 항목을 모두 입력해주세요.");
+            useToastStore.getState().show("필수 항목을 모두 입력해주세요.");
             return;
         }
 
@@ -83,15 +84,19 @@ export default function HabitModal() {
 
             const data = await res.json();
             if (res.ok) {
-                alert(isEditMode ? "습관이 수정되었습니다." : "습관이 등록되었습니다.");
+                useToastStore.getState().show(
+                    isEditMode ? "습관이 수정되었습니다." : "습관이 등록되었습니다."
+                );
                 closeModal();
                 refetchHabits?.();
             } else {
-                alert(data.error || (isEditMode ? "습관 수정 실패" : "습관 등록 실패"));
+                useToastStore.getState().show(
+                    data.error || (isEditMode ? "습관 수정 실패" : "습관 등록 실패")
+                );
             }
         } catch (error) {
             console.error("요청 실패:", error);
-            alert("서버 오류가 발생했습니다.");
+            useToastStore.getState().show("서버 오류가 발생했습니다.");
         }
     };
 
@@ -170,7 +175,7 @@ export default function HabitModal() {
                                     : new Date();
 
                                 const startLimit = new Date(startAt);
-                                startLimit.setDate(startLimit.getDate() + 14);
+                                startLimit.setDate(startLimit.getDate() + 13);
 
                                 const finalMin = startLimit > today ? startLimit : today;
 
