@@ -76,6 +76,10 @@ export default function TestRecordList() {
         fetchHabits();
     }, [fetchHabits]);
 
+    const filteredHabits = habits.filter(
+        (habit) => selectedCategoryId === null || Number(habit.categoryId) === selectedCategoryId
+    );
+
     if (isLoading) {
         return <Loading />;
     }
@@ -210,6 +214,51 @@ export default function TestRecordList() {
                         ))
                 )}
             </div>
+            {statusTab === "success" && filteredHabits.length > 0 && (
+                <div className={styles.celebrate}>
+                    <Image
+                        src="/images/Praise.png"
+                        alt="칭찬 캐릭터"
+                        width={160}
+                        height={160}
+                    />
+                    <p>
+                        <strong>{filteredHabits.length}개의 습관</strong>을 만드셨군요!
+                        <br />
+                        잘하고 있어요 :)
+                    </p>
+                </div>
+            )}
+
+            {statusTab === "fail" && filteredHabits.length > 0 && (
+                <div className={styles.celebrate}>
+                    <Image
+                        src="/images/Together.png"
+                        alt="응원 캐릭터"
+                        width={160}
+                        height={160}
+                    />
+                    <p>
+                        <strong>{filteredHabits.length}개의 습관</strong>을 실패하셨어요.<br />
+                        다시 도전해볼까요?
+                    </p>
+                </div>
+            )}
+
+            {statusTab === "giveup" && filteredHabits.length > 0 && (
+                <div className={styles.celebrate}>
+                    <Image
+                        src="/images/Together.png"
+                        alt="응원 캐릭터"
+                        width={160}
+                        height={160}
+                    />
+                    <p>
+                        <strong>{filteredHabits.length}개의 습관</strong>을 실패하셨어요.<br />
+                        다시 도전해볼까요?
+                    </p>
+                </div>
+            )}
         </div>
     );
 }
