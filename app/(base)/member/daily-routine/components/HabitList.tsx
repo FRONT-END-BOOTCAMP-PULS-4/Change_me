@@ -6,6 +6,7 @@ import { useEffect, useState, useCallback } from "react";
 import styles from "./HabitList.module.scss";
 import Loading from "@/app/components/Loading";
 import Image from "next/image";
+import { useToastStore } from "@/stores/toastStore";
 
 type Habit = {
     id: number;
@@ -113,7 +114,9 @@ export default function HabitList() {
                 await fetchHabits();
             } else {
                 const data = await res.json();
-                alert(data.error || "처리 실패");
+                useToastStore.getState().show(
+                    data.error || "처리 실패"
+                );
             }
         } catch (error) {
             console.error("체크 처리 실패:", error);
@@ -134,10 +137,12 @@ export default function HabitList() {
 
             const data = await res.json();
             if (res.ok) {
-                alert("삭제 완료");
+                useToastStore.getState().show("삭제 완료");
                 setHabits((prev) => prev.filter((habit) => habit.id !== habitId));
             } else {
-                alert(data.error || "삭제 실패");
+                useToastStore.getState().show(
+                    data.error || "삭제 실패"
+                );
             }
         } catch (error) {
             console.error("삭제 요청 실패:", error);
@@ -158,10 +163,12 @@ export default function HabitList() {
 
             const data = await res.json();
             if (res.ok) {
-                alert("습관을 포기했습니다.");
+                useToastStore.getState().show("습관을 포기했습니다.");
                 setHabits((prev) => prev.filter((habit) => habit.id !== habitId));
             } else {
-                alert(data.error || "포기 실패");
+                useToastStore.getState().show(
+                    data.error || "포기 실패"
+                );
             }
         } catch (error) {
             console.error("포기 요청 실패:", error);
