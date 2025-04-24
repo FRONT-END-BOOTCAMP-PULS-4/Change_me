@@ -63,8 +63,8 @@ export default function TestCreateHabitModal() {
 
         const method = isEditMode ? "PATCH" : "POST";
         const url = isEditMode
-            ? `/api/test-habits/${modalProps.habit.id}`
-            : `/api/test-habits`;
+            ? `/api/members/test-habits/${modalProps.habit.id}`
+            : `/api/members/test-habits`;
 
         try {
             const res = await fetch(url, {
