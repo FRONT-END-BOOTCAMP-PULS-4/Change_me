@@ -1,8 +1,4 @@
 .card {
-    @media (max-width: 768px) {
-        width: 100%;
-    }
-
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -14,12 +10,17 @@
     border-radius: 12px;
     font-size: var(--fontSize-md);
 
+    @media (max-width: 768px) {
+        width: 100%;
+        font-size: var(--fontSize-sm);
+    }
+
     .profile {
         display: flex;
         align-items: center;
         gap: 8px;
-        padding-left: 12px;
-
+        padding-left: 24px;
+        flex: 1;
         > .img {
             width: 28px;
             height: 28px;
@@ -35,14 +36,13 @@
             border: 1px solid var(--color-gray);
         }
     }
-
-    p {
+    .text {
         flex: 1;
         text-align: left;
         display: -webkit-box;
         overflow: hidden;
         text-overflow: ellipsis;
         -webkit-box-orient: vertical;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
     }
 }

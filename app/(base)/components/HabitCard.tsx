@@ -21,10 +21,12 @@ export default function HabitCard({
                         alt="profile"
                     />
                 </div>
-                <p>{isActive ? userNickname : "탈퇴한 사용자"}</p>
+                <p className={styles.text}>
+                    {isActive ? userNickname : "탈퇴한 회원"}
+                </p>
             </div>
-            <p>{habitName}</p>
-            <p>{description}</p>
+            <p className={styles.text}>{habitName}</p>
+            <p className={styles.text}>{description}</p>
         </div>
     );
 }
