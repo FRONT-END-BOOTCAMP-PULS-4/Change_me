@@ -7,6 +7,8 @@ type HabitCardProps = {
     habit: AnonHabit;
 };
 
+const { ["card-front"]: cardFront, ["card-back"]: cardBack } = styles;
+
 export default function HabitCard({
     habit: { id, userNickname, imageUrl, isActive, habitName, description },
 }: HabitCardProps) {
@@ -14,19 +16,22 @@ export default function HabitCard({
 
     return (
         <div className={styles.card}>
-            <div className={styles.profile}>
-                <div className={styles.img}>
+            <div className={cardFront}>
+                <div className={styles.profile}>
                     <img
+                        className={styles.profile}
                         src={isActive && imageUrl ? imageUrl : baseImageUrl}
                         alt="profile"
                     />
                 </div>
-                <p className={styles.text}>
+                <p className={styles.nickname}>
                     {isActive ? userNickname : "탈퇴한 회원"}
                 </p>
+                <p className={styles.title}>{habitName}</p>
             </div>
-            <p className={styles.text}>{habitName}</p>
-            <p className={styles.text}>{description}</p>
+            <div className={cardBack}>
+                <p>{description}</p>
+            </div>
         </div>
     );
 }
