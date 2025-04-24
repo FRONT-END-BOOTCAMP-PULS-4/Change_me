@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { useEffect, useState, useCallback } from "react";
 import styles from "./TestRecordList.module.scss";
 import Loading from "@/app/components/Loading";
+import Image from "next/image";
 
 type Habit = {
     id: number;
@@ -126,38 +127,51 @@ export default function TestRecordList() {
                 <div className={styles.info}><div className={styles.title}>달성률</div></div>
             </div>
             <div className={styles.habitList}>
-                {habits
-                    .filter(
-                        (habit) => selectedCategoryId === null || Number(habit.categoryId) === selectedCategoryId
-                    )
-                    .map((habit) => (
-                        <div className={styles.habitCard} key={habit.id}>
-                            <div className={styles.category}>{habit.categoryName}</div>
-                            <div className={styles.info}>
-                                <div className={styles.title}>{habit.name}</div>
-                            </div>
-                            <div className={styles.info}>
-                                <div className={styles.desc}>{habit.description}</div>
-                            </div>
-                            <div className={styles.info}>
-                                <div className={styles.desc}>{habit.startAt}</div>
-                            </div>
-                            <div className={styles.info}>
-                                <div className={styles.desc}>{habit.finishedAt}</div>
-                            </div>
-                            <div className={styles.info}>
-                                <div className={styles.desc}>{habit.stoppedAt ? habit.stoppedAt : "-"}</div>
-                            </div>
-                            <div className={styles.info}>
-                                <div className={styles.desc}>{habit.duration}일</div>
-                            </div>
-                            <div className={styles.info}>
-                                <div className={styles.progress}>
-                                    {habit.rate}
+                {habits.filter(
+                    (habit) => selectedCategoryId === null || Number(habit.categoryId) === selectedCategoryId
+                ).length === 0 ? (
+                    <div className={styles.empty}>
+                        <Image
+                            src="/images/DailyRoutineCheck.png"
+                            alt="조회된 습관 없음"
+                            width={140}
+                            height={140}
+                            className={styles.emptyImage}
+                        />
+                        <p>조회된 습관이 없습니다.</p>
+                    </div>
+                ) : (
+                    habits
+                        .filter(
+                            (habit) => selectedCategoryId === null || Number(habit.categoryId) === selectedCategoryId
+                        )
+                        .map((habit) => (
+                            <div className={styles.habitCard} key={habit.id}>
+                                <div className={styles.category}>{habit.categoryName}</div>
+                                <div className={styles.info}>
+                                    <div className={styles.title}>{habit.name}</div>
+                                </div>
+                                <div className={styles.info}>
+                                    <div className={styles.desc}>{habit.description}</div>
+                                </div>
+                                <div className={styles.info}>
+                                    <div className={styles.desc}>{habit.startAt}</div>
+                                </div>
+                                <div className={styles.info}>
+                                    <div className={styles.desc}>{habit.finishedAt}</div>
+                                </div>
+                                <div className={styles.info}>
+                                    <div className={styles.desc}>{habit.stoppedAt ? habit.stoppedAt : "-"}</div>
+                                </div>
+                                <div className={styles.info}>
+                                    <div className={styles.desc}>{habit.duration}일</div>
+                                </div>
+                                <div className={styles.info}>
+                                    <div className={styles.progress}>{habit.rate}</div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))
+                )}
             </div>
         </div>
     );
