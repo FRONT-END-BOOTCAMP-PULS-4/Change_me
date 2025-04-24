@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import styles from "./ViewHabitModal.module.scss";
 import { useAuthStore } from "@/stores/authStore";
+import { formatDate } from "react-calendar/dist/cjs/shared/dateFormatter";
 
 type ViewHabitModalProps = {
     habitId: number;
@@ -18,11 +19,19 @@ export default function ViewHabitModal(props: ViewHabitModalProps) {
 
     const [dates, setDates] = useState<Date[]>([]);
 
+    const { token } = useAuthStore();
+
     useEffect(() => {
         const fetchDates = async () => {
             try {
                 const res = await fetch(
                     `/api/members/records/${props.habitId}`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
                 );
                 const data = await res.json();
                 if (Array.isArray(data.dates)) {
@@ -43,7 +52,7 @@ export default function ViewHabitModal(props: ViewHabitModalProps) {
                     {props.habitDescrition}
                 </div>
                 <Calendar
-                    formatDay={(locale, date) => moment(date).format("DD")} // should be changed
+                    formatDay={(locale, date) => String(date.getDate())}
                     calendarType="gregory"
                     prev2Label={null}
                     next2Label={null}

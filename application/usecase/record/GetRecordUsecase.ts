@@ -14,6 +14,7 @@ export class GetRecordUsecase {
     async execute(getRecordDto: GetRecordDto): Promise<RecordDto> {
         try {
             const habitId: number = getRecordDto.habitId;
+            console.log("habitId@execute", habitId);
 
             // data query
             const filter = new HabitRecordFilter(habitId);
