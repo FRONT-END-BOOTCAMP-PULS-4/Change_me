@@ -11,7 +11,7 @@ export interface HabitRecordRepository {
     exists(record: HabitRecord): Promise<boolean>;
     save2(record: HabitRecord): Promise<void>;
     delete(record: HabitRecord): Promise<void>;
-    GetTodayCheckedHabitIds(
+    getTodayCheckedHabitIds(
         memberId: string,
         date: Date,
     ): Promise<number[]>;

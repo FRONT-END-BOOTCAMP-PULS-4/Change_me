@@ -12,7 +12,7 @@ export interface HabitRepository {
     deleteById(id: number): Promise<void>;
 
     create(habit: Habit): Promise<void>;
-    FindOngoingByMemberId(memberId: string): Promise<TestHabit[]>;
+    findOngoingByMemberId(memberId: string): Promise<TestHabit[]>;
     deleteById2(habitId: number): Promise<void>;
     giveUpById(habitId: number): Promise<void>;
     update2(
