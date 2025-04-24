@@ -3,7 +3,6 @@
 import React from "react";
 import Image from "next/image";
 import styles from "./MessageItem.module.scss";
-import MessageButton from "./MessageButton";
 import LikeButton from "./LikeButton";
 import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
 import { useAuthStore } from "@/stores/authStore";
@@ -56,20 +55,25 @@ export default function MessageItem(props: MessageItemProps) {
                     </nav>
                     {isAuthor && (
                         <div className="flex space-x-2 text-sm text-gray-500">
-                            <MessageButton
-                                type="Edit"
-                                id={messageDto.id}
-                                content={messageDto.content}
-                                handleUpdate={props.handleUpdate}
-                                handleDelete={props.handleDelete}
-                            />
-                            <MessageButton
-                                type="Delete"
-                                id={messageDto.id}
-                                content={messageDto.content}
-                                handleUpdate={props.handleUpdate}
-                                handleDelete={props.handleDelete}
-                            />
+                            <button
+                                className={styles.button}
+                                onClick={() =>
+                                    props.handleUpdate(
+                                        messageDto.id,
+                                        messageDto.content,
+                                    )
+                                }
+                            >
+                                수정
+                            </button>
+                            <button
+                                className={styles.button}
+                                onClick={() =>
+                                    props.handleDelete(messageDto.id)
+                                }
+                            >
+                                삭제
+                            </button>
                         </div>
                     )}
                 </div>
