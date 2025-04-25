@@ -12,8 +12,8 @@ export default function NotFound() {
                 height={140}
                 className={styles.image}
             />
-            <h1 className={styles.title}>404 - Forbidden</h1>
-            <p className={styles.message}>죄송합니다. 이 페이지에 접근할 권한이 없습니다.</p>
+            <h1 className={styles.title}>404 - Not Found</h1>
+            <p className={styles.message}>페이지가 존재하지 않습니다.</p>
             <Link href="/" className={styles.link}>
                 홈으로 돌아가기
             </Link>
