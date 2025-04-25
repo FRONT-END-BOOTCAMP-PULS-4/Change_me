@@ -3,8 +3,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    border: 1px solid var(--color-gray);
     align-items: start;
     gap: 36px;
+    padding: 12px;
 
     > .nav {
         flex: 1;
@@ -17,6 +19,40 @@
         @media (max-width: 768px) {
             flex-wrap: wrap;
             gap: 16px;
+        }
+    }
+
+    > .button {
+        align-self: flex-end;
+        background-color: var(--color-main1);
+        color: var(--color-white);
+        padding: 8px 16px;
+        font-size: var(--fontSize-base);
+        font-weight: var(--fontWeight-medium);
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: var(--color-main2);
+        }
+    }
+    > .input {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: var(--fontSize-base);
+        border: 1px solid var(--color-gray-light);
+        border-radius: 6px;
+        outline: none;
+        transition: border-color 0.2s ease;
+
+        &::placeholder {
+            color: var(--color-gray);
+        }
+
+        &:focus {
+            border-color: var(--color-main1);
         }
     }
 }
