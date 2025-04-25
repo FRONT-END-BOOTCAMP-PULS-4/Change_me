@@ -26,12 +26,21 @@ export async function POST(req: NextRequest) {
         const authHeader = req.headers.get("authorization");
         const memberId = await getMemberIdFromToken(authHeader!);
         const { categoryId, name, description, finishedAt } = await req.json();
-        const dto = new CreateHabitDto(memberId!, categoryId, name, description, finishedAt);
+        const dto = new CreateHabitDto(
+            memberId!,
+            categoryId,
+            name,
+            description,
+            finishedAt,
+        );
         const repo = new SbHabitRepository();
         const usecase = new CreateHabitUsecase(repo);
         await usecase.execute(dto);
 
-        return NextResponse.json({ message: "습관 등록 완료" }, { status: 201 });
+        return NextResponse.json(
+            { message: "습관 등록 완료" },
+            { status: 201 },
+        );
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

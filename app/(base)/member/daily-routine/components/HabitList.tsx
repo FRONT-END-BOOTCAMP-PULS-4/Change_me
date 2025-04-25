@@ -2,11 +2,12 @@
 
 import { useAuthStore } from "@/stores/authStore";
 import useModalStore from "@/stores/modalStore";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, use } from "react";
 import styles from "./HabitList.module.scss";
 import Loading from "@/app/components/Loading";
 import Image from "next/image";
 import { useToastStore } from "@/stores/toastStore";
+import { useRouter } from "next/navigation";
 
 type Habit = {
     id: number;
@@ -35,41 +36,51 @@ export default function HabitList() {
         null,
     );
     const [isLoading, setIsLoading] = useState(true);
+    const { show } = useToastStore();
 
-    const token = useAuthStore.getState().token;
+    const { token, logout } = useAuthStore();
 
     // 오늘 날짜 (YYYY-MM-DD)
     const today = new Date().toISOString().slice(0, 10);
 
+    const router = useRouter();
+
     const fetchHabits = useCallback(async () => {
-        try {
-            setIsLoading(true);
-            const res = await fetch("/api/members/test-habits/", {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+        setIsLoading(true);
+        const res = await fetch("/api/members/test-habits/", {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (res.ok) {
             const data = await res.json();
             const habits = Array.isArray(data) ? data : data.habits;
             setHabits(habits);
-        } catch (error) {
-            console.error("불러오기 실패:", error);
-        } finally {
-            setIsLoading(false);
+        } else if (res.status === 401) {
+            logout();
+            show("로그인이 필요한 서비스입니다.");
+
+            router.push("/login");
+        } else {
+            show("잠시 후 다시 시도해주세요");
         }
+
+        setIsLoading(false);
     }, [token]);
 
     useEffect(() => {
         const fetchCategories = async () => {
-            try {
-                const res = await fetch("/api/categories");
+            const res = await fetch("/api/categories");
+
+            if (res.ok) {
                 const data = await res.json();
                 if (Array.isArray(data.categories)) {
                     setCategories(data.categories);
                 }
-            } catch (error) {
-                console.error("카테고리 불러오기 실패:", error);
+            } else {
+                show("잠시 후 다시 시도해주세요");
             }
         };
         fetchCategories();
@@ -85,11 +96,15 @@ export default function HabitList() {
                 method: "GET",
                 headers: { Authorization: `Bearer ${token}` },
             });
-            const data = await res.json();
-            if (Array.isArray(data.checkedIds)) {
-                const state: { [id: number]: boolean } = {};
-                data.checkedIds.forEach((id: number) => (state[id] = true));
-                setCheckedHabits(state);
+            if (res.ok) {
+                const data = await res.json();
+                if (Array.isArray(data.checkedIds)) {
+                    const state: { [id: number]: boolean } = {};
+                    data.checkedIds.forEach((id: number) => (state[id] = true));
+                    setCheckedHabits(state);
+                }
+            } else {
+                show("잠시 후 다시 시도해주세요");
             }
         };
 

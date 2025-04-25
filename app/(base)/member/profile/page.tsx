@@ -6,9 +6,14 @@ import ChangePasswordButton from "./components/ChangePasswordButton";
 import styles from "./page.module.scss";
 import { useAuthStore } from "@/stores/authStore";
 import Loading from "@/app/components/Loading";
+import { useToastStore } from "@/stores/toastStore";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
     const [profile, setProfile] = useState<any>(null);
+    const { logout } = useAuthStore();
+    const { show } = useToastStore();
+    const router = useRouter();
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -22,10 +27,10 @@ export default function ProfilePage() {
             if (res.ok) {
                 const data = await res.json();
                 setProfile(data);
-            } else {
-                // 토큰이 잘못됐거나 만료된 경우
-                localStorage.removeItem("access_token");
-                window.location.href = "/login";
+            } else if (res.status === 401) {
+                logout();
+                show("로그인이 필요한 서비스입니다.");
+                router.push("/login");
             }
         };
 
