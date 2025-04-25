@@ -3,11 +3,8 @@ import { ViewQueryDto } from "./dto/ViewQueryDto";
 import { HabitListDto } from "./dto/HabitListDto";
 import { HabitFilter } from "@/domain/repositories/filters/HabitFilter";
 import { HabitDto } from "./dto/HabitDto";
-import { Habit } from "@/domain/entities/Habit";
 import { HabitRecordRepository } from "@/domain/repositories/HabitRecordRepository";
-import { HabitRecordDto } from "./dto/HabitRecordDto";
 import { CategoryRepository } from "@/domain/repositories/CategoryRepository";
-import { HabitRecord } from "@/domain/entities/HabitRecord";
 
 export class GetHabitListUsecase {
     private habitRepository: HabitRepository;
@@ -28,21 +25,15 @@ export class GetHabitListUsecase {
         try {
             const pageSize: number = 10;
             const currentPage: number = queryDto.currentPage || 1;
+            const offset: number = (currentPage - 1) * pageSize;
+            const limit: number = pageSize;
+
             const memberId: string | undefined = queryDto.memberId;
             const categoryId: number | undefined = queryDto.categoryId;
             const status: number | undefined = queryDto.status;
 
-            const offset: number = (currentPage - 1) * pageSize; // Q : offset은 왜 QueryDto에 포함되지 않나요?
-            // offset은 페이지네이션을 위해 계산된 값으로, 쿼리 파라미터로 전달할 필요가 없습니다.
-            // 페이지네이션을 위해 쿼리 파라미터로 전달되는 currentPage를 사용하여 offset을 계산합니다.
-            // 그러면 왜 currentPage는 QueryDto에 포함되나요?
-            // A : currentPage는 클라이언트에서 요청할 때 사용자가 지정하는 값입니다.
-            // 그러면 왜 페이지네이션은 QueryDto에 포함되지 않나요?
-            // A : 페이지네이션은 클라이언트에서 요청할 때 사용자가 지정하는 값입니다.
-            const limit: number = pageSize;
-
             // HabitFilter를 사용하여 필터링 조건 설정
-            const filter = new HabitFilter(
+            const listFilter = new HabitFilter(
                 memberId,
                 categoryId,
                 status,
@@ -52,12 +43,28 @@ export class GetHabitListUsecase {
                 limit,
             );
 
-            // 데이터 조회
-            const habits = await this.habitRepository.findAll(filter);
+            const countFilter = new HabitFilter(
+                memberId,
+                categoryId,
+                status,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+            );
 
             // 전체 개수 계산 (count 메소드가 있다면 사용)
-            const totalCount = habits.length; // 실제로는 전체 개수에 대한 쿼리가 필요할 수 있음
-            const totalPages = Math.ceil(totalCount / pageSize);
+            const totalCount = await this.habitRepository.count(countFilter); // 실제로는 전체 개수에 대한 쿼리가 필요할 수 있음
+            const startPage =
+                Math.floor((currentPage - 1) / pageSize) * pageSize + 1;
+            const endPage = Math.ceil(totalCount / pageSize);
+            const pages = Array.from(
+                { length: 10 },
+                (_, i) => startPage + i,
+            ).filter((pageNumber) => pageNumber <= endPage);
+
+            // 데이터 조회
+            const habits = await this.habitRepository.findAll(listFilter);
 
             // 응답 데이터 변환
             const habitDtos: HabitDto[] = await Promise.all(
@@ -136,12 +143,7 @@ export class GetHabitListUsecase {
                 }),
             );
 
-            return new HabitListDto(
-                habitDtos,
-                totalCount,
-                currentPage,
-                totalPages,
-            );
+            return new HabitListDto(habitDtos, endPage, currentPage, pages);
         } catch (error) {
             console.error("습관 목록 조회 중 오류 발생:", error);
             throw new Error("습관 목록 조회에 실패했습니다.");
