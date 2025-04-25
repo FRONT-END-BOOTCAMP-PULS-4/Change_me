@@ -26,21 +26,20 @@ export async function fetcher<T>(
     const data = await response.json();
 
     if (response.status === 401) {
+        localStorage.removeItem("auth-storage");
         if (typeof window !== "undefined") {
             window.location.href = "/login";
         }
-        alert(data.message);
     }
 
     if (response.status === 403) {
         if (typeof window !== "undefined") {
             window.location.href = "/error/403";
         }
-        alert(data.message);
     }
 
     if (!response.ok) {
-        alert(data.message); //추후 토스트 처리
+        throw new Error("잠시 후에 다시 시도해주세요.");
     }
 
     return data;
