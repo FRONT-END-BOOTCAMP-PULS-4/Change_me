@@ -24,20 +24,12 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
     async findAll(filter?: HabitRecordFilter): Promise<HabitRecord[]> {
         const supabase = await createClient();
 
-        let query = supabase
-            .from('habit_record')
-            .select('*');
+        let query = supabase.from("habit_record").select("*");
 
         // 기본 정렬이 없는 경우 날짜 기준으로 정렬
         if (!filter?.sortField) {
             query = query.order("date", { ascending: false });
         }
-
-        // 페이지네이션 처리
-        query = query.range(
-            filter?.offset || 0,
-            (filter?.offset || 0) + (filter?.limit || 10) - 1,
-        );
 
         // 필터 적용
         query = this.queryFilter(filter, query);
@@ -48,14 +40,13 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             throw new Error(`Failed to fetch habit records: ${error.message}`);
         }
 
-        console.log("Fetched habit records:", data);
-
         const habitRecords: HabitRecord[] =
             data.map(
                 (record: any) =>
                     new HabitRecord(record.habit_id, new Date(record.date)),
             ) || [];
 
+        console.log("Fetched habit records:", habitRecords);
         return habitRecords;
     }
 

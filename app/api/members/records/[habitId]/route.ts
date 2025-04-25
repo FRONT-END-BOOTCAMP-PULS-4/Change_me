@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 
 type RequestParams = {
     params: {
-        id: string;
+        habitId: string;
     };
 };
 
@@ -17,7 +17,6 @@ export async function GET(request: Request, { params }: RequestParams) {
         const memberId = await getMemberIdFromToken(
             request.headers.get("Authorization")!,
         );
-        console.log(memberId);
 
         if (!memberId) {
             return NextResponse.json(
@@ -28,7 +27,7 @@ export async function GET(request: Request, { params }: RequestParams) {
             );
         }
 
-        const url = new URL(request.url);
+        const { habitId } = await params;
 
         // set up usecase
         const habitRecordRepository: HabitRecordRepository =
@@ -37,7 +36,7 @@ export async function GET(request: Request, { params }: RequestParams) {
         const getRecordUsecase = new GetRecordUsecase(habitRecordRepository);
 
         // set up query Dto
-        const getRecordDto: GetRecordDto = new GetRecordDto(Number(params.id));
+        const getRecordDto: GetRecordDto = new GetRecordDto(Number(habitId));
 
         const recordDto: RecordDto =
             await getRecordUsecase.execute(getRecordDto);

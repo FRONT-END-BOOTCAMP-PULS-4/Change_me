@@ -277,6 +277,15 @@ export default function HabitList() {
                                 <div
                                     className={styles.title}
                                     title={habit.name}
+                                    onClick={() =>
+                                        useModalStore
+                                            .getState()
+                                            .openModal("viewHabit", {
+                                                id: habit.id,
+                                                name: habit.name,
+                                                description: habit.description,
+                                            })
+                                    }
                                 >
                                     {habit.name}
                                 </div>
