@@ -16,7 +16,9 @@ export type ResponseType = {
 export const useAdminCategories = (currentPage: number) => {
     const getUrl = `/api/admin/categories?currentPage=${currentPage}`;
 
-    const { data, error, isLoading } = useSWR<ResponseType>(getUrl, fetcher);
+    const { data, error, isLoading } = useSWR<ResponseType>(getUrl, fetcher, {
+        refreshInterval: 1000 * 60 * 60,
+    });
 
     const createCategory = async (name: string) => {
         await fetcher("/api/admin/categories", {
