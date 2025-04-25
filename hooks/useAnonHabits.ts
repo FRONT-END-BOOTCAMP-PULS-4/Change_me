@@ -23,6 +23,9 @@ export const useAnonHabits = (categoryId?: number) => {
     const { data, isLoading, error } = useSWR<AnonHabitResponseType>(
         getUrl,
         fetcher,
+        {
+            refreshInterval: 1000 * 60 * 60,
+        },
     );
 
     return {
