@@ -82,10 +82,8 @@
         flex-direction: column;
 
         .title {
-            max-width: 100px;
             font-weight: var(--fontWeight-semiBold);
             font-size: var(--fontSize-md);
-            white-space: nowrap; // 한 줄로 처리
             overflow: hidden; // 넘치는 부분 숨김
             text-overflow: ellipsis; // ...으로 표시
             display: -webkit-box;
@@ -94,7 +92,6 @@
         }
 
         .desc {
-            max-width: 100px;
             color: var(--color-darkGray);
             font-size: var(--fontSize-md);
             overflow: hidden; // 넘치는 부분 숨김
