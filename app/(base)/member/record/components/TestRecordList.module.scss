@@ -57,16 +57,18 @@
     margin-bottom: 1rem;
 
     button {
-        padding: 0.5rem 1rem;
+        padding: 0.3rem 0.6rem;
         border: 1px solid var(--color-main2);
         background-color: var(--color-main2);
+        font-size: var(--fontSize-md);
         cursor: pointer;
     }
 
     .activeTab {
         background-color: var(--color-main1);
         color: white;
-        font-weight: var(--fontWeight-bold);
+        font-size: var(--fontSize-md);
+        font-weight: var(--fontWeight-semiBold);
     }
 }
 

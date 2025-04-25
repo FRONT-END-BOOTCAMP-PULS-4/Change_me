@@ -349,7 +349,8 @@ export class SbHabitRepository implements HabitRepository {
             .select("*, category(name)")
             .eq("member_id", memberId)
             .in("status", [3])
-            .lt("finished_at", today);
+            .lt("finished_at", today)
+            .order("finished_at", { ascending: false });
 
         if (error) {
             throw new Error(`달성한 습관 조회 실패: ${error.message}`);
@@ -382,7 +383,8 @@ export class SbHabitRepository implements HabitRepository {
             .from("habit")
             .select("*, category(name)")
             .eq("member_id", memberId)
-            .in("status", [2]);
+            .in("status", [2])
+            .order("finished_at", { ascending: false });
 
         if (error) {
             throw new Error(`포기한 습관 조회 실패: ${error.message}`);
@@ -416,7 +418,8 @@ export class SbHabitRepository implements HabitRepository {
             .select("*, category(name)")
             .eq("member_id", memberId)
             .in("status", [0])
-            .lt("finished_at", today);
+            .lt("finished_at", today)
+            .order("finished_at", { ascending: false });
 
         if (error) {
             throw new Error(`실패한 습관 조회 실패: ${error.message}`);
