@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuthStore } from "@/stores/authStore";
+import useModalStore from "@/stores/modalStore";
 import { useEffect, useState, useCallback } from "react";
 import styles from "./TestRecordList.module.scss";
 import Loading from "@/app/components/Loading";
@@ -132,7 +133,7 @@ export default function TestRecordList() {
                     </select>
                 </div>
                 <div className={styles.info}><div className={styles.title}>습관명</div></div>
-                <div className={styles.info}><div className={styles.title}>설명</div></div>
+                {/* <div className={styles.info}><div className={styles.title}>설명</div></div> */}
                 <div className={styles.info}><div className={styles.title}>시작일</div></div>
                 <div className={styles.info}><div className={styles.title}>종료일</div></div>
                 <div className={styles.info}><div className={styles.title}>포기일</div></div>
@@ -190,11 +191,20 @@ export default function TestRecordList() {
                             <div className={styles.habitCard} key={habit.id}>
                                 <div className={styles.category}>{habit.categoryName}</div>
                                 <div className={styles.info}>
-                                    <div className={styles.title}>{habit.name}</div>
+                                    <div className={styles.title}
+                                        onClick={() =>
+                                            useModalStore
+                                                .getState()
+                                                .openModal("viewHabit", {
+                                                    id: habit.id,
+                                                    name: habit.name,
+                                                    description: habit.description,
+                                                })
+                                        }>{habit.name}</div>
                                 </div>
-                                <div className={styles.info}>
+                                {/* <div className={styles.info}>
                                     <div className={styles.desc}>{habit.description}</div>
-                                </div>
+                                </div> */}
                                 <div className={styles.info}>
                                     <div className={styles.desc}>{habit.startAt}</div>
                                 </div>
