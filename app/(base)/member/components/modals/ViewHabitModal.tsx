@@ -4,9 +4,9 @@ import ModalWrapper from "@/app/components/ModalWrapper";
 import useModalStore from "@/stores/modalStore";
 import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import styles from "./ViewHabitModal.module.scss";
 import { useAuthStore } from "@/stores/authStore";
-import { formatDate } from "react-calendar/dist/cjs/shared/dateFormatter";
 
 type ViewHabitModalProps = {
     id: number;
@@ -47,7 +47,22 @@ export default function ViewHabitModal(props: ViewHabitModalProps) {
                 <h2>{props.name}</h2>
                 <div className={styles.description}>{props.description}</div>
                 <Calendar
+                    className={styles.calendar}
                     formatDay={(locale, date) => String(date.getDate())}
+                    selectRange={false}
+                    tileClassName={({ date }) => {
+                        const dateFormatted = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`;
+
+                        if (
+                            dates.find(
+                                (x: Date) =>
+                                    x.toString().slice(0, 10) === dateFormatted,
+                            )
+                        ) {
+                            console.log(dateFormatted);
+                            return "checked";
+                        }
+                    }}
                     calendarType="gregory"
                     prev2Label={null}
                     next2Label={null}
