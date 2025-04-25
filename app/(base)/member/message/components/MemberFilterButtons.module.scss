@@ -1,15 +1,28 @@
 .nav {
-    flex: 1;
     display: flex;
     justify-content: center;
-    gap: 32px;
-    white-space: nowrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
 
-    @media (max-width: 768px) {
-        flex-wrap: wrap;
-        gap: 16px;
-    }
+.button {
+    padding: 8px 16px;
+    border: 1px solid var(--color-main1);
+    border-radius: 4px;
+    font-size: var(--fontSize-base);
+    font-weight: var(--fontWeight-medium);
+    cursor: pointer;
+    background-color: var(--color-main2);
+    color: var(--color-main1);
+    transition: all 0.2s ease-in-out;
 
-    > .true {
+    &:hover {
+        background-color: var(--color-main1);
+        color: var(--color-white);
     }
+}
+
+.active {
+    background-color: var(--color-main1);
+    color: var(--color-white);
 }
