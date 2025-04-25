@@ -34,7 +34,7 @@ export default function MessageListPage() {
     if (isLoading) return <Loading />;
 
     return (
-        <section className={styles.message}>
+        <section className={styles.wrapper}>
             <h2>Daily Message</h2>
             <MemberFilterButtons
                 onMineChange={(newMine: boolean) =>

@@ -1,11 +1,12 @@
-.message {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 36px;
+.wrapper {
+    padding: 24px;
+    max-width: 600px;
+    margin: 0 auto;
+
     > h2 {
         font-size: var(--fontSize-2xl);
+        font-weight: var(--fontWeight-bold);
+        text-align: center;
+        margin-bottom: 16px;
     }
 }
