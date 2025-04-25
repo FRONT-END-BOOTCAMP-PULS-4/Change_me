@@ -5,18 +5,19 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 5%;
 
-    > .logo {
+    >.logo {
         display: flex;
         flex-direction: column;
         align-items: center;
 
-        > img {
+        >img {
             width: 150px;
             height: 150px;
         }
 
-        > h1 {
+        >h1 {
             color: var(--color-main1);
             font-size: var(--fontSize-2xl);
         }
