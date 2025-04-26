@@ -26,7 +26,8 @@ export class GetOngoingHabitsUsecase {
                 const dayPassed = Math.ceil(
                     (getMidnight(today).getTime() - getMidnight(start).getTime()) / (1000 * 60 * 60 * 24) + 1
                 );
-
+                const daysTo80Percent = Math.floor(totalDays * 0.8);
+                const canGiveUp = dayPassed <= daysTo80Percent;
                 const checkedDays = await this.recordRepo.countByHabitId(habit.id);
                 const rate = Math.round((checkedDays / totalDays) * 100);
 
@@ -41,7 +42,7 @@ export class GetOngoingHabitsUsecase {
                     checkedDays,
                     totalDays,
                     `${rate}% (${checkedDays}일 / ${totalDays}일)`,
-                    rate < 80,
+                    canGiveUp,
                     dayPassed
                 );
             })
