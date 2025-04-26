@@ -15,12 +15,14 @@ export default function MessageList(props: MessageListProps) {
         <div className={styles.wrapper}>
             <ol className={styles.list}>
                 {props.messages.map((message: MessageDto) => (
-                    <MessageItem
-                        messageDto={message}
-                        key={message.id}
-                        handleUpdate={props.handleUpdate}
-                        handleDelete={props.handleDelete}
-                    />
+                    <li className={styles.listItem} key={message.id}>
+                        <MessageItem
+                            messageDto={message}
+                            key={message.id}
+                            handleUpdate={props.handleUpdate}
+                            handleDelete={props.handleDelete}
+                        />
+                    </li>
                 ))}
             </ol>
         </div>
