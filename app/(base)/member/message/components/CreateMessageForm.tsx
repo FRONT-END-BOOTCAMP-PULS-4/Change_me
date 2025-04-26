@@ -3,13 +3,13 @@
 import Image from "next/image";
 import styles from "./CreateMessageForm.module.scss";
 import { useAuthStore } from "@/stores/authStore";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 type CreateMessageFormProps = {
     handleSubmit: (content: string) => Promise<void>;
 };
 
-export default function MessageForm(props: CreateMessageFormProps) {
+export default function CreateMessageForm(props: CreateMessageFormProps) {
     const contentMaxLength: number = 100;
     const defaultProfileImageUrl: string = "/images/ProfileCircle.png";
 
@@ -17,39 +17,43 @@ export default function MessageForm(props: CreateMessageFormProps) {
     const [nickname, setNickname] = useState<string>("");
     const [imageUrl, setImageUrl] = useState<string>("");
 
-    const getMemberInfo = async () => {
-        const res = await fetch("/api/members/profile", {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+    useEffect(() => {
+        const getMemberInfo = async () => {
+            const res = await fetch("/api/members/profile", {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
-        const member = await res.json();
+            const member = await res.json();
 
-        if (res.ok) {
-            setNickname(member.nickname);
-            setImageUrl(member.imageUrl);
-        }
-    };
+            if (res.ok) {
+                setNickname(member.nickname);
+                setImageUrl(member.imageUrl);
+            }
+        };
 
-    getMemberInfo();
+        getMemberInfo();
+    }, [token]);
 
     const [content, setContent] = useState<string>("");
     const [wordCount, setWordCount] = useState<number>(0);
 
-    const handleChange = async (element: ChangeEvent<HTMLInputElement>) => {
-        if (element.target.value.length > contentMaxLength) {
-            element.target.value = element.target.value.slice(
-                0,
-                contentMaxLength,
-            );
+    const handleChange = async (element: ChangeEvent<HTMLTextAreaElement>) => {
+        const textarea = element.target;
+
+        // auto-adjust the height of the textarea
+        textarea.style.height = "auto";
+        textarea.style.height = `${textarea.scrollHeight}px`;
+
+        let newContent = textarea.value;
+        if (newContent.length > contentMaxLength) {
+            newContent = newContent.slice(0, contentMaxLength);
         }
 
-        const newContent = element.target.value;
-        const newWordCount = newContent.length;
         setContent(newContent);
-        setWordCount(newWordCount);
+        setWordCount(newContent.length);
     };
 
     return (
@@ -58,14 +62,14 @@ export default function MessageForm(props: CreateMessageFormProps) {
                 <Image
                     src={imageUrl || defaultProfileImageUrl}
                     alt="프로필 이미지"
-                    width={40}
-                    height={40}
-                    className="w-8 h-8 rounded-full"
+                    width={50}
+                    height={50}
+                    className={styles.profileImage}
                 />
-                <div className="text-sm font-semibold">{nickname}</div>
+                <div className={styles.nickname}>{nickname}</div>
             </nav>
-            <input
-                type="text"
+            <textarea
+                className={styles.textarea}
                 id="message"
                 name="message"
                 value={content}
@@ -73,10 +77,18 @@ export default function MessageForm(props: CreateMessageFormProps) {
                 onChange={(e) => handleChange(e)}
                 placeholder="메시지를 입력하세요."
             />
-            <div>
-                {wordCount}/{contentMaxLength}
-            </div>
-            <button onClick={() => props.handleSubmit(content)}>등록</button>
+            <div className={styles.divider} />
+            <nav className={styles.navBottom}>
+                <div>
+                    {wordCount}/{contentMaxLength}
+                </div>
+                <button
+                    className={styles.button}
+                    onClick={() => props.handleSubmit(content)}
+                >
+                    등록
+                </button>
+            </nav>
         </div>
     );
 }
