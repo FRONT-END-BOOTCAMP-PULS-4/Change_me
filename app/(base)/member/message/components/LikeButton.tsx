@@ -6,6 +6,7 @@ import fullHeartImage from "@/public/images/FullHeart.png";
 import { MessageLikeDto } from "@/application/usecase/message-like/dto/MessageLikeDto";
 import { useMessageLikes } from "@/hooks/useMessageLikes";
 import Image from "next/image";
+import styles from "./LikeButton.module.scss";
 
 type LikeButtonProps = {
     isLiked: Boolean;
@@ -32,7 +33,7 @@ export default function LikeButton(props: LikeButtonProps) {
     };
 
     return (
-        <button onClick={toggleLike}>
+        <button className={styles.button} onClick={toggleLike}>
             <Image src={iconImage} alt="하트 아이콘" width={20} height={20} />
         </button>
     );

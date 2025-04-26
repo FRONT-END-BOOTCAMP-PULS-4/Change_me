@@ -22,8 +22,9 @@ export default function MessageItem(props: MessageItemProps) {
     const messageDto = props.messageDto;
     const isAuthor = memberId === messageDto.memberId;
     const createdAt = new Date(messageDto.createdAt);
+    const modified: string = messageDto.modifiedAt !== null ? "(수정됨)" : "";
     const pad = (str: String) => str.toString().padStart(2, "0");
-    const formattedDate = `${createdAt.getFullYear()}-${pad(String(createdAt.getMonth() + 1))}-${pad(String(createdAt.getDate()))} ${pad(String(createdAt.getHours()))}:${pad(String(createdAt.getMinutes()))}`;
+    const formattedDate = `${createdAt.getFullYear()}-${pad(String(createdAt.getMonth() + 1))}-${pad(String(createdAt.getDate()))} ${pad(String(createdAt.getHours()))}:${pad(String(createdAt.getMinutes()))} ${modified}`;
 
     const messageLikeDto = { messageId: messageDto.id, memberId: memberId };
     const handleUpdate = async (id: number, content: string) => {
@@ -41,8 +42,8 @@ export default function MessageItem(props: MessageItemProps) {
     } else {
         return (
             <div className={styles.wrapper}>
-                <div className="flex justify-between items-start">
-                    <nav className="flex items-center space-x-2">
+                <nav>
+                    <div className={styles.profile}>
                         <Image
                             src={
                                 messageDto.imageUrl ||
@@ -51,19 +52,19 @@ export default function MessageItem(props: MessageItemProps) {
                             alt="프로필 이미지"
                             width={40}
                             height={40}
-                            className="w-8 h-8 rounded-full"
+                            className={styles.image}
                         />
-                        <div>
-                            <div className="text-sm font-semibold">
+                        <div className={styles.info}>
+                            <div className={styles.writer}>
                                 {messageDto.writer}
                             </div>
-                            <div className="text-xs text-gray-500">
+                            <div className={styles.createdAt}>
                                 {formattedDate}
                             </div>
                         </div>
-                    </nav>
+                    </div>
                     {isAuthor && (
-                        <div className="flex space-x-2 text-sm text-gray-500">
+                        <div className={styles.buttons}>
                             <button
                                 className={styles.button}
                                 onClick={() => setIsUpdating(true)}
@@ -72,17 +73,17 @@ export default function MessageItem(props: MessageItemProps) {
                             </button>
                             <button
                                 className={styles.button}
-                                onClick={() =>
-                                    props.handleDelete(messageDto.id)
+                                onClick={async () =>
+                                    await props.handleDelete(messageDto.id)
                                 }
                             >
                                 삭제
                             </button>
                         </div>
                     )}
-                </div>
-                <div className="mt-2 text-sm">{messageDto.content}</div>
-                <div className="flex justify-end items-center mt-2 text-sm text-gray-500 space-x-1">
+                </nav>
+                <div className={styles.content}>{messageDto.content}</div>
+                <div className={styles.like}>
                     <LikeButton
                         isLiked={messageDto.isLiked}
                         messageLikeDto={messageLikeDto}
