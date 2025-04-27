@@ -68,14 +68,59 @@ export default function HabitList() {
     return (
         <div>
             <div className={styles.habitGrid}>
-                {habits.map((habit) => (
-                    <div key={habit.id} className={styles.habitCard}>
-                        <h3 className={styles.title}>{habit.name}</h3>
-                        <p className={styles.category}>{habit.categoryname}</p>
-                        <p className={styles.description}>{habit.description}</p>
-                        <div className={styles.details}>
-                            <span>기간: {habit.duration}</span>
-                            <span>달성률: {habit.rate}%</span>
+                <div className={styles.info}>
+                    <div className={styles.title}>습관명</div>
+                </div>
+                <div className={styles.info}>
+                    <div className={styles.title}>설명</div>
+                </div>
+                <div className={styles.info}>
+                    <div className={styles.title}>시작일</div>
+                </div>
+                <div className={styles.info}>
+                    <div className={styles.title}>종료일</div>
+                </div>
+                <div className={styles.info}>
+                    <div className={styles.title}>포기일</div>
+                </div>
+                <div className={styles.info}>
+                    <div className={styles.title}>기간</div>
+                </div>
+                <div className={styles.info}>
+                    <div className={styles.title}>달성률</div>
+                </div>
+            </div>
+            <div className={styles.habitList}>
+                {habits
+                    .filter(
+                        (habit) =>
+                            categoryId === null || Number(habit.categoryId) === categoryId
+                    )
+                    .map((habit) => (
+                    <div className={styles.habitCard} key={habit.id}>
+                            <div className={styles.category}>{habit.categoryName}</div>
+                            <div className={styles.info}>
+                        <div className={styles.title}>{habit.name}</div>
+                        </div>
+                            <div className={styles.info}>
+                                <div className={styles.desc}>{habit.description}</div>
+                            </div>
+                            <div className={styles.info}>
+                        <div className={styles.desc}>{habit.startAt}</div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.desc}>{habit.finishedAt}</div>
+                            </div>
+                        <div className={styles.info}>
+                                <div className={styles.desc}>
+                                    {habit.stoppedAt ? habit.stoppedAt : "-"}
+                                </div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.desc}>{habit.duration}일</div>
+                            </div>
+                            <div className={styles.info}>
+                            <div className={styles.progress}>{habit.rate}</div>
                         </div>
                     </div>
                 ))}
