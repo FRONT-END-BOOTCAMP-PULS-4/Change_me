@@ -3,6 +3,7 @@
 import React from "react";
 import styles from "./CategoryItem.module.scss";
 import useModalStore from "@/stores/modalStore";
+import { useToastStore } from "@/stores/toastStore";
 
 type CategoryItemProps = {
     id: number;
@@ -20,6 +21,7 @@ export default function CategoryItem({
     handleUpdate,
 }: CategoryItemProps) {
     const { openModal } = useModalStore();
+    const { show } = useToastStore();
     const handleEditClick = () => {
         openModal("category", {
             type: "edit",

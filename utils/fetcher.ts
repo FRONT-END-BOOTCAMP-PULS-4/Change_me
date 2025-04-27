@@ -39,7 +39,7 @@ export async function fetcher<T>(
     }
 
     if (!response.ok) {
-        throw new Error("잠시 후에 다시 시도해주세요.");
+        throw new Error(data.message || "잠시 후에 다시 시도해주세요.");
     }
 
     return data;

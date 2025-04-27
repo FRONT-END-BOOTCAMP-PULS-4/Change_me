@@ -1,3 +1,4 @@
+import { useToastStore } from "@/stores/toastStore";
 import { fetcher } from "@/utils/fetcher";
 import useSWR, { mutate } from "swr";
 
@@ -14,6 +15,7 @@ export type ResponseType = {
 };
 
 export const useAdminCategories = (currentPage: number) => {
+    const { show } = useToastStore();
     const getUrl = `/api/admin/categories?currentPage=${currentPage}`;
 
     const { data, error, isLoading } = useSWR<ResponseType>(getUrl, fetcher, {
@@ -21,26 +23,46 @@ export const useAdminCategories = (currentPage: number) => {
     });
 
     const createCategory = async (name: string) => {
-        await fetcher("/api/admin/categories", {
-            method: "POST",
-            body: { name },
-        });
-        mutate(getUrl);
+        try {
+            await fetcher("/api/admin/categories", {
+                method: "POST",
+                body: { name },
+            });
+            mutate(getUrl);
+        } catch (error) {
+            if (error instanceof Error) {
+                show(error.message);
+            }
+        }
     };
 
     const updateCategory = async (id: number, name: string) => {
-        await fetcher(`/api/admin/categories/${id}`, {
-            method: "PATCH",
-            body: { name },
-        });
-        mutate(getUrl);
+        try {
+            await fetcher(`/api/admin/categories/${id}`, {
+                method: "PATCH",
+                body: { name },
+            });
+            show("카테고리 이름이 수정되었습니다.");
+            mutate(getUrl);
+        } catch (error) {
+            if (error instanceof Error) {
+                show(error.message);
+            }
+        }
     };
 
     const deleteCategory = async (id: number) => {
-        await fetcher(`/api/admin/categories/${id}`, {
-            method: "DELETE",
-        });
-        mutate(getUrl);
+        try {
+            await fetcher(`/api/admin/categories/${id}`, {
+                method: "DELETE",
+            });
+            show("카테고리가 삭제되었습니다.");
+            mutate(getUrl);
+        } catch (error) {
+            if (error instanceof Error) {
+                show(error.message);
+            }
+        }
     };
 
     return {

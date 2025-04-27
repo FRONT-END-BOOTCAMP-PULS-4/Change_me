@@ -116,6 +116,9 @@ export class SbCategoryRepository implements CategoryRepository {
             .single();
 
         if (error) {
+            if (error.code === "23505") {
+                throw new Error(`이미 존재하는 카테고리입니다.`);
+            }
             throw new Error(`카테고리 수정 실패: ${error.message}`);
         }
     }
