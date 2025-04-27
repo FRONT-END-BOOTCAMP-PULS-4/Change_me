@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import styles from "./CreateMessageForm.module.scss";
+import styles from "./UpdateMessageForm.module.scss";
 import { useAuthStore } from "@/stores/authStore";
 import { ChangeEvent, useEffect, useState } from "react";
 import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
