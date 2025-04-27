@@ -53,8 +53,13 @@
             .button {
                 font-size: var(--fontSize-md);
                 cursor: pointer;
-                padding: 4px 8px;
                 transition: color 0.2s ease;
+                color: var(--color-darkGray);
+
+                &:hover {
+                    color: var(--color-black);
+                    font-weight: var(--fontWeight-semiBold);
+                }
             }
         }
     }
