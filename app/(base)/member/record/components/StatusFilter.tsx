@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './StatusFilter.module.scss';
 
-interface StatusFilterProps {
+type StatusFilterProps = {
     selectedStatus: number | null;
     onStatusChange: (status: number | null) => void;
 }
