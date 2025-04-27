@@ -25,7 +25,7 @@ export class GetAnonHabitListUsecase {
                 categoryId,
                 3,
                 undefined,
-                undefined,
+                true,
                 0,
                 10,
             );
