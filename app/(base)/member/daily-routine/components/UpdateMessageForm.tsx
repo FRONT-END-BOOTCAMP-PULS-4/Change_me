@@ -5,6 +5,7 @@ import styles from "./UpdateMessageForm.module.scss";
 import { useAuthStore } from "@/stores/authStore";
 import { ChangeEvent, useEffect, useState } from "react";
 import { MessageDto } from "@/application/usecase/message/dto/MessageDto";
+import { useToastStore } from "@/stores/toastStore";
 
 type UpdateMessageFormProps = {
     messageDto: MessageDto;
@@ -60,6 +61,17 @@ export default function UpdateMessageForm(props: UpdateMessageFormProps) {
         setWordCount(newContent.length);
     };
 
+    const handleSubmit = async () => {
+        const newContent = content.trim();
+        if (newContent.length === 0) {
+            useToastStore.getState().show("메시지 내용을 입력해주세요.");
+            return;
+        }
+        await props.handleSubmit(id, newContent);
+        setContent("");
+        setWordCount(0);
+    };
+
     return (
         <div className={styles.wrapper}>
             <nav className={styles.nav}>
@@ -86,10 +98,7 @@ export default function UpdateMessageForm(props: UpdateMessageFormProps) {
                 <div>
                     {wordCount}/{contentMaxLength}
                 </div>
-                <button
-                    className={styles.button}
-                    onClick={() => props.handleSubmit(id, content)}
-                >
+                <button className={styles.button} onClick={handleSubmit}>
                     수정
                 </button>
             </nav>
