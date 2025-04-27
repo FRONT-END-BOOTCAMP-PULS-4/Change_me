@@ -53,7 +53,7 @@ export default function page() {
                     handleDelete={deleteMessage}
                 />
                 <Pager
-                    currentPage={1}
+                    currentPage={currentPage}
                     pages={pages}
                     endPage={endPage}
                     onPageChange={(newPage: number) =>
