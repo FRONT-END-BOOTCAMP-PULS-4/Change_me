@@ -7,7 +7,7 @@ import { MessageLikeDto } from "@/application/usecase/message-like/dto/MessageLi
 import { useMessageLikes } from "@/hooks/useMessageLikes";
 import Image from "next/image";
 import styles from "./LikeButton.module.scss";
-import { memo, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 type LikeButtonProps = {
     isLiked: Boolean;
