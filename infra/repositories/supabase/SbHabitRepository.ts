@@ -33,6 +33,13 @@ export class SbHabitRepository implements HabitRepository {
                     query = query.eq("status", filter.status);
                 }
             }
+
+            if (filter.latest) {
+                query.order("finished_at", { ascending: false });
+            } else {
+                query.order("created_at", { ascending: false });
+            }
+
             if (filter.offset !== undefined) {
                 query.range(
                     filter.offset,
@@ -64,8 +71,8 @@ export class SbHabitRepository implements HabitRepository {
 
         let query = supabase
             .from("habit")
-            .select("*, member(nickname, image_url, deleted_at)")
-            .order("created_at", { ascending: false });
+            .select("*, member(nickname, image_url, deleted_at)");
+
         query = this.queryFilter(filter, query);
 
         const { data } = await query;
