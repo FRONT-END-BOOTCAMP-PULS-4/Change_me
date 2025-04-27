@@ -57,6 +57,17 @@ export default function CreateMessageForm(props: CreateMessageFormProps) {
         setWordCount(newContent.length);
     };
 
+    const handleSubmit = async () => {
+        const newContent = content.trim();
+        if (newContent.length === 0) {
+            useToastStore.getState().show("메시지 내용을 입력해주세요.");
+            return;
+        }
+        await props.handleSubmit(newContent);
+        setContent("");
+        setWordCount(0);
+    };
+
     return (
         <div className={styles.wrapper}>
             <nav className={styles.nav}>
@@ -83,20 +94,7 @@ export default function CreateMessageForm(props: CreateMessageFormProps) {
                 <div>
                     {wordCount}/{contentMaxLength}
                 </div>
-                <button
-                    className={styles.button}
-                    onClick={async () => {
-                        if (content.length === 0) {
-                            useToastStore
-                                .getState()
-                                .show("메시지 내용을 입력해주세요.");
-                            return;
-                        }
-                        await props.handleSubmit(content);
-                        setContent("");
-                        setWordCount(0);
-                    }}
-                >
+                <button className={styles.button} onClick={handleSubmit}>
                     등록
                 </button>
             </nav>
