@@ -36,7 +36,7 @@ export default function page() {
     if (isLoading) return <Loading />;
 
     return (
-        <div>
+        <div className={styles.page}>
             <HabitList />
             <section className={styles.wrapper}>
                 <h2>Daily Message</h2>

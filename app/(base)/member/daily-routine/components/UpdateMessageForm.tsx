@@ -10,6 +10,7 @@ import { useToastStore } from "@/stores/toastStore";
 type UpdateMessageFormProps = {
     messageDto: MessageDto;
     handleSubmit: (id: number, content: string) => Promise<void>;
+    handleUndo: () => void;
 };
 
 export default function UpdateMessageForm(props: UpdateMessageFormProps) {
@@ -63,6 +64,9 @@ export default function UpdateMessageForm(props: UpdateMessageFormProps) {
 
     const handleSubmit = async () => {
         const newContent = content.trim();
+        if (defaultContent === newContent) {
+            props.handleUndo();
+        }
         if (newContent.length === 0) {
             useToastStore.getState().show("메시지 내용을 입력해주세요.");
             return;
@@ -98,9 +102,17 @@ export default function UpdateMessageForm(props: UpdateMessageFormProps) {
                 <div>
                     {wordCount}/{contentMaxLength}
                 </div>
-                <button className={styles.button} onClick={handleSubmit}>
-                    수정
-                </button>
+                <div className={styles.buttonGroup}>
+                    <button
+                        className={`${styles.button} ${styles.undo}`}
+                        onClick={props.handleUndo}
+                    >
+                        취소
+                    </button>
+                    <button className={styles.button} onClick={handleSubmit}>
+                        수정
+                    </button>
+                </div>
             </nav>
         </div>
     );

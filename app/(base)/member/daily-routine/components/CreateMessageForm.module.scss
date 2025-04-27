@@ -43,11 +43,16 @@
         color: var(--color-white);
         padding: 8px 16px;
         font-size: var(--fontSize-base);
-        font-weight: var(--fontWeight-medium);
+        font-weight: var(--fontWeight-semiBold);
         border: none;
         border-radius: 6px;
         cursor: pointer;
-        transition: background-color 0.2s ease;
+        transition: all 0.2s ease;
+    }
+
+    .button:hover {
+        background-color: var(--color-main3);
+        color: var(--color-black);
     }
 
     .textarea {

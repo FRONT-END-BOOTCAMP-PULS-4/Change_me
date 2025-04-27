@@ -54,8 +54,8 @@ export default function LikeButton(props: LikeButtonProps) {
 
     return (
         <button className={styles.button} onClick={toggleLike}>
-            <Image src={iconImage} alt="하트 아이콘" width={20} height={20} />
-            <div>{count}</div>
+            <Image src={iconImage} alt="하트 아이콘" />
+            <span>{count}</span>
         </button>
     );
 }

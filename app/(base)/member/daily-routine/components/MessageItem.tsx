@@ -32,11 +32,16 @@ export default function MessageItem(props: MessageItemProps) {
         setIsUpdating(false);
     };
 
+    const handleUndo = () => {
+        setIsUpdating(false);
+    };
+
     if (isUpdating) {
         return (
             <UpdateMessageForm
                 messageDto={messageDto}
                 handleSubmit={handleUpdate}
+                handleUndo={handleUndo}
             />
         );
     } else {
