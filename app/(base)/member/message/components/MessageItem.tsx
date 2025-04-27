@@ -86,9 +86,9 @@ export default function MessageItem(props: MessageItemProps) {
                 <div className={styles.like}>
                     <LikeButton
                         isLiked={messageDto.isLiked}
+                        likeCount={messageDto.likeCount}
                         messageLikeDto={messageLikeDto}
                     />
-                    <span>{messageDto.likeCount}</span>
                 </div>
             </div>
         );
