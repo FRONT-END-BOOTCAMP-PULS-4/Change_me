@@ -47,7 +47,7 @@ export class SbMessageLikeRepository implements MessageLikeRepository {
 
         const { data } = await query;
 
-        console.log("Fetched messageLikes:", data);
+        // console.log("Fetched messageLikes:", data);
 
         const messageLikes: MessageLike[] =
             data?.map((m) => ({

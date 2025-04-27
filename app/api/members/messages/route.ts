@@ -18,7 +18,7 @@ export async function GET(request: Request) {
         const memberId = await getMemberIdFromToken(
             request.headers.get("Authorization")!,
         );
-        console.log(memberId);
+        // console.log(memberId);
 
         if (!memberId) {
             return NextResponse.json(

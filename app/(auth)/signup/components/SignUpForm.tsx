@@ -130,7 +130,7 @@ export function SignUpForm() {
         });
 
         if (res.ok) {
-            console.log("회원가입 성공");
+            // console.log("회원가입 성공");
             router.push("/login");
         } else {
             const result = await res.json();

@@ -46,7 +46,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
                     new HabitRecord(record.habit_id, new Date(record.date)),
             ) || [];
 
-        console.log("Fetched habit records:", habitRecords);
+        // console.log("Fetched habit records:", habitRecords);
         return habitRecords;
     }
 

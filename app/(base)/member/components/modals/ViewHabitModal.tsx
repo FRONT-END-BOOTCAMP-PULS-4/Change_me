@@ -59,7 +59,7 @@ export default function ViewHabitModal(props: ViewHabitModalProps) {
                                     x.toString().slice(0, 10) === dateFormatted,
                             )
                         ) {
-                            console.log(dateFormatted);
+                            // console.log(dateFormatted);
                             return "checked";
                         }
                     }}
