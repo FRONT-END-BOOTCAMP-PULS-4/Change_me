@@ -14,7 +14,7 @@ import HabitList from "./components/HabitList";
 
 export default function page() {
     const searchParams = useSearchParams();
-    const currentPage: number = Number(searchParams.get("page")) || 1;
+    const currentPage: number = Number(searchParams.get("currentPage")) || 1;
     const mine: boolean = searchParams.get("mine") === "true" ? true : false;
 
     const router = useRouter();
