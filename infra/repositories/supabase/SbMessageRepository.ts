@@ -49,7 +49,7 @@ export class SbMessageRepository implements MessageRepository {
 
         const { data } = await query;
 
-        console.log("Fetched messages:", data);
+        // console.log("Fetched messages:", data);
 
         const messages: Message[] =
             data?.map((m) => ({
