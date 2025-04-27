@@ -26,6 +26,7 @@ export const useMessages = (currentPage: number, mine: boolean) => {
     const { data, error, isLoading } = useSWR<MessageResponseType>(
         getUrl,
         fetcher,
+        { refreshInterval: 1000 * 60 * 60 },
     );
 
     const createMessage = async (content: string) => {
