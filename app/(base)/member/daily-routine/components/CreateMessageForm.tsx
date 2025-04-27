@@ -4,6 +4,7 @@ import Image from "next/image";
 import styles from "./CreateMessageForm.module.scss";
 import { useAuthStore } from "@/stores/authStore";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useToastStore } from "@/stores/toastStore";
 
 type CreateMessageFormProps = {
     handleSubmit: (content: string) => Promise<void>;
@@ -84,7 +85,17 @@ export default function CreateMessageForm(props: CreateMessageFormProps) {
                 </div>
                 <button
                     className={styles.button}
-                    onClick={() => props.handleSubmit(content)}
+                    onClick={async () => {
+                        if (content.length === 0) {
+                            useToastStore
+                                .getState()
+                                .show("메시지 내용을 입력해주세요.");
+                            return;
+                        }
+                        await props.handleSubmit(content);
+                        setContent("");
+                        setWordCount(0);
+                    }}
                 >
                     등록
                 </button>
