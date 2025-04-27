@@ -1,43 +1,41 @@
-"use client";
-import { useEffect, useState } from 'react';
-import { useAuthStore } from "@/stores/authStore";
-import { useCategories } from '@/hooks/useCategories';
+'use client';
 import { Category } from '@/hooks/useCategories';
-import styles from './CategorySelector.module.scss';
+import React, { useEffect, useState } from 'react';
 
-type CategorySelectorProps = { // 카테고리 선택 컴포넌트 Props 타입 정의
-    selectedId: number; // 선택된 카테고리 ID 
-    categories: Category[]; // 카테고리 목록
-    handleCategoryChange: (id: number) => void; // 카테고리 변경 핸들러 : 아이디 변경시 부모 페이지한테 전달
+
+type CategorySelectorProps = {
+    onCategoryChange: (categoryId: number | null) => void;
 }
 
-export default function CategorySelector() { // 카테고리 선택 컴포넌트
-    const [categories, setCategories] = useState<{id : number; name : string }[]>([]);
-    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null); 
+export default function CategorySelector({ onCategoryChange }: CategorySelectorProps) {
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
-    const token = useAuthStore.getState().token;
-
-    useEffect(() => { // 컴포넌트가 마운트될 때 카테고리 목록을 가져오는 비동기 함수
-        // 비동기 함수 정의
+    useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const res = await fetch("/api/categories");
-                const data = await res.json(); // api에서 json형태로 반환환
-                if (Array.isArray(data.categories)){
-                    setCategories(data.categories);
-                }
+                const response = await fetch('/api/categories');
+                if (!response.ok) throw new Error('카테고리 로드 실패');
+                const data = await response.json();
+                setCategories(data.categories);
             } catch (error) {
-                console.error('카테고리 로드 실패:', error);
+                console.error('카테고리 로드 중 오류:', error);
             }
         };
         fetchCategories();
     }, []);
 
+    const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const categoryId = e.target.value === '' ? null : Number(e.target.value);
+        setSelectedCategory(categoryId);
+        onCategoryChange(categoryId);
+    };
+
     return (
         <select 
-            className={styles.selector}
-            value={selectedCategoryId ?? ""}
-            onChange={(e) => setSelectedCategoryId(e.target.value === "" ? null : Number(e.target.value))}
+            value={selectedCategory === null ? '' : selectedCategory} 
+            onChange={handleCategoryChange}
+            className="category-selector"
         >
             <option value="">전체</option>
             {categories.map((category) => (
@@ -48,7 +46,3 @@ export default function CategorySelector() { // 카테고리 선택 컴포넌트
         </select>
     );
 }
-
-// useCategories 왜 안썼지??
-// useCategories를 사용하면 카테고리 목록을 가져오는 로직을 간소화할 수 있습니다.
-// useCategories는 SWR을 사용하여 데이터를 가져오고 캐싱하는 훅입니다.

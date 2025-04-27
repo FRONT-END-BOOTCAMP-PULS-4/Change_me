@@ -104,17 +104,36 @@ export default function HabitList() {
                     )
                     .map((habit) => (
                         <div key={habit.id} className={styles.habitGrid}>
-                            <div className={styles.info}>{habit.name}</div>
-                            <div className={styles.info}>{habit.description}</div>
-                            <div className={styles.info}>{habit.startAt}</div>
-                            <div className={styles.info}>{habit.finishedAt}</div>
-                            <div className={styles.info}>{habit.stoppedAt}</div>
-                            <div className={styles.info}>{habit.duration}</div>
-                            <div className={styles.info}>{habit.rate}</div>
+                            <div className={styles.info}>
+                                <div className={styles.title}>{habit.name}</div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.title}>{habit.description}</div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.title}>{habit.startAt}</div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.title}>{habit.finishedAt}</div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.title}>{habit.stoppedAt}</div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.title}>{habit.duration}</div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.title}>{habit.rate}</div>
+                            </div>
                         </div>
-                    ))}
-                
+                    ))
             </div>
-        </div>
+            <div className={styles.pager}>
+                <Pager
+                    currentPage={currentPage}
+                    totalPages={Math.ceil(habits.length / 10)} // 페이지 수 계산 (예: 10개씩 보여준다고 가정)
+                    totalCount={habits.length} // 총 습관 수
+                    onPageChange={(page) => setCurrentPage(page)} // 페이지 변경 핸들러
+                />  
     );
 }

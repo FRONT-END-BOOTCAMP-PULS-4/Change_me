@@ -11,12 +11,7 @@ import CategorySelector from "./components/CategorySelector";
 import { useRouter, useSearchParams } from "next/navigation";
 import TestRecordList from "./components/TestRecordList";
 
-export type PagerProps = {
-    currentPage: number;
-    totalPages: number; // Added totalPages property
-    totalCount: number;
-    onPageChange: (newPage: number) => any;
-}
+
 
 export default function RecordPage() {
     const searchParams = useSearchParams();
