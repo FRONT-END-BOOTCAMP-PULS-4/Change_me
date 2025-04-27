@@ -144,7 +144,7 @@ export class GetHabitListUsecase {
             );
 
             return new HabitListDto(habitDtos, endPage, currentPage, pages);
-        } catch (error) {
+      } catch (error) {
             console.error("습관 목록 조회 중 오류 발생:", error);
             throw new Error("습관 목록 조회에 실패했습니다.");
         }
