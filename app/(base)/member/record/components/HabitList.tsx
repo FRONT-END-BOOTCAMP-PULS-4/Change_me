@@ -4,6 +4,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { useHabit } from "@/hooks/useHabit";
 import styles from "./HabitList.module.scss";
 import Loading from "@/app/components/Loading";
+import Pager from "@/app/components/Pager";
 
 type Habit = {
     id: number;
@@ -16,7 +17,15 @@ type Habit = {
     stoppedAt: string;
     duration: number;
     rate: string;
+    status: number;
 };
+
+export interface PagerProps {
+    currentPage: number;
+    totalPages: number; // Added totalPages property
+    totalCount: number;
+    onPageChange: (newPage: number) => any;
+}
 
 export default function HabitList() {
     const [habits, setHabits] = useState<Habit[]>([]);
@@ -39,7 +48,7 @@ export default function HabitList() {
             if (categoryId !== null) params.append("category", String(categoryId));
             params.append("currentPage", String(currentPage));
 
-            const res = await fetch(`/api/members/habit/record/view?${params.toString()}`, {
+            const res = await fetch(`/api/members/habits/view?${params.toString()}`, {
                 method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -60,10 +69,6 @@ export default function HabitList() {
     }, [fetchHabits]); // fetchHabits가 변경될 때 실행
 
     if (isLoading) return <Loading />; // 로딩 중일 때 표시
-
-    if (habits.length === 0) {
-        return <div className={styles.empty}>조회된 습관이 없습니다.</div>;
-    }
 
     return (
         <div>
@@ -91,57 +96,24 @@ export default function HabitList() {
                 </div>
             </div>
             <div className={styles.habitList}>
-                {habits
+                {habits && habits
                     .filter(
                         (habit) =>
-                            categoryId === null || Number(habit.categoryId) === categoryId
+                            (categoryId === null || Number(habit.categoryId) === categoryId) &&
+                            (status === null || Number(habit.status) === status)
                     )
                     .map((habit) => (
-                    <div className={styles.habitCard} key={habit.id}>
-                            <div className={styles.category}>{habit.categoryName}</div>
-                            <div className={styles.info}>
-                        <div className={styles.title}>{habit.name}</div>
+                        <div key={habit.id} className={styles.habitGrid}>
+                            <div className={styles.info}>{habit.name}</div>
+                            <div className={styles.info}>{habit.description}</div>
+                            <div className={styles.info}>{habit.startAt}</div>
+                            <div className={styles.info}>{habit.finishedAt}</div>
+                            <div className={styles.info}>{habit.stoppedAt}</div>
+                            <div className={styles.info}>{habit.duration}</div>
+                            <div className={styles.info}>{habit.rate}</div>
                         </div>
-                            <div className={styles.info}>
-                                <div className={styles.desc}>{habit.description}</div>
-                            </div>
-                            <div className={styles.info}>
-                        <div className={styles.desc}>{habit.startAt}</div>
-                            </div>
-                            <div className={styles.info}>
-                                <div className={styles.desc}>{habit.finishedAt}</div>
-                            </div>
-                        <div className={styles.info}>
-                                <div className={styles.desc}>
-                                    {habit.stoppedAt ? habit.stoppedAt : "-"}
-                                </div>
-                            </div>
-                            <div className={styles.info}>
-                                <div className={styles.desc}>{habit.duration}일</div>
-                            </div>
-                            <div className={styles.info}>
-                            <div className={styles.progress}>{habit.rate}</div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-            {/* 페이지 네이션 */}
-            <div className={styles.pagination}>
-                <button
-                    disabled={currentPage === 1}
-                    onClick={() => setCurrentPage((prev) => prev - 1)}
-                >
-                    이전
-                </button>
-                <span>
-                    {currentPage} / {totalPages}
-                </span>
-                <button
-                    disabled={currentPage === totalPages}
-                    onClick={() => setCurrentPage((prev) => prev + 1)}
-                >
-                    다음
-                </button>
+                    ))}
+                
             </div>
         </div>
     );

@@ -8,14 +8,30 @@ import { getToken } from "@/utils/utils";
 import {useHabit} from "@/hooks/useHabit";
 import {fetcher} from "@/utils/fetcher";
 import CategorySelector from "./components/CategorySelector";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import TestRecordList from "./components/TestRecordList";
 
+export type PagerProps = {
+    currentPage: number;
+    totalPages: number; // Added totalPages property
+    totalCount: number;
+    onPageChange: (newPage: number) => any;
+}
 
-export default function page() {
+export default function RecordPage() {
+    const searchParams = useSearchParams();
+    const currentPage: number = Number(searchParams.get("page")) || 1;
+    const mine: boolean = searchParams.get("mine") === "true" ? true : false;
+    const router = useRouter();
     // 토큰 가져오기
     const token = useAuthStore.getState().token;
-
+    
+    const {
+        habits,
+        totalCount,
+        totalPages,
+        isLoading,
+        } = useHabit(currentPage);
     return (
         <div>
 
@@ -23,7 +39,6 @@ export default function page() {
             <StatusFilter />
             <HabitList />
             {/* <TestRecordList />  */}
-
         </div>
     )
 }
