@@ -1,13 +1,14 @@
 .section {
-    padding: 36px 0;
+    padding: 48px 0;
     font-size: var(--fontSize-xl);
     width: 100%;
-
-    margin: auto;
+    max-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     @media (max-width: 768px) {
         font-size: var(--fontSize-md);
-        padding: 8px 0;
     }
 
     .records {
