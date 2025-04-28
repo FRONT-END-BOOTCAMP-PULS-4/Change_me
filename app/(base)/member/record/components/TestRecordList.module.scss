@@ -1,5 +1,5 @@
 .container {
-    max-width: 768px;
+    max-width: 900px;
     width: 100%;
     margin: 0 auto;
     padding: 40px 16px;
@@ -103,7 +103,7 @@
         justify-content: center;
 
         .title {
-            font-size: var(--fontSize-sm);
+            font-size: var(--fontSize-md);
             font-weight: var(--fontWeight-bold);
             color: var(--color-black);
         }
