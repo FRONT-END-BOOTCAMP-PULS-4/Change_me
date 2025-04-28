@@ -277,7 +277,7 @@ export default function TestRecordList() {
                         height={160}
                     />
                     <p>
-                        <strong>{filteredHabits.length}개의 습관</strong>을 실패하셨어요.<br />
+                        <strong>{filteredHabits.length}개의 습관</strong>을 포기하셨어요.<br />
                         다시 도전해볼까요?
                     </p>
                 </div>
