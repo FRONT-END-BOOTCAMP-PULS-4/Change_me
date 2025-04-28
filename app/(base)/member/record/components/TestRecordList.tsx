@@ -229,12 +229,14 @@ export default function TestRecordList() {
                     ))
                 )}
             </div>
-            <Pager
-                currentPage={currentPage}
-                pages={pageNumbers}
-                endPage={totalPages}
-                onPageChange={(page) => setCurrentPage(page)}
-            />
+            {filteredHabits.length > 0 && (
+                <Pager
+                    currentPage={currentPage}
+                    pages={pageNumbers}
+                    endPage={totalPages}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
+            )}
             {statusTab === "success" && filteredHabits.length > 0 && (
                 <div className={styles.celebrate}>
                     <Image
