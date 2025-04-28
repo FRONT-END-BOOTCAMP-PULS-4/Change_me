@@ -2,18 +2,17 @@ import { NextResponse } from "next/server";
 import { getMemberIdFromToken } from "@/utils/auth";
 import { GetHabitListUsecase } from "@/application/usecase/habit/GetHabitListUsecase";
 import { ViewQueryDto } from "@/application/usecase/habit/dto/ViewQueryDto";
-import { HabitRecordDto } from "@/application/usecase/habit/dto/HabitRecordDto";
+
 import { SbHabitRepository } from "@/infra/repositories/supabase/SbHabitRepository";
 import { SbHabitRecordRepository } from "@/infra/repositories/supabase/SbHabitRecordRepository";
 import { SbCategoryRepository } from "@/infra/repositories/supabase/SbCategoryRepository";
-import { Habit } from "@/domain/entities/Habit";
 
 export async function GET(request: Request) {
     try {
         // 요청의 URL에서 쿼리 파라미터 추출
         const url = new URL(request.url);
-        const currentPage = url.searchParams.get("page")
-            ? parseInt(url.searchParams.get("page")!)
+        const currentPage = url.searchParams.get("currentPage")
+            ? parseInt(url.searchParams.get("currentPage")!)
             : 1;
         const categoryId = url.searchParams.get("categoryId")
             ? parseInt(url.searchParams.get("categoryId")!)
