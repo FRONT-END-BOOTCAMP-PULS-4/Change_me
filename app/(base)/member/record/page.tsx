@@ -28,13 +28,12 @@ export default function RecordPage() {
         isLoading,
         } = useHabit(currentPage);
     return (
-        <div>
-
+        <>
             {/* <CategorySelector /> */}
-            <StatusFilter />
-            <HabitList />
-            {/* <TestRecordList />  */}
-        </div>
+            {/* <StatusFilter /> */}
+            {/* <HabitList /> */}
+            <TestRecordList />
+        </>
     )
 }
 
