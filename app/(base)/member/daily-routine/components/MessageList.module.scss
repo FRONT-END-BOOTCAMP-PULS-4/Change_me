@@ -5,18 +5,34 @@
     justify-content: center;
     align-items: center;
     gap: 36px;
-}
 
-.list {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
+    .list {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
 
-.listItem {
-    margin-bottom: 24px;
+    .empty {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: var(--color-darkGray);
+        font-size: var(--font-size-lg);
+        gap: 16px;
+
+        .image {
+            order: -1;
+        }
+    }
+
+    .listItem {
+        margin-bottom: 24px;
+    }
 }
