@@ -20,7 +20,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-wrap: wrap;
         min-width: 120px;
     }
 
@@ -35,6 +34,7 @@
         > h1 {
             color: var(--color-main1);
             font-size: var(--fontSize-2xl);
+            white-space: nowrap;
         }
 
         @media (max-width: 768px) {
@@ -67,6 +67,7 @@
         gap: 12px;
         font-size: var(--fontSize-lg);
         font-weight: var(--fontWeight-regular);
+        flex-wrap: wrap;
 
         :hover {
             font-weight: var(--fontWeight-semiBold);

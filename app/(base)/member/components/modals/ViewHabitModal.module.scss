@@ -1,0 +1,91 @@
+.wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding: 16px;
+
+    > h1 {
+        font-size: var(--fontSize-2xl);
+        font-weight: var(--fontWeight-bold);
+        text-align: center;
+    }
+
+    > .description {
+        font-size: var(--fontSize-lg);
+        font-weight: var(--fontWeight-regular);
+        text-align: left;
+        width: 100%;
+        border: 1px solid var(--color-gray);
+        border-radius: 8px;
+        padding: 12px;
+        gap: 6px;
+    }
+
+    > .calendar {
+        width: 100%;
+        border: 1px solid var(--color-gray);
+        border-radius: 8px;
+        padding: 12px;
+        gap: 6px;
+
+        // 요일 줄 밑줄 제거
+        :global(.react-calendar__month-view__weekdays abbr) {
+            text-decoration: none;
+        }
+
+        // 날짜 셀 기본 세팅
+        :global(.react-calendar__tile) {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1 / 1; // 정사각형
+        }
+
+        // 오늘 날짜 네모 테두리 유지
+        :global(.react-calendar__tile--now) {
+            background-color: var(--color-white);
+            border: 2px solid var(--color-main1);
+            border-radius: 4px;
+            z-index: 1;
+        }
+
+        // active는 선택 색이 아니라 흰색 유지
+        :global(.react-calendar__tile--active) {
+            background-color: var(--color-white);
+        }
+
+        // 체크된 날짜 (습관 완료 날짜)
+        :global(.checked) {
+            color: white;
+
+            // 숫자를 위에 보이게 설정
+            abbr {
+                position: relative;
+                z-index: 2;
+            }
+
+            // 동그란 배경
+            &::before {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 32px;
+                height: 32px;
+                background-color: var(--color-main3);
+                border-radius: 50%;
+                z-index: 1;
+            }
+        }
+
+        // 오늘 날짜이면서 checked인 경우
+        :global(.react-calendar__tile--now.checked) {
+            border: 2px solid var(--color-main1);
+            border-radius: 4px;
+        }
+    }
+}

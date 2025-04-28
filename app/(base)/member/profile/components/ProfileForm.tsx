@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import styles from "./ProfileForm.module.scss";
 import { useAuthStore } from "@/stores/authStore";
+import { useToastStore } from "@/stores/toastStore";
 
 type Props = {
     profile: {
@@ -46,12 +47,12 @@ export default function ProfileForm({ profile }: Props) {
 
     const handleSubmit = async () => {
         if (!password) {
-            alert("비밀번호를 입력해주세요.");
+            useToastStore.getState().show("비밀번호를 입력해주세요.");
             return;
         }
 
         if (!nickname.trim()) {
-            alert("닉네임을 입력해주세요.");
+            useToastStore.getState().show("닉네임을 입력해주세요.");
             return;
         }
 
@@ -69,7 +70,7 @@ export default function ProfileForm({ profile }: Props) {
         const passwordData = await passwordRes.json();
 
         if (!passwordRes.ok || !passwordData.valid) {
-            alert("비밀번호가 틀렸습니다. 다시 입력해주세요.");
+            useToastStore.getState().show("비밀번호가 틀렸습니다. 다시 입력해주세요.");
             return;
         }
 
@@ -93,10 +94,12 @@ export default function ProfileForm({ profile }: Props) {
             if (data.imageUrl) {
                 setPreview(data.imageUrl);
             }
-            alert("프로필이 성공적으로 변경되었습니다.");
+            useToastStore.getState().show("프로필이 성공적으로 변경되었습니다.");
             setPassword("");
         } else {
-            alert(data.error || "프로필 업데이트 실패");
+            useToastStore.getState().show(
+                data.error || "프로필 업데이트 실패"
+            );
         }
     };
 

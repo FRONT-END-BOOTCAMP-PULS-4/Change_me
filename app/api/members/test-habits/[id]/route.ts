@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { TestDeleteHabitUsecase } from "@/application/usecase/habit/TestDeleteHabitUsecase";
+import { DeleteHabitUsecase } from "@/application/usecase/habit/DeleteHabitUsecase";
 import { SbHabitRepository } from "@/infra/repositories/supabase/SbHabitRepository";
 import { getMemberIdFromToken } from "@/utils/auth";
-import { TestUpdateHabitDto } from "@/application/usecase/habit/dto/TestUpdateHabitDto";
-import { TestUpdateHabitUsecase } from "@/application/usecase/habit/TestUpdateHabitUsecase";
+import { UpdateHabitDto } from "@/application/usecase/habit/dto/UpdateHabitDto";
+import { UpdateHabitUsecase } from "@/application/usecase/habit/UpdateHabitUsecase";
 
 export async function DELETE(
     req: NextRequest,
@@ -11,7 +11,7 @@ export async function DELETE(
 ) {
     try {
         const habitId = Number(params.id);
-        const usecase = new TestDeleteHabitUsecase(new SbHabitRepository());
+        const usecase = new DeleteHabitUsecase(new SbHabitRepository());
         await usecase.execute(habitId);
 
         return NextResponse.json({ message: "습관 삭제 완료" });
@@ -28,8 +28,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
         const authHeader = req.headers.get("authorization");
         const memberId = await getMemberIdFromToken(authHeader!);
 
-        const dto = new TestUpdateHabitDto(id, memberId!, categoryId, name, description, finishedAt);
-        const usecase = new TestUpdateHabitUsecase(new SbHabitRepository());
+        const dto = new UpdateHabitDto(id, memberId!, categoryId, name, description, finishedAt);
+        const usecase = new UpdateHabitUsecase(new SbHabitRepository());
         await usecase.execute(dto);
 
         return NextResponse.json({ message: "습관 수정 완료" });

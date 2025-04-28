@@ -18,6 +18,13 @@ export class SbHabitRepository implements HabitRepository {
                 if (filter.status === 0) {
                     query = query
                         .eq("status", filter.status)
+                        .gt(
+                            "finished_at",
+                            new Date().toISOString().split("T")[0],
+                        );
+                } else if (filter.status === 1) {
+                    query = query
+                        .eq("status", 0)
                         .lte(
                             "finished_at",
                             new Date().toISOString().split("T")[0],
@@ -26,6 +33,13 @@ export class SbHabitRepository implements HabitRepository {
                     query = query.eq("status", filter.status);
                 }
             }
+
+            if (filter.latest) {
+                query.order("finished_at", { ascending: false });
+            } else {
+                query.order("created_at", { ascending: false });
+            }
+
             if (filter.offset !== undefined) {
                 query.range(
                     filter.offset,
@@ -57,8 +71,7 @@ export class SbHabitRepository implements HabitRepository {
 
         let query = supabase
             .from("habit")
-            .select("*, member(nickname, image_url, deleted_at)")
-            .order("created_at", { ascending: false });
+            .select("*, member(nickname, image_url, deleted_at)");
 
         query = this.queryFilter(filter, query);
 
@@ -183,7 +196,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // [테스트] 습관 등록
-    async TestCreate(habit: Habit): Promise<void> {
+    async create(habit: Habit): Promise<void> {
         const supabase = await createClient();
         const { error } = await supabase.from("habit").insert({
             category_id: habit.categoryId,
@@ -201,7 +214,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // [테스트] 습관 조회 (진행 중인 습관)
-    async TestFindOngoingByMemberId(memberId: string): Promise<TestHabit[]> {
+    async findOngoingByMemberId(memberId: string): Promise<TestHabit[]> {
         const supabase = await createClient();
 
         const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD' 형식
@@ -211,7 +224,8 @@ export class SbHabitRepository implements HabitRepository {
             .select("*, category(name)")
             .eq("member_id", memberId)
             .in("status", [0, 3])
-            .gte("finished_at", today);
+            .gte("finished_at", today)
+            .order("created_at", { ascending: true });
 
         if (error) {
             throw new Error(`진행 중인 습관 조회 실패: ${error.message}`);
@@ -235,7 +249,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // 습관 삭제
-    async TestDeleteById(habitId: number): Promise<void> {
+    async deleteById2(habitId: number): Promise<void> {
         const supabase = await createClient();
         const { error } = await supabase
             .from("habit")
@@ -248,7 +262,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // 습관 포기
-    async TestGiveUpById(habitId: number): Promise<void> {
+    async giveUpById(habitId: number): Promise<void> {
         const supabase = await createClient();
         const now = new Date().toISOString();
         const { error } = await supabase
@@ -265,7 +279,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // 습관 수정
-    async TestUpdate(
+    async update2(
         id: number,
         memberId: string,
         categoryId: number,
@@ -292,7 +306,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // 습관ID로 습관 조회
-    async TestFindById(habitId: number): Promise<Habit> {
+    async findById2(habitId: number): Promise<Habit> {
         const supabase = await createClient();
 
         const { data, error } = await supabase
@@ -319,7 +333,7 @@ export class SbHabitRepository implements HabitRepository {
     }
 
     // 습관 상태 업데이트
-    async TestUpdateStatus(habitId: number, status: number): Promise<void> {
+    async updateStatus(habitId: number, status: number): Promise<void> {
         const supabase = await createClient();
         const { error } = await supabase
             .from("habit")
@@ -342,7 +356,8 @@ export class SbHabitRepository implements HabitRepository {
             .select("*, category(name)")
             .eq("member_id", memberId)
             .in("status", [3])
-            .lt("finished_at", today);
+            .lt("finished_at", today)
+            .order("finished_at", { ascending: false });
 
         if (error) {
             throw new Error(`달성한 습관 조회 실패: ${error.message}`);
@@ -375,7 +390,8 @@ export class SbHabitRepository implements HabitRepository {
             .from("habit")
             .select("*, category(name)")
             .eq("member_id", memberId)
-            .in("status", [2]);
+            .in("status", [2])
+            .order("finished_at", { ascending: false });
 
         if (error) {
             throw new Error(`포기한 습관 조회 실패: ${error.message}`);
@@ -409,7 +425,8 @@ export class SbHabitRepository implements HabitRepository {
             .select("*, category(name)")
             .eq("member_id", memberId)
             .in("status", [0])
-            .lt("finished_at", today);
+            .lt("finished_at", today)
+            .order("finished_at", { ascending: false });
 
         if (error) {
             throw new Error(`실패한 습관 조회 실패: ${error.message}`);
@@ -431,4 +448,7 @@ export class SbHabitRepository implements HabitRepository {
                 ),
         );
     }
+}
+function lt(arg0: string, today: string) {
+    throw new Error("Function not implemented.");
 }

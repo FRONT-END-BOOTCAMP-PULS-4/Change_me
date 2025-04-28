@@ -1,0 +1,95 @@
+.wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid var(--color-gray);
+    align-items: start;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 36px;
+
+    > .nav {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        white-space: nowrap;
+
+        @media (max-width: 768px) {
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+    }
+
+    .profileImage {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 100%;
+        border: 1px solid var(--color-gray);
+    }
+
+    .nickname {
+        font-size: var(--fontSize-lg);
+        font-weight: var(--fontWeight-semiBold);
+    }
+
+    .button {
+        align-self: flex-end;
+        background-color: var(--color-main1);
+        color: var(--color-white);
+        padding: 8px 16px;
+        font-size: var(--fontSize-base);
+        font-weight: var(--fontWeight-semiBold);
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .button:hover {
+        background-color: var(--color-main3);
+        color: var(--color-black);
+    }
+
+    .textarea {
+        width: 100%;
+        min-height: 90px;
+        padding: 12px;
+        font-family: "NotoSansKR";
+        font-size: var(--fontSize-base);
+        border: 1px solid var(--color-gray);
+        outline: none;
+        overflow: hidden;
+        resize: none;
+        transition: border-color 0.2s ease;
+
+        &::placeholder {
+            color: var(--color-gray);
+        }
+
+        &:focus {
+            border-color: var(--color-main1);
+        }
+    }
+
+    .divider {
+        width: calc(100% + 24px);
+        margin: 0 -12px;
+        height: 1px;
+        background-color: var(--color-gray);
+    }
+
+    > .navBottom {
+        flex: 1;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        white-space: nowrap;
+    }
+}

@@ -8,7 +8,7 @@ export class DeleteMessageUsecase {
     }
 
     async execute(id: number): Promise<void> {
-        if (id) {
+        if (!id) {
             throw new Error("id is required");
         }
 

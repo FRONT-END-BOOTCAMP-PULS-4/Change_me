@@ -17,7 +17,7 @@ export class TestGetFailHabitsUsecase {
                 const end = new Date(habit.finishedAt);
                 const giveUp = habit.stoppedAt ? new Date(habit.stoppedAt) : null;
                 const totalDays = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-                const checkedDays = await this.recordRepo.TestCountByHabitId(habit.id);
+                const checkedDays = await this.recordRepo.countByHabitId(habit.id);
                 const rate = Math.round((checkedDays / totalDays) * 100);
 
                 return new TestHabitReadRecordDto(

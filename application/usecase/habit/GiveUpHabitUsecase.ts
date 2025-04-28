@@ -1,10 +1,9 @@
 import { HabitRepository } from "@/domain/repositories/HabitRepository";
 
-
-export class TestDeleteHabitUsecase {
+export class GiveUpHabitUsecase {
     constructor(private readonly repo: HabitRepository) { }
 
     async execute(habitId: number): Promise<void> {
-        await this.repo.TestDeleteById(habitId);
+        await this.repo.giveUpById(habitId);
     }
 }

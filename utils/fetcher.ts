@@ -31,21 +31,20 @@ export async function fetcher<T>( // 제네릭 타입 T를 사용하여 응답 �
     const data = await response.json();
 
     if (response.status === 401) {
+        localStorage.removeItem("auth-storage");
         if (typeof window !== "undefined") {
             window.location.href = "/login";
         }
-        alert(data.message);
     }
 
     if (response.status === 403) {
         if (typeof window !== "undefined") {
             window.location.href = "/error/403";
         }
-        alert(data.message);
     }
 
     if (!response.ok) {
-        alert(data.message); //추후 토스트 처리, 토스트가 뭐지...?
+        throw new Error(data.message || "잠시 후에 다시 시도해주세요.");
     }
 
     return data;

@@ -24,20 +24,12 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
     async findAll(filter?: HabitRecordFilter): Promise<HabitRecord[]> {
         const supabase = await createClient();
 
-        let query = supabase
-            .from('habit_record')
-            .select('*');
+        let query = supabase.from("habit_record").select("*");
 
         // 기본 정렬이 없는 경우 날짜 기준으로 정렬
         if (!filter?.sortField) {
             query = query.order("date", { ascending: false });
         }
-
-        // 페이지네이션 처리
-        query = query.range(
-            filter?.offset || 0,
-            (filter?.offset || 0) + (filter?.limit || 10) - 1,
-        );
 
         // 필터 적용
         query = this.queryFilter(filter, query);
@@ -48,14 +40,13 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             throw new Error(`Failed to fetch habit records: ${error.message}`);
         }
 
-        console.log("Fetched habit records:", data);
-
         const habitRecords: HabitRecord[] =
             data.map(
                 (record: any) =>
                     new HabitRecord(record.habit_id, new Date(record.date)),
             ) || [];
 
+        // console.log("Fetched habit records:", habitRecords);
         return habitRecords;
     }
 
@@ -129,7 +120,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         }
     }
 
-    async TestExists(record: HabitRecord): Promise<boolean> {
+    async exists(record: HabitRecord): Promise<boolean> {
         const supabase = await createClient();
         const { data } = await supabase
             .from("habit_record")
@@ -141,7 +132,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         return !!data;
     }
 
-    async TestSave(record: HabitRecord): Promise<void> {
+    async save2(record: HabitRecord): Promise<void> {
         const supabase = await createClient();
         const { error } = await supabase.from("habit_record").insert({
             habit_id: record.habitId,
@@ -150,7 +141,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
         if (error) throw new Error("습관 기록 저장 실패: " + error.message);
     }
 
-    async TestDelete(record: HabitRecord): Promise<void> {
+    async delete(record: HabitRecord): Promise<void> {
         const supabase = await createClient();
         const { error } = await supabase
             .from("habit_record")
@@ -159,7 +150,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
             .eq("date", record.date.toISOString().split("T")[0]);
         if (error) throw new Error("습관 기록 삭제 실패: " + error.message);
     }
-    async TestGetTodayCheckedHabitIds(
+    async getTodayCheckedHabitIds(
         memberId: string,
         date: Date,
     ): Promise<number[]> {
@@ -196,7 +187,7 @@ export class SbHabitRecordRepository implements HabitRecordRepository {
     }
 
     // 달성률을 계산하기 위해 habit_record 테이블에서 체크된 기록 수를 가져오는 메서드
-    async TestCountByHabitId(habitId: number): Promise<number> {
+    async countByHabitId(habitId: number): Promise<number> {
         const supabase = await createClient();
 
         const { count, error } = await supabase

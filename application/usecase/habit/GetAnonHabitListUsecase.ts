@@ -25,9 +25,9 @@ export class GetAnonHabitListUsecase {
                 categoryId,
                 3,
                 undefined,
-                undefined,
-                undefined,
-                undefined,
+                true,
+                0,
+                10,
             );
 
             const filterOngoing = new HabitFilter(

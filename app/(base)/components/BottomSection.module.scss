@@ -1,21 +1,40 @@
 .section {
+    flex: 1;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 32px;
-    padding: 24px;
+    gap: 48px;
+    padding: 48px;
+    background-color: var(--color-main1);
+    box-shadow:
+        rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
+        rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
 
     .title {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 4px;
+        gap: 8px;
+
         > h3 {
-            font-size: var(--fontSize-2xl);
+            font-size: var(--fontSize-3xl);
+            font-weight: var(--fontWeight-bold);
+            text-shadow: var(--color-beige) 1px 0 10px;
         }
         > p {
-            font-size: var(--fontSize-md);
+            font-size: var(--fontSize-lg);
+            text-shadow: var(--color-beige) 1px 0 10px;
+        }
+
+        @media (max-width: 768px) {
+            > h3 {
+                font-size: var(--fontSize-2xl);
+            }
+
+            > p {
+                font-size: var(--fontSize-sm);
+            }
         }
     }
 
@@ -23,7 +42,7 @@
         width: 100%;
         max-width: 900px;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(49%, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 8px;
         @media (max-width: 768px) {
             display: flex;
@@ -38,14 +57,26 @@
         flex-direction: column;
         align-items: center;
         gap: 12px;
-        margin-top: 24px;
 
         > img {
-            width: 200px;
+            width: 350px;
+            filter: drop-shadow(6px 3px 3px var(--color-darkGray));
         }
         > p {
-            color: var(--color-darkGray);
-            font-size: var(--font-size-md);
+            color: var(--color-beige);
+            font-size: var(--fontSize-xl);
+            font-weight: var(--fontWeight-semiBold);
+            text-shadow: var(--color-gray) 1px 0 10px;
+        }
+
+        @media (max-width: 768px) {
+            > img {
+                width: 250px;
+            }
+
+            > p {
+                font-size: var(--fontSize-lg);
+            }
         }
     }
 }

@@ -3,7 +3,6 @@
     width: 100%;
     margin: 0 auto;
     padding: 40px 16px;
-    font-family: 'Pretendard', sans-serif;
 }
 
 .habitList {
@@ -15,7 +14,7 @@
 .habitCard {
     display: flex;
     align-items: center;
-    padding: 12px 16px;
+    padding: 16px 12px 16px 0px;
     border-bottom: 1px solid var(--color-gray);
     gap: 12px;
     font-size: var(--fontSize-md);
@@ -37,6 +36,7 @@
         .title {
             font-weight: var(--fontWeight-semiBold);
             font-size: var(--fontSize-md);
+            cursor: pointer;
         }
 
         .desc {
@@ -58,23 +58,25 @@
     margin-bottom: 1rem;
 
     button {
-        padding: 0.5rem 1rem;
+        padding: 0.3rem 0.6rem;
         border: 1px solid var(--color-main2);
         background-color: var(--color-main2);
+        font-size: var(--fontSize-md);
         cursor: pointer;
     }
 
     .activeTab {
         background-color: var(--color-main1);
         color: white;
-        font-weight: var(--fontWeight-bold);
+        font-size: var(--fontSize-md);
+        font-weight: var(--fontWeight-semiBold);
     }
 }
 
 .headerRow {
     display: flex;
     align-items: center;
-    padding: 8px 16px;
+    padding: 8px 8px 16px 0px;
     font-size: var(--fontSize-md);
     font-weight: var(--fontWeight-bold);
 
@@ -104,6 +106,47 @@
             font-size: var(--fontSize-sm);
             font-weight: var(--fontWeight-bold);
             color: var(--color-black);
+        }
+    }
+}
+
+.empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+
+    p {
+        margin-top: 1rem;
+        font-size: var(--fontSize-md);
+        color: var(--color-darkGray);
+    }
+
+    .emptyImage {
+        max-width: 180px;
+        margin: 0 auto;
+        opacity: 0.6;
+    }
+}
+
+.celebrate {
+    margin-top: 4rem;
+    text-align: center;
+
+    img {
+        display: block;
+        margin: 0 auto 1rem;
+        max-width: 180px;
+        opacity: 0.9;
+    }
+
+    p {
+        font-size: var(--fontSize-lg);
+        color: var(--color-black);
+        line-height: 1.6;
+
+        strong {
+            font-weight: var(--fontWeight-bold);
+            color: var(--color-main1);
         }
     }
 }

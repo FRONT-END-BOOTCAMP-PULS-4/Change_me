@@ -1,31 +1,38 @@
 .card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    padding: 8px;
+    display: inline-grid;
 
-    min-height: 100px;
-    border: 1px solid var(--color-gray);
-    border-radius: 12px;
-    font-size: var(--fontSize-md);
+    width: 100%;
+    background: transparent;
+    transform: perspective(800px) rotateY(0deg);
+    transform-style: preserve-3d;
+    transition: transform 300ms ease-in-out;
 
-    @media (max-width: 768px) {
+    > * {
+        grid-area: 1 / 1 / 1 / 1;
         width: 100%;
-        font-size: var(--fontSize-sm);
+        height: 250px;
+        padding: 0 24px;
+        border-radius: 12px;
+        backface-visibility: hidden;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+        cursor: pointer;
     }
 
-    .profile {
+    .card-front {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 8px;
-        padding-left: 24px;
-        flex: 1;
-        > .img {
-            width: 28px;
-            height: 28px;
+        justify-content: center;
+        gap: 4px;
+
+        background: var(--color-main2);
+
+        .profile {
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             overflow: hidden;
+            background-color: var(--color-lightGray);
 
             img {
                 width: 100%;
@@ -35,14 +42,29 @@
             border-radius: 100%;
             border: 1px solid var(--color-gray);
         }
+
+        .nickname {
+            font-size: var(--fontSize-xl);
+            margin-bottom: 8px;
+            font-weight: var(--fontWeight-semiBold);
+            color: var(--color-darkGray);
+        }
+
+        .title {
+            font-weight: var(--fontWeight-semiBold);
+        }
     }
-    .text {
-        flex: 1;
-        text-align: left;
-        display: -webkit-box;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
+
+    .card-back {
+        background-color: var(--color-main3);
+        display: flex;
+        align-items: center;
+        padding: 24px;
+        font-size: var(--fontSize-xl);
+        transform: rotateY(180deg);
     }
+}
+
+.card:hover {
+    transform: perspective(800px) rotateY(180deg);
 }

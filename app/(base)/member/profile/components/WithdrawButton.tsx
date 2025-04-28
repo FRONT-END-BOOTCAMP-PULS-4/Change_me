@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import styles from "./WithdrawButton.module.scss";
 import { useAuthStore } from "@/stores/authStore";
+import { useToastStore } from "@/stores/toastStore";
 
 export default function WithdrawButton() {
     const router = useRouter();
@@ -24,11 +25,13 @@ export default function WithdrawButton() {
 
         if (res.ok) {
             logout();
-            alert("탈퇴가 완료되었습니다.");
+            useToastStore.getState().show("탈퇴가 완료되었습니다.");
             router.push("/login");
         } else {
             const data = await res.json();
-            alert(data.error || "탈퇴 실패");
+            useToastStore.getState().show(
+                data.error || "탈퇴 실패"
+            );
         }
     };
 

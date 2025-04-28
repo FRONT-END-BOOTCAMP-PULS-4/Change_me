@@ -12,6 +12,29 @@
     width: 140px;
     height: 140px;
     object-fit: cover;
+    animation: spinAndShrink 1.2s linear infinite;
+}
+
+@keyframes spinAndShrink {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: rotate(90deg) scale(0.9);
+    }
+
+    50% {
+        transform: rotate(180deg) scale(0.8);
+    }
+
+    75% {
+        transform: rotate(270deg) scale(0.7);
+    }
+
+    100% {
+        transform: rotate(360deg) scale(0.6);
+    }
 }
 
 .text {
@@ -19,4 +42,42 @@
     font-size: var(--fontSize-xl);
     font-weight: var(--fontWeight-semiBold);
     color: var(--color-darkGray);
+    animation: flash 1s ease-in-out infinite;
+
+    &::after {
+        content: '';
+        display: inline-block;
+        width: 1ch;
+        animation: dots 1.2s steps(3, end) infinite;
+    }
+}
+
+@keyframes dots {
+    0% {
+        content: '';
+    }
+
+    33% {
+        content: '.';
+    }
+
+    66% {
+        content: '..';
+    }
+
+    100% {
+        content: '...';
+    }
+}
+
+@keyframes flash {
+
+    0%,
+    100% {
+        filter: brightness(1);
+    }
+
+    50% {
+        filter: brightness(3);
+    }
 }

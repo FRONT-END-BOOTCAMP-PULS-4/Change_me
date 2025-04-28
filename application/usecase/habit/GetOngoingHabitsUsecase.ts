@@ -1,15 +1,15 @@
-import { TestHabitProgressDto } from "@/application/usecase/habit/dto/TestHabitProgressDto";
+import { HabitProgressDto } from "@/application/usecase/habit/dto/HabitProgressDto";
 import { HabitRecordRepository } from "@/domain/repositories/HabitRecordRepository";
 import { HabitRepository } from "@/domain/repositories/HabitRepository";
 
-export class TestGetOngoingHabitsUsecase {
+export class GetOngoingHabitsUsecase {
     constructor(
         private readonly habitRepo: HabitRepository,
         private readonly recordRepo: HabitRecordRepository
     ) { }
 
-    async execute(memberId: string): Promise<TestHabitProgressDto[]> {
-        const habits = await this.habitRepo.TestFindOngoingByMemberId(memberId);
+    async execute(memberId: string): Promise<HabitProgressDto[]> {
+        const habits = await this.habitRepo.findOngoingByMemberId(memberId);
         const today = new Date();
 
         return await Promise.all(
@@ -26,11 +26,12 @@ export class TestGetOngoingHabitsUsecase {
                 const dayPassed = Math.ceil(
                     (getMidnight(today).getTime() - getMidnight(start).getTime()) / (1000 * 60 * 60 * 24) + 1
                 );
-
-                const checkedDays = await this.recordRepo.TestCountByHabitId(habit.id);
+                const daysTo80Percent = Math.floor(totalDays * 0.8);
+                const canGiveUp = dayPassed <= daysTo80Percent;
+                const checkedDays = await this.recordRepo.countByHabitId(habit.id);
                 const rate = Math.round((checkedDays / totalDays) * 100);
 
-                return new TestHabitProgressDto(
+                return new HabitProgressDto(
                     habit.id,
                     habit.categoryId,
                     habit.categoryName ?? "",
@@ -41,7 +42,7 @@ export class TestGetOngoingHabitsUsecase {
                     checkedDays,
                     totalDays,
                     `${rate}% (${checkedDays}일 / ${totalDays}일)`,
-                    rate < 80,
+                    canGiveUp,
                     dayPassed
                 );
             })

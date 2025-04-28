@@ -1,4 +1,4 @@
-export class TestHabitProgressDto {
+export class HabitProgressDto {
     constructor(
         public id: number,
         public categoryId: number,

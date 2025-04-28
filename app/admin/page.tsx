@@ -7,11 +7,13 @@ import styles from "./page.module.scss";
 import { useAdminCategories } from "@/hooks/useAdminCategories";
 import Loading from "../components/Loading";
 import Pager from "../components/Pager";
+import { useToastStore } from "@/stores/toastStore";
 
 export default function AdminPage() {
     const serachParams = useSearchParams();
     const router = useRouter();
     const currentPage = Number(serachParams.get("currentPage")) || 1;
+    const { show } = useToastStore();
 
     const {
         categories,
@@ -30,7 +32,7 @@ export default function AdminPage() {
 
     if (isLoading) return <Loading />;
     if (error) {
-        console.log(error);
+        show(error);
     }
 
     return (

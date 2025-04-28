@@ -3,7 +3,7 @@ import { verifyJWT } from "./utils/jwt";
 
 export const config = {
     // /api/admin/** 및 /api/member/** 경로에 미들웨어 적용
-    matcher: ["/api/admin/:path*", "/api/member/:path*"],
+    matcher: ["/api/admin/:path*", "/api/members/:path*"],
 };
 
 export async function middleware(request: NextRequest) {

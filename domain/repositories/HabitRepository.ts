@@ -11,11 +11,11 @@ export interface HabitRepository {
     update(Habit: Habit): Promise<Habit>;
     deleteById(id: number): Promise<void>;
 
-    TestCreate(habit: Habit): Promise<void>;
-    TestFindOngoingByMemberId(memberId: string): Promise<TestHabit[]>;
-    TestDeleteById(habitId: number): Promise<void>;
-    TestGiveUpById(habitId: number): Promise<void>;
-    TestUpdate(
+    create(habit: Habit): Promise<void>;
+    findOngoingByMemberId(memberId: string): Promise<TestHabit[]>;
+    deleteById2(habitId: number): Promise<void>;
+    giveUpById(habitId: number): Promise<void>;
+    update2(
         id: number,
         memberId: string,
         categoryId: number,
@@ -23,8 +23,8 @@ export interface HabitRepository {
         description: string,
         finishedAt: string
     ): Promise<void>;
-    TestFindById(id: number): Promise<Habit>;
-    TestUpdateStatus(habitId: number, status: number): Promise<void>;
+    findById2(id: number): Promise<Habit>;
+    updateStatus(habitId: number, status: number): Promise<void>;
     TestFindSuccessByMemberId(memberId: string): Promise<TestHabit[]>;
     TestFindGiveupByMemberId(memberId: string): Promise<TestHabit[]>;
     TestFindFailByMemberId(memberId: string): Promise<TestHabit[]>;

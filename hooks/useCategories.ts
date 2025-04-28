@@ -12,7 +12,9 @@ export type ResponseType = {
 export const useCategories = (popular?: boolean) => {
     const getUrl = `/api/categories${popular && `?popular=${popular}`}`;
 
-    const { data, error, isLoading } = useSWR<ResponseType>(getUrl, fetcher);
+    const { data, error, isLoading } = useSWR<ResponseType>(getUrl, fetcher, {
+        refreshInterval: 1000 * 60 * 60 * 24,
+    });
 
     return {
         categories: data?.categories || [],
