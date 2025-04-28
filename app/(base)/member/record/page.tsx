@@ -5,7 +5,7 @@ import TestRecordList from "./components/TestRecordList";
 export default function page() {
     return (
         <>
-            {/* <TestRecordList /> */}
+            <TestRecordList />
         </>
     );
 }

@@ -6,6 +6,7 @@ import { useEffect, useState, useCallback } from "react";
 import styles from "./TestRecordList.module.scss";
 import Loading from "@/app/components/Loading";
 import Image from "next/image";
+import Pager from "@/app/components/Pager";
 
 type Habit = {
     id: number;
@@ -26,6 +27,8 @@ export default function TestRecordList() {
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [statusTab, setStatusTab] = useState<"success" | "giveup" | "fail">("success");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10; // 한 페이지에 보여줄 습관 수
 
     const token = useAuthStore.getState().token;
 
@@ -80,6 +83,12 @@ export default function TestRecordList() {
     const filteredHabits = habits.filter(
         (habit) => selectedCategoryId === null || Number(habit.categoryId) === selectedCategoryId
     );
+    const totalPages = Math.ceil(filteredHabits.length / itemsPerPage);
+    const paginatedHabits = filteredHabits.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     if (isLoading) {
         return <Loading />;
@@ -183,47 +192,49 @@ export default function TestRecordList() {
                         </p>
                     </div>
                 ) : (
-                    habits
-                        .filter(
-                            (habit) => selectedCategoryId === null || Number(habit.categoryId) === selectedCategoryId
-                        )
-                        .map((habit) => (
-                            <div className={styles.habitCard} key={habit.id}>
-                                <div className={styles.category}>{habit.categoryName}</div>
-                                <div className={styles.info}>
-                                    <div className={styles.title}
-                                        onClick={() =>
-                                            useModalStore
-                                                .getState()
-                                                .openModal("viewHabit", {
-                                                    id: habit.id,
-                                                    name: habit.name,
-                                                    description: habit.description,
-                                                })
-                                        }>{habit.name}</div>
-                                </div>
-                                {/* <div className={styles.info}>
+                    paginatedHabits.map((habit) => (
+                        <div className={styles.habitCard} key={habit.id}>
+                            <div className={styles.category}>{habit.categoryName}</div>
+                            <div className={styles.info}>
+                                <div className={styles.title}
+                                    onClick={() =>
+                                        useModalStore
+                                            .getState()
+                                            .openModal("viewHabit", {
+                                                id: habit.id,
+                                                name: habit.name,
+                                                description: habit.description,
+                                            })
+                                    }>{habit.name}</div>
+                            </div>
+                            {/* <div className={styles.info}>
                                     <div className={styles.desc}>{habit.description}</div>
                                 </div> */}
-                                <div className={styles.info}>
-                                    <div className={styles.desc}>{habit.startAt}</div>
-                                </div>
-                                <div className={styles.info}>
-                                    <div className={styles.desc}>{habit.finishedAt}</div>
-                                </div>
-                                <div className={styles.info}>
-                                    <div className={styles.desc}>{habit.stoppedAt ? habit.stoppedAt : "-"}</div>
-                                </div>
-                                <div className={styles.info}>
-                                    <div className={styles.desc}>{habit.duration}일</div>
-                                </div>
-                                <div className={styles.info}>
-                                    <div className={styles.progress}>{habit.rate}</div>
-                                </div>
+                            <div className={styles.info}>
+                                <div className={styles.desc}>{habit.startAt}</div>
                             </div>
-                        ))
+                            <div className={styles.info}>
+                                <div className={styles.desc}>{habit.finishedAt}</div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.desc}>{habit.stoppedAt ? habit.stoppedAt : "-"}</div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.desc}>{habit.duration}일</div>
+                            </div>
+                            <div className={styles.info}>
+                                <div className={styles.progress}>{habit.rate}</div>
+                            </div>
+                        </div>
+                    ))
                 )}
             </div>
+            <Pager
+                currentPage={currentPage}
+                pages={pageNumbers}
+                endPage={totalPages}
+                onPageChange={(page) => setCurrentPage(page)}
+            />
             {statusTab === "success" && filteredHabits.length > 0 && (
                 <div className={styles.celebrate}>
                     <Image
