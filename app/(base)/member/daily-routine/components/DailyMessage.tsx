@@ -48,14 +48,16 @@ export default function DailyMessage() {
                 handleUpdate={updateMessage}
                 handleDelete={deleteMessage}
             />
-            <Pager
-                currentPage={currentPage}
-                pages={pages}
-                endPage={endPage}
-                onPageChange={(newPage: number) =>
-                    handleQueryStringChange(newPage, mine)
-                }
-            />
+            {messages.length > 0 && (
+                <Pager
+                    currentPage={currentPage}
+                    pages={pages}
+                    endPage={endPage}
+                    onPageChange={(newPage: number) =>
+                        handleQueryStringChange(newPage, mine)
+                    }
+                />
+            )}
         </section>
     );
 }
