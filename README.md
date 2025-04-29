@@ -50,14 +50,14 @@ app/
 
 | 기능 | 이미지 |
 |------|--------|
-| **모두의 습관** | <img src="public/images/ReadmeHabit.png" width="280" /> |
-| **오늘의 루틴** | <img src="public/images/ReadmeDailyRoutine.png" width="280" /> |
-| **기록 보기** | <img src="public/images/ReadmeRecord.png" width="280" /> |
-| **데일리 메시지** | <img src="public/images/ReadmeMessage.png" width="280" /> |
-| **카테고리 관리** | <img src="public/images/ReadmeCategory.png" width="280" /> |
-| **회원가입** | <img src="public/images/ReadmeJoin.png" width="280" /> |
-| **로그인** | <img src="public/images/ReadmeLogin.png" width="280" /> |
-| **비밀번호 변경** | <img src="public/images/ReadmePasswordChange.png" width="280" /> |
-| **마이페이지** | <img src="public/images/ReadmeMyPage.png" width="280" /> |
+| **모두의 습관** | <img src="public/images/ReadmeHabit.png" width="400" /> |
+| **오늘의 루틴** | <img src="public/images/ReadmeDailyRoutine.png" width="400" /> |
+| **기록 보기** | <img src="public/images/ReadmeRecord.png" width="400" /> |
+| **데일리 메시지** | <img src="public/images/ReadmeMessage.png" width="400" /> |
+| **카테고리 관리** | <img src="public/images/ReadmeCategory.png" width="400" /> |
+| **회원가입** | <img src="public/images/ReadmeJoin.png" width="400" /> |
+| **로그인** | <img src="public/images/ReadmeLogin.png" width="400" /> |
+| **비밀번호 변경** | <img src="public/images/ReadmePasswordChange.png" width="400" /> |
+| **마이페이지** | <img src="public/images/ReadmeMyPage.png" width="400" /> |
 
 
