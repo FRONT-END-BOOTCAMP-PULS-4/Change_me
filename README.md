@@ -46,58 +46,30 @@ app/
 └── 📂 public/                  # 정적 파일 (이미지, 폰트)
 
 ## 🌟 주요 기능
-✅ 회원 기능
 
-회원가입 / 로그인 / 비밀번호 변경
+✅ 회원
 
-마이페이지(프로필 관리)
+회원가입 
+<img src="/images/ReadmeJoin.png" width="300" />
+로그인
+<img src="/images/ReadmeLogin.png" width="300" />
+비밀번호 변경
+<img src="/images/ReadmePasswordChange.png" width="300" />
+마이페이지
+<img src="/images/ReadmeMyPage.png" width="300" />
 
-✅ 습관 관리
-
-새로운 습관 생성, 수정, 삭제
-
-진행 중인 습관 체크
-
-진행률(%) 표시 및 일 수 표시
+✅ 오늘의 루틴
+<img src="/images/ReadmeDailyRoutine.png" width="300" />
 
 ✅ 기록 보기
-
-완료/실패/포기한 습관 기록 열람
-
-카테고리별/진행 상태별 필터링
+<img src="/images/ReadmeRecord.png" width="300" />
 
 ✅ 모두의 습관
-
-전체 습관 통계
-
-최근 달성 습관 조회 (비회원도 가능)
+<img src="/images/ReadmeHabit.png" width="300" />
 
 ✅ 데일리 메시지
-
-오늘의 루틴 하단에 응원 메시지 작성 가능
-
-회원 간 소통 공간
+<img src="/images/ReadmeMessage.png" width="300" />
 
 ✅ 관리자 기능
+<img src="/images/ReadmeCategory.png" width="300" />
 
-카테고리 생성 / 수정 / 삭제
-
-사용량 0인 카테고리만 삭제 가능
-
-## 🎬 시연 화면
-
-로그인 / 로그아웃
-
-프로필 / 비밀번호 변경
-
-오늘의 루틴 관리
-
-기록 보기
-
-모두의 습관 열람
-
-(관리자) 카테고리 관리
-
-403/404 에러 페이지
-
-로딩 애니메이션
