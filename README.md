@@ -31,7 +31,7 @@ Next.js, TypeScript, SCSS, Supabase, Zustand, SWR, GitHub, Figma
 ## 🏗️ 프로젝트 구조 (Clean Architecture 기반)
 app/
 
-├── 📂 api/                    # API 구현<br/>
+├── 📂 api/                     # API 구현<br/>
 ├── 📂 (pages)/                 # 페이지 구성<br/>
 ├── 📂 application/<br/>
 │   └── 🧩 usecase/             # 비즈니스 로직 흐름<br/>
@@ -50,14 +50,14 @@ app/
 
 | 기능 | 이미지 |
 |------|--------|
-| **모두의 습관** | <img src="public/images/ReadmeHabit.png" width="400" /> |
-| **오늘의 루틴** | <img src="public/images/ReadmeDailyRoutine.png" width="400" /> |
-| **기록 보기** | <img src="public/images/ReadmeRecord.png" width="400" /> |
-| **데일리 메시지** | <img src="public/images/ReadmeMessage.png" width="400" /> |
-| **카테고리 관리** | <img src="public/images/ReadmeCategory.png" width="400" /> |
-| **회원가입** | <img src="public/images/ReadmeJoin.png" width="400" /> |
-| **로그인** | <img src="public/images/ReadmeLogin.png" width="400" /> |
-| **비밀번호 변경** | <img src="public/images/ReadmePasswordChange.png" width="400" /> |
-| **마이페이지** | <img src="public/images/ReadmeMyPage.png" width="400" /> |
+| **모두의 습관** | <img src="public/images/ReadmeHabit.png" width="500" /> |
+| **오늘의 루틴** | <img src="public/images/ReadmeDailyRoutine.png" width="500" /> |
+| **기록 보기** | <img src="public/images/ReadmeRecord.png" width="500" /> |
+| **데일리 메시지** | <img src="public/images/ReadmeMessage.png" width="500" /> |
+| **카테고리 관리** | <img src="public/images/ReadmeCategory.png" width="500" /> |
+| **회원가입** | <img src="public/images/ReadmeJoin.png" width="500" /> |
+| **로그인** | <img src="public/images/ReadmeLogin.png" width="500" /> |
+| **비밀번호 변경** | <img src="public/images/ReadmePasswordChange.png" width="500" /> |
+| **마이페이지** | <img src="public/images/ReadmeMyPage.png" width="500" /> |
 
 
